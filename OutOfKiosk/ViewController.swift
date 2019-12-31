@@ -18,6 +18,6 @@ class ViewController: UIViewController {
     //test by jackson
     //test meme
     //test IOS
-    // 심영민
+    // 심영민ㅇㅇ
 }
 
