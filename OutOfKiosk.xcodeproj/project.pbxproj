@@ -9,9 +9,11 @@
 /* Begin PBXBuildFile section */
 		3308428523BD72D400FCF4C0 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308428423BD72D400FCF4C0 /* LoginController.swift */; };
 		3308428723BD72DF00FCF4C0 /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308428623BD72DF00FCF4C0 /* MainController.swift */; };
-		3308428923BD7AF000FCF4C0 /* CafeMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308428823BD7AF000FCF4C0 /* CafeMenuController.swift */; };
+		3308428923BD7AF000FCF4C0 /* StoreListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308428823BD7AF000FCF4C0 /* StoreListController.swift */; };
 		3308428B23BD7F7300FCF4C0 /* SettingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308428A23BD7F7300FCF4C0 /* SettingController.swift */; };
 		3308428D23BD81B600FCF4C0 /* FavoriteMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308428C23BD81B600FCF4C0 /* FavoriteMenuController.swift */; };
+		3308429023BDA18400FCF4C0 /* StoreList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308428F23BDA18400FCF4C0 /* StoreList.swift */; };
+		3308429223BDE67700FCF4C0 /* StoreDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308429123BDE67700FCF4C0 /* StoreDetailController.swift */; };
 		33259F5323BB017400D44CB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33259F5223BB017400D44CB0 /* AppDelegate.swift */; };
 		33259F5523BB017400D44CB0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33259F5423BB017400D44CB0 /* SceneDelegate.swift */; };
 		33259F5A23BB017400D44CB0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5823BB017400D44CB0 /* Main.storyboard */; };
@@ -22,9 +24,11 @@
 /* Begin PBXFileReference section */
 		3308428423BD72D400FCF4C0 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		3308428623BD72DF00FCF4C0 /* MainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainController.swift; sourceTree = "<group>"; };
-		3308428823BD7AF000FCF4C0 /* CafeMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CafeMenuController.swift; sourceTree = "<group>"; };
+		3308428823BD7AF000FCF4C0 /* StoreListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListController.swift; sourceTree = "<group>"; };
 		3308428A23BD7F7300FCF4C0 /* SettingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingController.swift; sourceTree = "<group>"; };
 		3308428C23BD81B600FCF4C0 /* FavoriteMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteMenuController.swift; sourceTree = "<group>"; };
+		3308428F23BDA18400FCF4C0 /* StoreList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreList.swift; sourceTree = "<group>"; };
+		3308429123BDE67700FCF4C0 /* StoreDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailController.swift; sourceTree = "<group>"; };
 		33259F4F23BB017400D44CB0 /* OutOfKiosk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OutOfKiosk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33259F5223BB017400D44CB0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33259F5423BB017400D44CB0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,15 +55,25 @@
 				3308428423BD72D400FCF4C0 /* LoginController.swift */,
 				3308428623BD72DF00FCF4C0 /* MainController.swift */,
 				3308428A23BD7F7300FCF4C0 /* SettingController.swift */,
-				3308428823BD7AF000FCF4C0 /* CafeMenuController.swift */,
+				3308428823BD7AF000FCF4C0 /* StoreListController.swift */,
 				3308428C23BD81B600FCF4C0 /* FavoriteMenuController.swift */,
+				3308429123BDE67700FCF4C0 /* StoreDetailController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		3308428E23BDA16400FCF4C0 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				3308428F23BDA18400FCF4C0 /* StoreList.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		33259F4623BB017400D44CB0 = {
 			isa = PBXGroup;
 			children = (
+				3308428E23BDA16400FCF4C0 /* Cell */,
 				3308428123BD724100FCF4C0 /* Controller */,
 				33259F5123BB017400D44CB0 /* OutOfKiosk */,
 				33259F5023BB017400D44CB0 /* Products */,
@@ -161,10 +175,12 @@
 				3308428B23BD7F7300FCF4C0 /* SettingController.swift in Sources */,
 				3308428D23BD81B600FCF4C0 /* FavoriteMenuController.swift in Sources */,
 				3308428723BD72DF00FCF4C0 /* MainController.swift in Sources */,
+				3308429023BDA18400FCF4C0 /* StoreList.swift in Sources */,
 				33259F5323BB017400D44CB0 /* AppDelegate.swift in Sources */,
 				3308428523BD72D400FCF4C0 /* LoginController.swift in Sources */,
 				33259F5523BB017400D44CB0 /* SceneDelegate.swift in Sources */,
-				3308428923BD7AF000FCF4C0 /* CafeMenuController.swift in Sources */,
+				3308428923BD7AF000FCF4C0 /* StoreListController.swift in Sources */,
+				3308429223BDE67700FCF4C0 /* StoreDetailController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

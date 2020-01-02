@@ -19,7 +19,7 @@ class MainController : UIViewController{
     
     /* 카페 버튼 */
     @IBAction func cafe_Btn(_ sender: Any) {
-        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "CafeMenuController"){
+        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "StoreListController"){
             self.navigationController?.pushViewController(controller, animated: true)
         }
     }
