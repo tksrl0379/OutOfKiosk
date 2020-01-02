@@ -14,8 +14,5 @@ class SettingController : UIViewController{
         super.viewDidLoad()
        
     }
-    
-    
-    
 }
 
