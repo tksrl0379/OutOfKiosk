@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ApiAI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,7 +15,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        /*ApiAi를 사용하여, 구글 다이얼로그플로우의 토큰을 받는 과정이다. 초기설정.*/
+        let configuration = AIDefaultConfiguration()
+        configuration.clientAccessToken = "0ae686e48b24450e84cb7f89afa6b337"
+        
+        let apiai = ApiAI.shared()
+        apiai?.configuration = configuration
+        
+        
         return true
     }
 
