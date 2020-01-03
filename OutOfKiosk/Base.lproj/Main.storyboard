@@ -43,6 +43,15 @@
                                     <action selector="login_Btn:" destination="Y49-lh-7VC" eventType="touchUpInside" id="g7l-XH-Ec3"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ASq-u0-TGp">
+                                <rect key="frame" x="172" y="607" width="70" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="회원가입"/>
+                                <connections>
+                                    <action selector="signUp_Btn:" destination="Y49-lh-7VC" eventType="touchUpInside" id="XeU-mp-fnm"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="XIQ-p5-b9w"/>
@@ -219,10 +228,10 @@
             </objects>
             <point key="canvasLocation" x="1253.6231884057972" y="92.934782608695656"/>
         </scene>
-        <!--Store Detail Controller-->
+        <!--Cafe Detail Controller-->
         <scene sceneID="XPq-qL-wMZ">
             <objects>
-                <viewController storyboardIdentifier="StoreDetailController" id="6xr-Jj-VDY" customClass="StoreDetailController" customModule="OutOfKiosk" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CafeDetailController" id="6xr-Jj-VDY" customClass="CafeDetailController" customModule="OutOfKiosk" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="99A-pz-754">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

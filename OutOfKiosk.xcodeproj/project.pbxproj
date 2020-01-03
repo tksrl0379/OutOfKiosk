@@ -13,7 +13,7 @@
 		3308428B23BD7F7300FCF4C0 /* SettingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308428A23BD7F7300FCF4C0 /* SettingController.swift */; };
 		3308428D23BD81B600FCF4C0 /* FavoriteMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308428C23BD81B600FCF4C0 /* FavoriteMenuController.swift */; };
 		3308429023BDA18400FCF4C0 /* StoreList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308428F23BDA18400FCF4C0 /* StoreList.swift */; };
-		3308429223BDE67700FCF4C0 /* StoreDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308429123BDE67700FCF4C0 /* StoreDetailController.swift */; };
+		3308429223BDE67700FCF4C0 /* CafeDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308429123BDE67700FCF4C0 /* CafeDetailController.swift */; };
 		33259F5323BB017400D44CB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33259F5223BB017400D44CB0 /* AppDelegate.swift */; };
 		33259F5523BB017400D44CB0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33259F5423BB017400D44CB0 /* SceneDelegate.swift */; };
 		33259F5A23BB017400D44CB0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5823BB017400D44CB0 /* Main.storyboard */; };
@@ -28,7 +28,7 @@
 		3308428A23BD7F7300FCF4C0 /* SettingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingController.swift; sourceTree = "<group>"; };
 		3308428C23BD81B600FCF4C0 /* FavoriteMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteMenuController.swift; sourceTree = "<group>"; };
 		3308428F23BDA18400FCF4C0 /* StoreList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreList.swift; sourceTree = "<group>"; };
-		3308429123BDE67700FCF4C0 /* StoreDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailController.swift; sourceTree = "<group>"; };
+		3308429123BDE67700FCF4C0 /* CafeDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CafeDetailController.swift; sourceTree = "<group>"; };
 		33259F4F23BB017400D44CB0 /* OutOfKiosk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OutOfKiosk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33259F5223BB017400D44CB0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33259F5423BB017400D44CB0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -57,7 +57,7 @@
 				3308428A23BD7F7300FCF4C0 /* SettingController.swift */,
 				3308428823BD7AF000FCF4C0 /* StoreListController.swift */,
 				3308428C23BD81B600FCF4C0 /* FavoriteMenuController.swift */,
-				3308429123BDE67700FCF4C0 /* StoreDetailController.swift */,
+				3308429123BDE67700FCF4C0 /* CafeDetailController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -180,7 +180,7 @@
 				3308428523BD72D400FCF4C0 /* LoginController.swift in Sources */,
 				33259F5523BB017400D44CB0 /* SceneDelegate.swift in Sources */,
 				3308428923BD7AF000FCF4C0 /* StoreListController.swift in Sources */,
-				3308429223BDE67700FCF4C0 /* StoreDetailController.swift in Sources */,
+				3308429223BDE67700FCF4C0 /* CafeDetailController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
