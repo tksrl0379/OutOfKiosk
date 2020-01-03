@@ -40,6 +40,8 @@ class LoginController: UIViewController{
     @IBOutlet weak var id_Textfield: UITextField!
     @IBOutlet weak var pwd_Textfield: UITextField!
     
+    var responseText: NSString? = "dd"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -48,15 +50,80 @@ class LoginController: UIViewController{
     
     
     @IBAction func login_Btn(_ sender: Any) {
-        if (id_Textfield.text == "text" && pwd_Textfield.text == "text"){
-            if let controller = self.storyboard?.instantiateViewController(withIdentifier: "Main_NavigationController"){
-                controller.modalTransitionStyle = .coverVertical
-                self.present(controller, animated: true, completion: nil)
+//        if (id_Textfield.text == "text" && pwd_Textfield.text == "text"){
+//            if let controller = self.storyboard?.instantiateViewController(withIdentifier: "Main_NavigationController"){
+//                controller.modalTransitionStyle = .coverVertical
+//                self.present(controller, animated: true, completion: nil)
+//            }
+        //        }
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-52-79-241-250.ap-northeast-2.compute.amazonaws.com/rds.php")! as URL)
+        request.httpMethod = "POST"
+        
+        let postString = "mode=login&id=\(id_Textfield.text!)&pwd=\(pwd_Textfield.text!)"
+        
+        
+        request.httpBody = postString.data(using: String.Encoding.utf8)
+        
+        // URLSession: HTTP 요청을 보내고 받는 핵심 객체
+        let task = URLSession.shared.dataTask(with: request as URLRequest) {
+            data, response, error in
+            
+            print("response = \(response!)")
+            
+            let responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+            print("responseString = \(responseString!)")
+            self.responseText = responseString
+            if (self.responseText! == "\ntrue") {
+                DispatchQueue.main.async{
+                    if let controller = self.storyboard?.instantiateViewController(withIdentifier: "Main_NavigationController"){
+                        controller.modalTransitionStyle = .coverVertical
+                        self.present(controller, animated: true, completion: nil)
+                    }
+                }
             }
+            
+            
+            
         }
+        //실행
+        task.resume()
+        
+        //print(self.responseText!)
+        
+        
+        
     }
     
     
-    
-    
+    @IBAction func signUp_Btn(_ sender: Any) {
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-52-79-241-250.ap-northeast-2.compute.amazonaws.com/rds.php")! as URL)
+            request.httpMethod = "POST"
+            
+            let postString = "mode=signup&id=\(id_Textfield.text!)&pwd=\(pwd_Textfield.text!)"
+            
+            
+            request.httpBody = postString.data(using: String.Encoding.utf8)
+            
+            // URLSession: HTTP 요청을 보내고 받는 핵심 객체
+            let task = URLSession.shared.dataTask(with: request as URLRequest) {
+                data, response, error in
+                
+                if error != nil {
+                    print("error=\(error)")
+                    return
+                }
+                
+                print("response = \(response)")
+                
+                let responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+                print("responseString = \(responseString)")
+            }
+            //실행
+            task.resume()
+        }
+        
+        
 }
+
+
+

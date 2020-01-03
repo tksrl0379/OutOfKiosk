@@ -53,7 +53,7 @@ class StoreListController : UIViewController, UITableViewDelegate, UITableViewDa
         
         /* view controller 간 데이터 교환
         : instantiateViewController를 통해 생성된 객체는 UIViewController타입이기 때문에 StoreDetailController 타입으로 다운캐스팅. */
-        let vc = self.storyboard?.instantiateViewController(identifier: "StoreDetailController") as! StoreDetailController
+        let vc = self.storyboard?.instantiateViewController(identifier: "CafeDetailController") as! CafeDetailController
         vc.receivedValueFromBeforeVC = indexPath.row
         //print(indexPath.row)
         

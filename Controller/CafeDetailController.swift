@@ -9,7 +9,8 @@
 
 import UIKit
 
-class StoreDetailController : UIViewController{
+/* 다이어로그 플로우 넣는 곳 */
+class CafeDetailController : UIViewController{
     
     var receivedValueFromBeforeVC : Int?
     
