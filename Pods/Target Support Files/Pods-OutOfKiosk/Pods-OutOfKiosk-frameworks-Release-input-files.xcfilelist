@@ -1,0 +1,3 @@
+${PODS_ROOT}/Target Support Files/Pods-OutOfKiosk/Pods-OutOfKiosk-frameworks.sh
+${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
+${BUILT_PRODUCTS_DIR}/ApiAI/ApiAI.framework
