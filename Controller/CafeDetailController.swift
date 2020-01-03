@@ -28,28 +28,23 @@ class CafeDetailController : UIViewController{
         //print(receivedValueFromBeforeVC)
         test_Text.text = String(receivedValueFromBeforeVC!) 
        
-        //DialogueFlow 팝업창 띄우기
+        //DialogFlow 팝업창 띄우기
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyBoard.instantiateViewController(withIdentifier: "DialogueFlowPopUpController") as! DialogueFlowPopUpController
+        let vc = storyBoard.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as! DialogFlowPopUpController
 
-        vc.modalPresentationStyle = .overCurrentContext
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(blurEffectView)
+        vc.blurEffectView = blurEffectView
+        vc.view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
+        
+        vc.modalPresentationStyle = .pageSheet
         self.present(vc, animated: true, completion: nil)
         
-        //vc.view.backgroundColor = UIColor.clear
-
-
         
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
 }

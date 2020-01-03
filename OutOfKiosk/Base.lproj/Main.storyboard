@@ -245,6 +245,10 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="square.and.arrow.up.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="7SW-42-vRL">
+                                <rect key="frame" x="73" y="464" width="289" height="198"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="Wtr-hX-ECd"/>
@@ -255,24 +259,16 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="stm-2k-nfP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1948" y="95"/>
+            <point key="canvasLocation" x="1947.826086956522" y="94.565217391304358"/>
         </scene>
-        <!--Dialogue Flow Pop Up Controller-->
+        <!--Dialog Flow Pop Up Controller-->
         <scene sceneID="fQ2-0z-0om">
             <objects>
-                <viewController storyboardIdentifier="DialogueFlowPopUpController" id="Yoj-n0-B9v" customClass="DialogueFlowPopUpController" customModule="OutOfKiosk" customModuleProvider="target" colorLabel="IBBuiltInLabel-Red" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DialogFlowPopUpController" id="Yoj-n0-B9v" customClass="DialogFlowPopUpController" customModule="OutOfKiosk" customModuleProvider="target" colorLabel="IBBuiltInLabel-Red" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rTU-o0-ReA">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h0T-UG-LXq">
-                                <rect key="frame" x="192" y="637" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="닫기"/>
-                                <connections>
-                                    <action selector="close_Btn:" destination="Yoj-n0-B9v" eventType="touchUpInside" id="Nrw-GV-7B2"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="안녕하세요" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eTm-ta-o6V">
                                 <rect key="frame" x="20" y="33" width="374" height="163"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -283,7 +279,7 @@
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6TA-Vl-fmi">
                                 <rect key="frame" x="20" y="204" width="374" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -298,14 +294,14 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="fBx-SR-Gvn"/>
                     </view>
                     <value key="contentSizeForViewInPopover" type="size" width="50" height="200"/>
                     <connections>
-                        <outlet property="input_Msg" destination="6TA-Vl-fmi" id="0GM-DB-QzK"/>
-                        <outlet property="recieve_Msg" destination="eTm-ta-o6V" id="FsD-oA-9ie"/>
+                        <outlet property="receivedMsg_Label" destination="eTm-ta-o6V" id="FsD-oA-9ie"/>
                         <outlet property="recording_Btn" destination="gXu-rb-zay" id="f16-B6-fVx"/>
+                        <outlet property="requestMsg_Label" destination="6TA-Vl-fmi" id="0GM-DB-QzK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bzp-LX-pIM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -342,5 +338,6 @@
     <resources>
         <image name="cart" catalog="system" width="64" height="50"/>
         <image name="person" catalog="system" width="64" height="58"/>
+        <image name="square.and.arrow.up.fill" catalog="system" width="56" height="64"/>
     </resources>
 </document>
