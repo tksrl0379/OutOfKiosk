@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -19,7 +19,7 @@
 		33259F5A23BB017400D44CB0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5823BB017400D44CB0 /* Main.storyboard */; };
 		33259F5C23BB017500D44CB0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5B23BB017500D44CB0 /* Assets.xcassets */; };
 		33259F5F23BB017500D44CB0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5D23BB017500D44CB0 /* LaunchScreen.storyboard */; };
-		3386079223BF0D89003208AD /* DialogueFlowPopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3386079123BF0D89003208AD /* DialogueFlowPopUpController.swift */; };
+		3386079223BF0D89003208AD /* DialogFlowPopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */; };
 		561A199013A68AC2CAB7E557 /* Pods_OutOfKiosk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E77C96B32E43C00A091B8A7 /* Pods_OutOfKiosk.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,7 +40,7 @@
 		33259F5B23BB017500D44CB0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		33259F5E23BB017500D44CB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33259F6023BB017500D44CB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3386079123BF0D89003208AD /* DialogueFlowPopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueFlowPopUpController.swift; sourceTree = "<group>"; };
+		3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogFlowPopUpController.swift; sourceTree = "<group>"; };
 		F5097F4775439F8A0528E7C8 /* Pods-OutOfKiosk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OutOfKiosk.release.xcconfig"; path = "Target Support Files/Pods-OutOfKiosk/Pods-OutOfKiosk.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -65,7 +65,7 @@
 				3308428823BD7AF000FCF4C0 /* StoreListController.swift */,
 				3308428C23BD81B600FCF4C0 /* FavoriteMenuController.swift */,
 				3308429123BDE67700FCF4C0 /* CafeDetailController.swift */,
-				3386079123BF0D89003208AD /* DialogueFlowPopUpController.swift */,
+				3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -125,7 +125,6 @@
 				109C79DE6BF10C453A241743 /* Pods-OutOfKiosk.debug.xcconfig */,
 				F5097F4775439F8A0528E7C8 /* Pods-OutOfKiosk.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -252,7 +251,7 @@
 				3308428523BD72D400FCF4C0 /* LoginController.swift in Sources */,
 				33259F5523BB017400D44CB0 /* SceneDelegate.swift in Sources */,
 				3308428923BD7AF000FCF4C0 /* StoreListController.swift in Sources */,
-				3386079223BF0D89003208AD /* DialogueFlowPopUpController.swift in Sources */,
+				3386079223BF0D89003208AD /* DialogFlowPopUpController.swift in Sources */,
 				3308429223BDE67700FCF4C0 /* CafeDetailController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
