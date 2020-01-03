@@ -19,6 +19,7 @@
 		33259F5A23BB017400D44CB0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5823BB017400D44CB0 /* Main.storyboard */; };
 		33259F5C23BB017500D44CB0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5B23BB017500D44CB0 /* Assets.xcassets */; };
 		33259F5F23BB017500D44CB0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5D23BB017500D44CB0 /* LaunchScreen.storyboard */; };
+		3386079223BF0D89003208AD /* DialogueFlowPopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3386079123BF0D89003208AD /* DialogueFlowPopUpController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		33259F5B23BB017500D44CB0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		33259F5E23BB017500D44CB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33259F6023BB017500D44CB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3386079123BF0D89003208AD /* DialogueFlowPopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueFlowPopUpController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 				3308428823BD7AF000FCF4C0 /* StoreListController.swift */,
 				3308428C23BD81B600FCF4C0 /* FavoriteMenuController.swift */,
 				3308429123BDE67700FCF4C0 /* CafeDetailController.swift */,
+				3386079123BF0D89003208AD /* DialogueFlowPopUpController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -180,6 +183,7 @@
 				3308428523BD72D400FCF4C0 /* LoginController.swift in Sources */,
 				33259F5523BB017400D44CB0 /* SceneDelegate.swift in Sources */,
 				3308428923BD7AF000FCF4C0 /* StoreListController.swift in Sources */,
+				3386079223BF0D89003208AD /* DialogueFlowPopUpController.swift in Sources */,
 				3308429223BDE67700FCF4C0 /* CafeDetailController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
