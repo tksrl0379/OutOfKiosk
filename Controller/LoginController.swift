@@ -59,11 +59,13 @@ class LoginController: UIViewController{
             
             print("response = \(response!)")
             
-            let responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
             print("responseString = \(responseString!)")
             
+            responseString = responseString?.trimmingCharacters(in: .newlines) as NSString
+            
             if(mode == "login"){
-                if (responseString! == "\ntrue") {
+                if (responseString! == "true") {
                     /* 화면 전환은 main 쓰레드에서만 가능하므로 main 쓰레드에서 돌아가도록 설정 */
                     DispatchQueue.main.async{
                         if let controller = self.storyboard?.instantiateViewController(withIdentifier: "Main_NavigationController"){
