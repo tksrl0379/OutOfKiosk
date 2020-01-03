@@ -17,12 +17,25 @@ class CafeDetailController : UIViewController{
     @IBOutlet weak var test_Text: UILabel!
     
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //print(receivedValueFromBeforeVC)
         test_Text.text = String(receivedValueFromBeforeVC!) 
        
+        //DialogueFlow 팝업창 띄우기
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyBoard.instantiateViewController(withIdentifier: "DialogueFlowPopUpController") as! DialogueFlowPopUpController
+
+        vc.modalPresentationStyle = .overCurrentContext
+        self.present(vc, animated: true, completion: nil)
+        
+        //vc.view.backgroundColor = UIColor.clear
+
+
+        
     }
     
     

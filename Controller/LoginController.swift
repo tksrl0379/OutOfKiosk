@@ -62,7 +62,8 @@ class LoginController: UIViewController{
             var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
             print("responseString = \(responseString!)")
             
-            responseString = responseString?.trimmingCharacters(in: .newlines) as NSString
+            // php서버와 통신 시 NSString에 생기는 개행 제거
+            responseString = responseString?.trimmingCharacters(in: .newlines) as NSString?
             
             if(mode == "login"){
                 if (responseString! == "true") {
