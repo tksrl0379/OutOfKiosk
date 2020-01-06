@@ -31,9 +31,10 @@ class DialogFlowPopUpController: UIViewController{
     
     var blurEffectView: UIView?
     
-    private var burger: String?
-    private var soda:String?
+    private var name: String?
     private var count: Int?
+    private var size: String?
+    private var sugar: String?
     
     /* Btn 관련 변수
      1. receivedMsg_Label: 챗봇을 통하여 답장을 받는 label(라벨)
@@ -99,6 +100,7 @@ class DialogFlowPopUpController: UIViewController{
             audioEngine.stop()
             recognitionRequest?.endAudio()
             
+            
             /* Dialogflow에 requestMsg 전송 */
             let request = ApiAI.shared().textRequest()
             
@@ -108,6 +110,7 @@ class DialogFlowPopUpController: UIViewController{
                 return
             }
             
+            /* Dialogflow 전송 부분 */
             /* Dialogflow에게 requestMsg 전송: 이 전송이 완료 되면 아래의 전송완료 콜백함수 호출*/
             ApiAI.shared().enqueue(request)
             requestMsg_Label.text = " "
@@ -128,27 +131,35 @@ class DialogFlowPopUpController: UIViewController{
                 
                 /* 후에 php통신을 하는 곳. */
                 
+            
                 /*파라미터 값을 실제로 받는 공간*/
                 if let parameter = response.result.parameters as? [String : AIResponseParameter]{
-                    if let burger = parameter["Burger"]?.stringValue{
-                        //print(burger)
-                        self.burger = burger
-                        print(self.burger) //optional binding
+                    
+                    
+                    var parameter_name = response.result.metadata.intentName + "_NAME"
+                    if let name = parameter[parameter_name]?.stringValue{
                         
-                    };
-                    if let soda = parameter["Drink"]?.stringValue{
-                        
-                        self.soda = soda
-                        print(soda)
+                        self.name = name
+                        print("이름: \(name)")
                         
                     };
                     if let count = parameter["number"]?.numberValue{
                         
                         self.count = count as? Int
-                        print("count: \(self.count)")
-                        //print(self.num)
-                        //self.num = (num as NSString).integerValue
-                        //print(self.num)
+                        print("개수: \(self.count)")
+                       
+                    };
+                    if let size = parameter["SIZE_NAME"]?.stringValue{
+                        
+                        self.size = size
+                        print("사이즈: \(self.size)")
+                       
+                    };
+                    if let sugar = parameter["SUGAR"]?.stringValue{
+                        
+                        self.sugar = sugar
+                        print("당도: \(self.sugar)")
+                       
                     };
                     
                 }
@@ -158,22 +169,20 @@ class DialogFlowPopUpController: UIViewController{
                  dialogflow에서 파라미터 값을 모두 받아 Alamofire란 api를 사용하여
                  localhost서버의 Mysql로 전송한다.
                  */
+
                 
-                if(self.burger != nil && self.soda != nil && self.count != nil){
-                    /*let burger = self.burger;
-                     let soda = self.soda;
-                     let num = self.num;
-                     */
+                if(self.name != "" && self.count != nil && self.size != "" && self.sugar != ""){
+                    
                     //creating parameters for the post request
                     let parameters: Parameters=[
-                        "burger":self.burger!,
-                        "soda":self.soda!,
-                        "count":self.count!
-                        //"email":textFieldEmail.text!,
-                        //"phone":textFieldPhone.text!
+                        //"burger":self.burger!,
+                        "name": self.name!,
+                        "count": self.count!,
+                        "size": self.size!,
+                        "sugar": self.sugar!
                     ]
                     
-                    let URL_ORDER = "http://ec2-52-79-241-250.ap-northeast-2.compute.amazonaws.com/mcdonald/api/order.php"
+                    let URL_ORDER = "http://ec2-52-79-241-250.ap-northeast-2.compute.amazonaws.com/order/api/order.php"
                     //Sending http post request
                     Alamofire.request(URL_ORDER, method: .post, parameters: parameters).responseString
                         {
@@ -193,11 +202,19 @@ class DialogFlowPopUpController: UIViewController{
                              //displaying the message in label
                              self.input_Msg.text = jsonData.value(forKey: "message") as! String?
                              }*/
+                            
+                            
+                            
+                            /* 재주문하는 경우를 대비하여 nil로 초기화 해줘야 함. 아니면 query가 2번 날라감 */
+                            self.name = nil;
+                            self.count = nil;
+                            self.size = nil;
+                            self.sugar = nil;
                     }
                     
                 }
-                 
-                 
+                
+                
                 
                 /* 응답 받고 responseMsg_Label에 출력 */
                 if let textResponse = response.result.fulfillment.speech {
@@ -211,8 +228,8 @@ class DialogFlowPopUpController: UIViewController{
                 print("error")
                 print(error!)
             }) // End of request complete call back
-        
-        /* 2. 음성인식이 중단상태일시 */
+            
+            /* 2. 음성인식이 중단상태일시 */
         } else {
             startRecording()
             
@@ -321,6 +338,36 @@ class DialogFlowPopUpController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        /* Dialogflow에 requestMsg 전송 */
+        let request = ApiAI.shared().textRequest()
+        
+        request?.query = "스타벅스"
+        
+        /* Dialogflow 전송 부분 */
+        ApiAI.shared().enqueue(request)
+        
+        /* requestMsg 전송완료 시 콜백함수 호출 */
+        request?.setMappedCompletionBlockSuccess({ (request, response) in
+            
+            /* 성공 시 */
+            let response = response as! AIResponse
+            
+            /* 응답 받고 responseMsg_Label에 출력 */
+            if let textResponse = response.result.fulfillment.speech {
+                print(textResponse)
+                print("success")
+                self.speechAndText(textResponse)
+            }
+            
+            /* 실패 시 */
+        }, failure: { (request, error) in
+            print("error")
+            print(error!)
+        }) // End of request complete call back
+        
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
