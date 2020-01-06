@@ -31,9 +31,9 @@ class DialogFlowPopUpController: UIViewController{
     
     var blurEffectView: UIView?
     
-    override func viewWillDisappear(_ animated: Bool) {
-        blurEffectView?.removeFromSuperview()
-    }
+    private var burger: String?
+    private var soda:String?
+    private var count: Int?
     
     /* Btn 관련 변수
      1. receivedMsg_Label: 챗봇을 통하여 답장을 받는 label(라벨)
@@ -119,92 +119,96 @@ class DialogFlowPopUpController: UIViewController{
                 
                 /* 성공 시 */
                 let response = response as! AIResponse
-
+                
                 
                 //if response.result.action == "HereTogo"{ //이 공간이 실행이 되질 않는다.
                 //response.result.action은 Intents를 가르키지 못하고 ""표시 되며
                 //response.result.parameters를 통해서 바로 $color값을 받을 수 있다.
                 
                 
-                /* 후에 php통신을 하는 곳.
-                 
-                 /*파라미터 값을 실제로 받는 공간*/
-                 if let parameter = response.result.parameters as? [String : AIResponseParameter]{
-                 if let burger = parameter["Burger"]?.stringValue{
-                 //print(burger)
-                 self.burger = burger
-                 //print(self.burger) //optional binding
-                 
-                 };
-                 if let soda = parameter["Drink"]?.stringValue{
-                 //print(soda)
-                 self.soda = soda
-                 
-                 };
-                 if let num = parameter["number"]?.numberValue{
-                 print("num??")
-                 self.num = num as? Int
-                 //print(self.num)
-                 //self.num = (num as NSString).integerValue
-                 //print(self.num)
-                 };
-                 
-                 }
-                 
-                 /*
+                /* 후에 php통신을 하는 곳. */
+                
+                /*파라미터 값을 실제로 받는 공간*/
+                if let parameter = response.result.parameters as? [String : AIResponseParameter]{
+                    if let burger = parameter["Burger"]?.stringValue{
+                        //print(burger)
+                        self.burger = burger
+                        print(self.burger) //optional binding
+                        
+                    };
+                    if let soda = parameter["Drink"]?.stringValue{
+                        
+                        self.soda = soda
+                        print(soda)
+                        
+                    };
+                    if let count = parameter["number"]?.numberValue{
+                        
+                        self.count = count as? Int
+                        print("count: \(self.count)")
+                        //print(self.num)
+                        //self.num = (num as NSString).integerValue
+                        //print(self.num)
+                    };
+                    
+                }
+                
+                /*
                  mysql에 전송할 모든 파라미터 값이 저장되었을때 실행
                  dialogflow에서 파라미터 값을 모두 받아 Alamofire란 api를 사용하여
                  localhost서버의 Mysql로 전송한다.
                  */
+                
+                if(self.burger != nil && self.soda != nil && self.count != nil){
+                    /*let burger = self.burger;
+                     let soda = self.soda;
+                     let num = self.num;
+                     */
+                    //creating parameters for the post request
+                    let parameters: Parameters=[
+                        "burger":self.burger!,
+                        "soda":self.soda!,
+                        "count":self.count!
+                        //"email":textFieldEmail.text!,
+                        //"phone":textFieldPhone.text!
+                    ]
+                    
+                    let URL_ORDER = "http://ec2-52-79-241-250.ap-northeast-2.compute.amazonaws.com/mcdonald/api/order.php"
+                    //Sending http post request
+                    Alamofire.request(URL_ORDER, method: .post, parameters: parameters).responseString
+                        {
+                            response in
+                            //printing response
+                            print("응답",response)
+                            
+                            //getting the json value from the server
+                            /*if let result = response.result.value {
+                             
+                             
+                             //결과값을 받는 변수와 출력내용이다.
+                             
+                             //converting it as NSDictionary
+                             let jsonData = result as! NSDictionary
+                             
+                             //displaying the message in label
+                             self.input_Msg.text = jsonData.value(forKey: "message") as! String?
+                             }*/
+                    }
+                    
+                }
                  
-                 if(self.burger != nil && self.soda != nil && self.num != nil){
-                 /*let burger = self.burger;
-                 let soda = self.soda;
-                 let num = self.num;
-                 */
-                 //creating parameters for the post request
-                 let parameters: Parameters=[
-                 "burger":self.burger!,
-                 "soda":self.soda!,
-                 "num":self.num!
-                 //"email":textFieldEmail.text!,
-                 //"phone":textFieldPhone.text!
-                 ]
                  
-                 let URL_ORDER = "http://localhost:8080/mcdonald/api/order.php"
-                 //Sending http post request
-                 Alamofire.request(URL_ORDER, method: .post, parameters: parameters).responseString
-                 {
-                 response in
-                 //printing response
-                 print("응답",response)
-                 
-                 //getting the json value from the server
-                 /*if let result = response.result.value {
-                 
-                 
-                 //결과값을 받는 변수와 출력내용이다.
-                 
-                 //converting it as NSDictionary
-                 let jsonData = result as! NSDictionary
-                 
-                 //displaying the message in label
-                 self.input_Msg.text = jsonData.value(forKey: "message") as! String?
-                 }*/
-                 }
-                 
-                 }
-                 
-                 */
                 
                 /* 응답 받고 responseMsg_Label에 출력 */
                 if let textResponse = response.result.fulfillment.speech {
                     print(textResponse)
+                    print("success")
                     self.speechAndText(textResponse)
                 }
                 
                 /* 실패 시 */
             }, failure: { (request, error) in
+                print("error")
                 print(error!)
             }) // End of request complete call back
         
@@ -295,6 +299,8 @@ class DialogFlowPopUpController: UIViewController{
                  결과가 최종 결과이면 isFinal을 true로 설정된다.
                  */
                 self.requestMsg_Label.text = result?.bestTranscription.formattedString
+                /* 명령 Append 받아서 문자열로 받는 곳 */
+                //print(result?.bestTranscription.formattedString)
                 isFinal = (result?.isFinal)!
             }
             /*
@@ -315,5 +321,9 @@ class DialogFlowPopUpController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        blurEffectView?.removeFromSuperview()
     }
 }
