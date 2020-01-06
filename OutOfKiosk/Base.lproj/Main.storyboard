@@ -178,6 +178,21 @@
             </objects>
             <point key="canvasLocation" x="1253.6231884057972" y="776.9021739130435"/>
         </scene>
+        <!--Detail Menu Controller-->
+        <scene sceneID="GHh-0B-06H">
+            <objects>
+                <viewController storyboardIdentifier="DetailMenuController" id="Pwi-ve-Dd6" customClass="DetailMenuController" customModule="OutOfKiosk" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Py3-Va-wsw">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="4jF-ca-uHA"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hVr-WX-ut4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2793" y="778"/>
+        </scene>
         <!--Store List Controller-->
         <scene sceneID="BWA-GH-ZUb">
             <objects>
@@ -238,28 +253,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bk0-nI-3Vy">
-                                <rect key="frame" x="148" y="401" width="42" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="square.and.arrow.up.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="7SW-42-vRL">
-                                <rect key="frame" x="73" y="464" width="289" height="198"/>
+                                <rect key="frame" x="105" y="602" width="204" height="113"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ah-qg-zRI">
+                                <rect key="frame" x="162" y="134" width="91" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="커피"/>
+                                <connections>
+                                    <action selector="coffee_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="NYq-MA-Gfg"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cvl-PS-Toi">
+                                <rect key="frame" x="182" y="257" width="55" height="38"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <state key="normal" title="스무디"/>
+                                <connections>
+                                    <action selector="smoothie_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="bfG-XA-hsK"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="Wtr-hX-ECd"/>
                     </view>
-                    <connections>
-                        <outlet property="test_Text" destination="bk0-nI-3Vy" id="gYj-yL-CZR"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="stm-2k-nfP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1947.826086956522" y="94.565217391304358"/>
+            <point key="canvasLocation" x="2739" y="94"/>
         </scene>
         <!--Dialog Flow Pop Up Controller-->
         <scene sceneID="fQ2-0z-0om">
@@ -306,7 +329,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bzp-LX-pIM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2692.753623188406" y="94.565217391304358"/>
+            <point key="canvasLocation" x="3484" y="94"/>
         </scene>
         <!--환경설정-->
         <scene sceneID="tW2-dc-rXI">

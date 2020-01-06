@@ -103,8 +103,9 @@ class DialogFlowPopUpController: UIViewController{
             
             /* Dialogflow에 requestMsg 전송 */
             let request = ApiAI.shared().textRequest()
+                                
             
-            if self.requestMsg_Label.text != "" {
+            if self.requestMsg_Label.text != " " {
                 request?.query = self.requestMsg_Label.text
             } else {
                 return
@@ -113,6 +114,7 @@ class DialogFlowPopUpController: UIViewController{
             /* Dialogflow 전송 부분 */
             /* Dialogflow에게 requestMsg 전송: 이 전송이 완료 되면 아래의 전송완료 콜백함수 호출*/
             ApiAI.shared().enqueue(request)
+            
             requestMsg_Label.text = " "
             
             recording_Btn.setTitle("녹음 시작", for: .normal)
@@ -123,7 +125,6 @@ class DialogFlowPopUpController: UIViewController{
                 /* 성공 시 */
                 let response = response as! AIResponse
                 
-                
                 //if response.result.action == "HereTogo"{ //이 공간이 실행이 되질 않는다.
                 //response.result.action은 Intents를 가르키지 못하고 ""표시 되며
                 //response.result.parameters를 통해서 바로 $color값을 받을 수 있다.
@@ -133,6 +134,7 @@ class DialogFlowPopUpController: UIViewController{
                 
             
                 /*파라미터 값을 실제로 받는 공간*/
+                
                 if let parameter = response.result.parameters as? [String : AIResponseParameter]{
                     
                     
@@ -298,7 +300,7 @@ class DialogFlowPopUpController: UIViewController{
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
             
             self.recognitionRequest?.append(buffer)
-            print("monitoring")
+            //print("monitoring")
         }
         
         

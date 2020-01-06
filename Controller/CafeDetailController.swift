@@ -17,7 +17,27 @@ class CafeDetailController : UIViewController{
     
     var receivedValueFromBeforeVC : Int?
     
-    @IBOutlet weak var test_Text: UILabel!
+//    @IBOutlet weak var test_Text: UILabel!
+    
+ 
+    @IBAction func coffee_Btn(_ sender: Any) {
+        
+        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController"){
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+        
+    }
+    
+    
+    @IBAction func smoothie_Btn(_ sender: Any) {
+        
+        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController"){
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+    }
+    
+    
+    
     
     
     
@@ -26,7 +46,7 @@ class CafeDetailController : UIViewController{
         super.viewDidLoad()
         
         //print(receivedValueFromBeforeVC)
-        test_Text.text = String(receivedValueFromBeforeVC!) 
+//        test_Text.text = String(receivedValueFromBeforeVC!) 
        
         //DialogFlow 팝업창 띄우기
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
