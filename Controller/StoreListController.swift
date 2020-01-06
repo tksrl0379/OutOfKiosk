@@ -9,7 +9,9 @@
 import UIKit
 
 /* TableView 구현 위해선 Delegate(, DataSource 두 프로토콜 상속 필요 */
-class StoreListController : UIViewController, UITableViewDelegate, UITableViewDataSource{
+/* Delegate와 DataSource 둘 다 델리게이트인데
+ 차이점은 DataSource는 자원을 담당하고, Delgate는 자원과 액션을 담당한다.*/
+class StoreListController : UIViewController, UITableViewDelegate , UITableViewDataSource{
     
     @IBOutlet weak var CafeTableView: UITableView!
     
@@ -19,9 +21,9 @@ class StoreListController : UIViewController, UITableViewDelegate, UITableViewDa
    
     /* Cell 반복 횟수 관리 */
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+
         return storeName.count
-        
+
     }
     
     /* Cell 편집 */
