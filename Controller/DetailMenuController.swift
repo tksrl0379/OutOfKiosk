@@ -14,10 +14,17 @@ import UIKit
  */
 class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewDataSource{
     
+    //var receivedValueFromBeforeVC : Int?
     
+    var willgetCategroyName : String!
     
-    //php통신으로 product의 이름들을 가져와서 append시켜줘야한다.
+    /*php통신으로 product의 이름들을 가져와서 append시켜줘야한다.*/
+    /*php통신에 menu의 대분류가 coffee 인지 smoothie 인지를 알수 있는 방법이 필요하다.*/
+    
+    let URL_ORDER = "http://ec2-54-180-119-142.ap-northeast-2.compute.amazonaws.com/order/api/order.php"
     var productName = ["a","b"]
+    
+    /* */
     
     @IBOutlet weak var ProductTableView: UITableView!
     
@@ -36,6 +43,23 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         return cell
     }
     
+    /*
+    /* 특정 Cell 클릭 이벤트 처리 */
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+                
+        /* view controller 간 데이터 교환
+        : instantiateViewController를 통해 생성된 객체는 UIViewController타입이기 때문에 StoreDetailController 타입으로 다운캐스팅. */
+        let vc = self.storyboard?.instantiateViewController(identifier: "DetailMenuController") as! DetailMenuController
+        vc.receivedValueFromBeforeVC = indexPath.row
+        //print(indexPath.row)
+        
+        /* StoreDetailController 로 화면 전환 */
+        //self.present(vc, animated: true, completion: nil) // present 방식
+        self.navigationController?.pushViewController(vc, animated: true) // navigation controller 방식
+        
+        
+    }*/
+    
     
     
     
@@ -46,6 +70,8 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         /*
          ProdcutTableView의 delgate , datasource = self
          */
+        print(self.willgetCategroyName)
+        
         ProductTableView.delegate = self
         ProductTableView.dataSource = self
         

@@ -17,7 +17,8 @@ class CafeDetailController : UIViewController{
     
     var receivedValueFromBeforeVC : Int?
     
-//    @IBOutlet weak var test_Text: UILabel!
+    @IBOutlet weak var coffee: UIButton! //
+    //    @IBOutlet weak var test_Text: UILabel!
     
  
     /*coffee_btn누를시 커피에 관련된 메뉴가 나와야한다.
@@ -27,11 +28,23 @@ class CafeDetailController : UIViewController{
      DetailMenuController에서는 밸류값을 php통신으로 mysql에 있는
      값을 관련 데이터값들을 불러온다.
     */
+    
     @IBAction func coffee_Btn(_ sender: Any) {
         
-        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController"){
+        
+        //rvc 가 옵셔널 타입이므로 guard 구문을 통해서 옵셔널 바인딩 처리
+        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController") as? DetailMenuController else {
+            //아니면 종료
+            return}
+        
+        rvc.willgetCategroyName = "coffee"
+        
+        self.navigationController?.pushViewController(rvc, animated: true)
+        
+        //"coffee"란 문자열을 전송시켜야한다.
+        /*if let controller = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController"){
             self.navigationController?.pushViewController(controller, animated: true)
-        }
+        }*/
         
     }
     
@@ -44,7 +57,9 @@ class CafeDetailController : UIViewController{
     }
     
     
-    
+    /*
+     TabView 를 이용하여, 선택한 메뉴가 모두 뜨게끔 할 수도 있다.
+     */
     
     
     
