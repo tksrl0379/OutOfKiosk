@@ -35,6 +35,7 @@ class DialogFlowPopUpController: UIViewController{
     private var count: Int?
     private var size: String?
     private var sugar: String?
+    private var whippedcream: String?
     
     /* Btn 관련 변수
      1. receivedMsg_Label: 챗봇을 통하여 답장을 받는 label(라벨)
@@ -131,7 +132,7 @@ class DialogFlowPopUpController: UIViewController{
                 
                 /* 후에 php통신을 하는 곳. */
                 
-            
+                
                 /*파라미터 값을 실제로 받는 공간*/
                 if let parameter = response.result.parameters as? [String : AIResponseParameter]{
                     
@@ -140,76 +141,75 @@ class DialogFlowPopUpController: UIViewController{
                     if let name = parameter[parameter_name]?.stringValue{
                         
                         self.name = name
-                        print("이름: \(name)")
+                        print("이름: \(self.name)")
                         
                     };
                     if let count = parameter["number"]?.numberValue{
                         
                         self.count = count as? Int
                         print("개수: \(self.count)")
-                       
+                        
                     };
                     if let size = parameter["SIZE_NAME"]?.stringValue{
                         
                         self.size = size
                         print("사이즈: \(self.size)")
-                       
+                        
                     };
                     if let sugar = parameter["SUGAR"]?.stringValue{
                         
                         self.sugar = sugar
                         print("당도: \(self.sugar)")
-                       
+                        
+                    };
+                    if let whippedcream = parameter["WHIPPEDCREAM"]?.stringValue{
+                        
+                        self.whippedcream = whippedcream
+                        print("휘핑크림: \(self.whippedcream)")
+                        
                     };
                     
                 }
                 
-                /*
-                 mysql에 전송할 모든 파라미터 값이 저장되었을때 실행
-                 dialogflow에서 파라미터 값을 모두 받아 Alamofire란 api를 사용하여
-                 localhost서버의 Mysql로 전송한다.
-                 */
-
-                
-                if(self.name != "" && self.count != nil && self.size != "" && self.sugar != ""){
+               
+                /* 해당하는 intents 의 파라미터는 intents로부터 값을 받아서 ""든 뭐든 무조건 '문자열 값'을 받으나, 해당하는 intents의 파라미터가 아닌 경우 nil 상태임.
+                 
+                예를 들어 스무디 intents는 whippedcream이 nil이고 프라푸치노 intents는 sugar가 nil. 이를 염두하고 작성. */
+                if(self.name != "" && self.count != nil && self.size != "" && self.sugar != "" && self.whippedcream != ""){
+                    
+                    /* 아래의 parameter 넣는 곳이 강제 unwrapping인 !이기 때문에 nil이 들어가면 안됨. 따라서 문자열 값 넣어줌 */
+                    if self.sugar == nil {
+                        self.sugar = "NULL"
+                    }
+                    
+                    if self.whippedcream == nil {
+                        self.whippedcream = "NULL"
+                    }
                     
                     //creating parameters for the post request
                     let parameters: Parameters=[
-                        //"burger":self.burger!,
-                        "name": self.name!,
+                        "name": self.name! ,
                         "count": self.count!,
                         "size": self.size!,
-                        "sugar": self.sugar!
+                        "sugar": self.sugar!,
+                        "whippedcream": self.whippedcream!
                     ]
                     
+                    /* php 서버 위치 */
                     let URL_ORDER = "http://ec2-52-79-241-250.ap-northeast-2.compute.amazonaws.com/order/api/order.php"
                     //Sending http post request
                     Alamofire.request(URL_ORDER, method: .post, parameters: parameters).responseString
                         {
                             response in
-                            //printing response
+                            
                             print("응답",response)
                             
-                            //getting the json value from the server
-                            /*if let result = response.result.value {
-                             
-                             
-                             //결과값을 받는 변수와 출력내용이다.
-                             
-                             //converting it as NSDictionary
-                             let jsonData = result as! NSDictionary
-                             
-                             //displaying the message in label
-                             self.input_Msg.text = jsonData.value(forKey: "message") as! String?
-                             }*/
-                            
-                            
-                            
-                            /* 재주문하는 경우를 대비하여 nil로 초기화 해줘야 함. 아니면 query가 2번 날라감 */
-                            self.name = nil;
-                            self.count = nil;
-                            self.size = nil;
-                            self.sugar = nil;
+                            /* 재주문하는 경우를 대비하여 nil로 초기화 해줘야 함. 아니면 query가 여러번 날라감 */
+                            self.name = nil
+                            self.count = nil
+                            self.size = nil
+                            self.sugar = nil
+                            self.whippedcream = nil
                     }
                     
                 }
