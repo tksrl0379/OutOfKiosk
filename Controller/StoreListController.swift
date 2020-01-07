@@ -17,7 +17,6 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
     
     var storeName = ["카페그리닝", "이디야커피", "스타벅스"]
     
-    
    
     /* Cell 반복 횟수 관리 */
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
