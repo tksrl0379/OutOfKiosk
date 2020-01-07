@@ -59,9 +59,7 @@ class LoginController: UIViewController{
             
             /* Alert Message 띄우기 */
             self.present(alert, animated: false, completion: nil)
-            
         }
-        
     }
     
     /* php 서버를 통해 mysql 서버와 통신하는 함수 */
