@@ -50,13 +50,27 @@ class CafeDetailController : UIViewController{
          rvc.willgetCategroyName = ["아메리카노","카페라떼","콜드블루"] 의 형태가 되어야함.
         */
         
-        phpGetData("coffee")//["coffee","test"]
         
-        print("Befor send", self.arrayOfProduct)
+//        print(type(of: rvc.willgetCategroyName))
+//        rvc.willgetCategroyName = ["test1","test2"]
+        phpGetData("coffee"){
+            (returnArray) in //returnarrray는 @escaping을 통해 나온 return 값이다.
+            
+//            self.arrayOfProduct = returnArray
+            rvc.willgetCategroyName = returnArray//self.arrayOfProduct
+            self.navigationController?.pushViewController(rvc, animated: true)
+        }
+            
+//        print(self.arrayOfProduct)
+            
+        //["coffee","test"]
+ 
+//        rvc.willgetCategroyName = self.arrayOfProduct
+        //print("Befor send", self.arrayOfProduct)
         
-        rvc.willgetCategroyName = self.arrayOfProduct
+//        rvc.willgetCategroyName = phpGetData("coffee")
         
-        self.navigationController?.pushViewController(rvc, animated: true)
+        //self.navigationController?.pushViewController(rvc, animated: true)
         
         //"coffee"란 문자열을 전송시켜야한다.
         /*if let controller = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController"){
@@ -83,9 +97,12 @@ class CafeDetailController : UIViewController{
       category에 값을 파라미터로 받아서 PHP mysql에 연동하여 데이터 값을 받는다.
      
      */
-    func phpGetData(_ category : String){//->Array<String>{
-        
-        
+    
+    //String 배열을 escaping 하여 받겠다.
+    func phpGetData(_ category : String, handler: @escaping ([String])->Void ){
+    //func performRequest(_ section: String, completion: @escaping (Result<[String: Any]>) -> Void) {
+    
+    //func phpGetData(_ category : String, completion: @escaping <[String: Any]>)-> Void{
         
         /*
          멀티 쓰레딩 , Grand Central Dispatch를 위한 변수
@@ -93,6 +110,8 @@ class CafeDetailController : UIViewController{
 //        let dispatchQueue = DispatchQueue(label: "ALAMOFIRE_REQUEST")
 //        let dispatchGroup  = DispatchGroup()
         
+        
+        //var arrayOfProduct : [String] = []
         
         let parameter: Parameters=[
             "category": category
@@ -109,6 +128,48 @@ class CafeDetailController : UIViewController{
         Alamofire.request(URL_GET_PRODUCT, method: .post, parameters: parameter).responseJSON{
             response in
             
+            switch response.result{
+                
+            case .success:
+                
+                if let result = response.result.value {
+                    
+                    var arrayOfProductJSON : [String] = []
+                    
+                    //converting it as NSDictionary
+                    let jsonData = result as! NSDictionary
+                    //                        print("data is " ,jsonData)
+                    //displaying the message in label
+                    //                self.coffeesName.text = jsonData.value(forKey: "message") as! String?
+                    
+                    /* jsonData의 allValue를 Array<String>으로 받는다.*/
+                    //array = jsonData.allValues as! [String]
+                    
+                    arrayOfProductJSON = jsonData.allValues as! [String]
+                    
+                    print("Inside of alamofire", arrayOfProductJSON)
+                    
+                    handler(arrayOfProductJSON)
+                    
+                    
+//                    print("INSide alamofire", arrayOfProductJSON)
+//                    arrayOfProduct = arrayOfProductJSON
+                    
+                    //                    print("when?",arrayOfProduct)
+                    //                        return arrayOfProduct
+                    
+                }
+                //completion(result)
+            default :
+                fatalError("received non-dictionary JSON response")
+            }
+            
+            
+        }
+        
+        /*Alamofire.request(URL_GET_PRODUCT, method: .post, parameters: parameter).responseJSON{
+            response in
+            
             if let result = response.result.value {
                 
                 var arrayOfProductJSON : [String] = []
@@ -123,24 +184,21 @@ class CafeDetailController : UIViewController{
                 //array = jsonData.allValues as! [String]
                 arrayOfProductJSON = jsonData.allValues as! [String]
                 print("INSide alamofire", arrayOfProductJSON)
-                self.arrayOfProduct = arrayOfProductJSON
+                arrayOfProduct = arrayOfProductJSON
                 
-                print("when?",self.arrayOfProduct)
+                //                    print("when?",arrayOfProduct)
                 //                        return arrayOfProduct
                 
             }
             
-        }
+        }*/
         
+        //dispatchGroup.wait(timeout: .distantFuture)
         
-            //dispatchGroup.wait(timeout: .distantFuture)
             
-            
-        
-        
-        
 //        print("Outside alamofire", arrayOfProduct)
         
+//        print("when?",arrayOfProduct)
 //        return arrayOfProduct
         
 //        print("test", arrayOfProduct)
