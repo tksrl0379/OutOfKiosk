@@ -184,7 +184,7 @@ class DialogFlowPopUpController: UIViewController{
                         "sugar": self.sugar!
                     ]
                     
-                    let URL_ORDER = "http://ec2-54-180-119-142.ap-northeast-2.compute.amazonaws.com/order/api/order.php"
+                    let URL_ORDER = "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/order/api/order.php"
                     //Sending http post request
                     Alamofire.request(URL_ORDER, method: .post, parameters: parameters).responseString
                         {
@@ -300,7 +300,7 @@ class DialogFlowPopUpController: UIViewController{
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
             
             self.recognitionRequest?.append(buffer)
-            //print("monitoring")
+            print("monitoring")
         }
         
         
