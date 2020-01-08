@@ -64,7 +64,7 @@ class LoginController: UIViewController{
     
     /* php 서버를 통해 mysql 서버와 통신하는 함수 */
     func phpCommunication(_ mode: String){
-        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-54-180-119-142.ap-northeast-2.compute.amazonaws.com/rds.php")! as URL)
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/app_login.php")! as URL)
         request.httpMethod = "POST"
         
         let postString = "mode=\(mode)&id=\(id_Textfield.text!)&pwd=\(pwd_Textfield.text!)"

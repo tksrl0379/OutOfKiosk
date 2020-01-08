@@ -189,7 +189,7 @@ class DialogFlowPopUpController: UIViewController{
                     ]
                     
                     /* php 서버 위치 */
-                    let URL_ORDER = "http://ec2-54-180-119-142.ap-northeast-2.compute.amazonaws.com/order/api/order.php"
+                    let URL_ORDER = "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/order/api/order.php"
                     //Sending http post request
                     Alamofire.request(URL_ORDER, method: .post, parameters: parameters).responseString
                         {
@@ -204,7 +204,6 @@ class DialogFlowPopUpController: UIViewController{
                             self.sugar = nil
                             self.whippedcream = nil
                     }
-                    
                 }
                 
                 
@@ -217,7 +216,7 @@ class DialogFlowPopUpController: UIViewController{
                     if(textResponse.contains("선택하셨습니다.")){
                         
                         /* php 통신 */
-                        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-54-180-119-142.ap-northeast-2.compute.amazonaws.com/price.php")! as URL)
+                        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/price.php")! as URL)
                         request.httpMethod = "POST"
                         
                         let postString = "name=\(self.name!)&count=\(self.count!)";
@@ -245,7 +244,7 @@ class DialogFlowPopUpController: UIViewController{
                         task.resume()
                         
                             
-                            
+                        
                         }else{
                             self.speechAndText(textResponse)
                         }
