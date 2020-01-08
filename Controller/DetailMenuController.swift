@@ -9,6 +9,7 @@
 import UIKit
 
 
+
 /*
  TableViewDataSources의 오버라이딩 함수들. numberOfRowsInSection , cellForRowAt indexPath
  */
@@ -16,20 +17,24 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
     
     //var receivedValueFromBeforeVC : Int?
     
-    var willgetCategroyName : String!
+    //var willgetCategroyName : String!
+    var willgetCategroyName : Array<String>!
     
     /*php통신으로 product의 이름들을 가져와서 append시켜줘야한다.*/
     /*php통신에 menu의 대분류가 coffee 인지 smoothie 인지를 알수 있는 방법이 필요하다.*/
     
-    let URL_ORDER = "http://ec2-54-180-119-142.ap-northeast-2.compute.amazonaws.com/order/api/order.php"
+    
+        
+    
     var productName = ["a","b"]
     
-    /* */
+    /*php*/
     
     @IBOutlet weak var ProductTableView: UITableView!
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return productName.count
+        return willgetCategroyName.count
+        //return productName.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -37,7 +42,8 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         let cell = ProductTableView.dequeueReusableCell(withIdentifier: "ProductList", for: indexPath ) as! ProductList
         
         /* ProductList 클래스(Cell Class)에 등록한 프로퍼티 이용 가능 */
-        cell.productName_Label.text = productName[indexPath.row]
+        //cell.productName_Label.text = productName[indexPath.row]
+        cell.productName_Label.text = willgetCategroyName[indexPath.row]
         
         
         return cell
@@ -70,7 +76,7 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         /*
          ProdcutTableView의 delgate , datasource = self
          */
-        print(self.willgetCategroyName)
+//        print(self.willgetCategroyName) //optional로 먹힘.
         
         ProductTableView.delegate = self
         ProductTableView.dataSource = self
