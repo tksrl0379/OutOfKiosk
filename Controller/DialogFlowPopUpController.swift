@@ -31,6 +31,10 @@ class DialogFlowPopUpController: UIViewController{
     
     var blurEffectView: UIView?
     
+    var check :Bool = false
+    var check2 :Bool = false
+    var check3 :Bool = false
+    var check4 : Bool = false
     
     /* Dialogflow parameter 변수 */
     private var name: String?
@@ -158,7 +162,6 @@ class DialogFlowPopUpController: UIViewController{
     }
     
     
-    
     /*
      STT관련 함수
      1. func startStopAct() -> (Void): audioEngine의 running에 따라, 음성인식기능(startRecording)의 시작 여부 결정하는 함수
@@ -172,26 +175,35 @@ class DialogFlowPopUpController: UIViewController{
         /* 한국어 설정 */
         speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "ko-KR"))
         
-        /* 1. 음성인식이 진행중일시 */
-        if audioEngine.isRunning {
-            
-            /* 오디오 입력 및 음성인식 중단 */
-            audioEngine.stop()
-            recognitionRequest?.endAudio()
-            
-            recording_Btn.setTitle("녹음시작", for: .normal)
-            
-            /* 2. 음성인식이 중단상태일시 */
-        } else {
-            startRecording()
-            
-            recording_Btn.setTitle("녹음 중", for: .normal)
+        
+        self.startRecording() // stop
+    
+        DispatchQueue.global().async {
+            while(true){
+                usleep(100)
+                if(self.check == true && self.check2 == true && self.check3 == true  && self.check4 == true ){
+                    
+                    self.check = false
+                    self.check2 = false
+                    self.check3 = false
+                    self.check4 = false
+                    
+                    self.startRecording()
+                }
+            }
         }
+        
+        
+        recording_Btn.setTitle("녹음 중", for: .normal)
+        
     }
+    
+    //func redisSet(key: String, value: )
+    
     
     
     /* STT 시작 */
-    func startRecording() {
+    func startRecording() -> Bool{
         
         var recordingState : Bool = false
         var recordingCount : Int = 0
@@ -238,7 +250,10 @@ class DialogFlowPopUpController: UIViewController{
         } catch {
             print("audioEngine couldn't start because of an error.")
         }
-        requestMsg_Label.text = " "
+        DispatchQueue.main.async {
+            self.requestMsg_Label.text = " "
+        }
+        
         
         var befRecordingCount: Int = 0
         
@@ -255,6 +270,9 @@ class DialogFlowPopUpController: UIViewController{
                 if(monitorCount / 7 == 1){ // monitorCount가 30이 될 때마다 recordingCount 증가 여부 검사
                     
                     if(recordingCount == befRecordingCount){ // 사용자가 말을 끝마친 경우 전송
+                        
+                        
+                        
                         print("EndOfConversation")
                         
                         /* STT 멈추기 */
@@ -271,6 +289,7 @@ class DialogFlowPopUpController: UIViewController{
                         befRecordingCount = 0
                         
                         
+                        
                         /* 2.1. Dialogflow에 requestMsg 전송: 이 전송이 완료 되면 아래의 전송완료 콜백함수 호출 */
                         let request = ApiAI.shared().textRequest()
                         
@@ -280,6 +299,7 @@ class DialogFlowPopUpController: UIViewController{
                             print(self.requestMsg_Label?.text)
                             ApiAI.shared().enqueue(request)
                             self.requestMsg_Label?.text = " "
+                            self.check4 = true
                         }
                         
                         /* 2.2. requestMsg 전송완료 시 호출되는 콜백함수 */
@@ -318,6 +338,8 @@ class DialogFlowPopUpController: UIViewController{
                                     self.whippedcream = whippedcream
                                     print("휘핑크림: \(String(describing: self.whippedcream))")
                                 };
+                                
+                                self.check2 = true
                             }
                             
                             /* 2.2.2. Dialogflow 응답 받고 responseMsg_Label에 출력 및 TTS */
@@ -340,6 +362,8 @@ class DialogFlowPopUpController: UIViewController{
                                     self.speechAndText(textResponse)
                                 }
                                 print("success")
+                                
+                                self.check3 = true
                             }
                             
                             
@@ -382,14 +406,17 @@ class DialogFlowPopUpController: UIViewController{
             
             /* 오류가 없거나 최종 결과가 나오면 audioEngine (오디오 입력)을 중지하고 인식 요청 및 인식 작업을 중지 */
             if error != nil || isFinal {
+                
                 self.audioEngine.stop()
                 inputNode.removeTap(onBus: 0)
                 
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
+                
+                self.check = true
             }
         })
-        
+        return true
     } /* End of startRecording */
     
     
