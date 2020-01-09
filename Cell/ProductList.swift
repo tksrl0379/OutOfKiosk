@@ -11,4 +11,6 @@ import UIKit
 class ProductList : UITableViewCell{
     
     @IBOutlet weak var productName_Label: UILabel!
+    
+    @IBOutlet weak var productPrice_Label: UILabel!
 }
