@@ -198,26 +198,25 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="98"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="drink" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="htS-gX-Ten">
-                                                    <rect key="frame" x="29" y="16" width="87" height="66"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="87" id="x7b-X4-X3i"/>
-                                                    </constraints>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="drink" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="htS-gX-Ten">
+                                                    <rect key="frame" x="29" y="16" width="228" height="66"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Price" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xHt-1X-D34">
+                                                    <rect key="frame" x="320" y="14" width="66" height="70"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
-                                            <constraints>
-                                                <constraint firstItem="htS-gX-Ten" firstAttribute="top" secondItem="hs1-1w-VhH" secondAttribute="topMargin" constant="5" id="cnn-m3-2JX"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="htS-gX-Ten" secondAttribute="bottom" constant="5" id="meV-Lh-L3S"/>
-                                            </constraints>
                                         </tableViewCellContentView>
-                                        <constraints>
-                                            <constraint firstItem="htS-gX-Ten" firstAttribute="centerX" secondItem="tbO-fJ-jEc" secondAttribute="centerX" constant="-134.5" id="ywM-1G-KwB"/>
-                                        </constraints>
                                         <connections>
                                             <outlet property="productName_Label" destination="htS-gX-Ten" id="lTN-qt-f0d"/>
+                                            <outlet property="productPrice_Label" destination="xHt-1X-D34" id="fHH-Sd-FZt"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

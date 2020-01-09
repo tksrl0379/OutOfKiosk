@@ -58,6 +58,7 @@ class CafeDetailController : UIViewController{
             
 //            self.arrayOfProduct = returnArray
             rvc.willgetCategroyName = returnArray//self.arrayOfProduct
+            //rvc.willgetCategroyName = returnArray//self.arrayOfProduct
             self.navigationController?.pushViewController(rvc, animated: true)
         }
             
@@ -82,21 +83,22 @@ class CafeDetailController : UIViewController{
     
     @IBAction func smoothie_Btn(_ sender: Any) {
         
-        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController"){
-            self.navigationController?.pushViewController(controller, animated: true)
-        }
+      //rvc 가 옵셔널 타입이므로 guard 구문을 통해서 옵셔널 바인딩 처리
+                guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController") as? DetailMenuController else {
+                    //아니면 종료
+                    return}
+                
+                phpGetData("smoothie"){
+                    (returnArray) in //returnarrray는 @escaping을 통해 나온 return 값이다.
+                    
+        //            self.arrayOfProduct = returnArray
+                    rvc.willgetCategroyName = returnArray//self.arrayOfProduct
+                    //rvc.willgetCategroyName = returnArray//self.arrayOfProduct
+                    self.navigationController?.pushViewController(rvc, animated: true)
+                }
     }
     
     
-    /*
-     TabView 를 이용하여, 선택한 메뉴가 모두 뜨게끔 할 수도 있다.
-     */
-    
-    
-    /*phpGetData -> return array
-      category에 값을 파라미터로 받아서 PHP mysql에 연동하여 데이터 값을 받는다.
-     
-     */
     
     //String 배열을 escaping 하여 받겠다.
     func phpGetData(_ category : String, handler: @escaping ([String])->Void ){

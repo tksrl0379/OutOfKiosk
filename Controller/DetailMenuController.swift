@@ -19,6 +19,7 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
     
     //var willgetCategroyName : String!
     var willgetCategroyName : Array<String>!
+    var willgetCategroyPrice : Array<Int>!
     
     /*php통신으로 product의 이름들을 가져와서 append시켜줘야한다.*/
     /*php통신에 menu의 대분류가 coffee 인지 smoothie 인지를 알수 있는 방법이 필요하다.*/
@@ -44,6 +45,7 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         /* ProductList 클래스(Cell Class)에 등록한 프로퍼티 이용 가능 */
         //cell.productName_Label.text = productName[indexPath.row]
         cell.productName_Label.text = willgetCategroyName[indexPath.row]
+        //cell.productPrice_Label.text = willgetCategroyPrice[indexPath.row]
         
         
         return cell
@@ -80,7 +82,7 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         
         ProductTableView.delegate = self
         ProductTableView.dataSource = self
-        
+        self.ProductTableView.rowHeight = 93.0
     }
     
 }
