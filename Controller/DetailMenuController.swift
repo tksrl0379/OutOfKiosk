@@ -21,13 +21,15 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
     var willgetCategroyName : Array<String>!
     var willgetCategroyPrice : Array<Int>!
     
+    //var willgetCategroyPrice : Array<Int>!
+    
     /*php통신으로 product의 이름들을 가져와서 append시켜줘야한다.*/
     /*php통신에 menu의 대분류가 coffee 인지 smoothie 인지를 알수 있는 방법이 필요하다.*/
     
     
         
     
-    var productName = ["a","b"]
+//    var productName = ["a","b"]
     
     /*php*/
     
@@ -42,10 +44,11 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         /* 재사용할 수 있는 cell을 ProductTableView에 넣는다는 뜻. UITableViewCell을 반환하기 때문에 Storelist로 다운캐스팅 */
         let cell = ProductTableView.dequeueReusableCell(withIdentifier: "ProductList", for: indexPath ) as! ProductList
         
+//        print("indexPath si ", indexPath.row)
         /* ProductList 클래스(Cell Class)에 등록한 프로퍼티 이용 가능 */
         //cell.productName_Label.text = productName[indexPath.row]
         cell.productName_Label.text = willgetCategroyName[indexPath.row]
-        //cell.productPrice_Label.text = willgetCategroyPrice[indexPath.row]
+        cell.productPrice_Label.text = String(willgetCategroyPrice[indexPath.row])
         
         
         return cell

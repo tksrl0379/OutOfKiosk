@@ -44,23 +44,44 @@ class CafeDetailController : UIViewController{
             //아니면 종료
             return}
         
-        
-        /*
-         PHP 통신으로 받은 값을 리스트에 append 시킬 예정
-         rvc.willgetCategroyName = ["아메리카노","카페라떼","콜드블루"] 의 형태가 되어야함.
-        */
-        
-        
-//        print(type(of: rvc.willgetCategroyName))
-//        rvc.willgetCategroyName = ["test1","test2"]
-        phpGetData("coffee"){
+        /*ORIGINAL*/
+        /*phpGetData("coffee"){
             (returnArray) in //returnarrray는 @escaping을 통해 나온 return 값이다.
             
 //            self.arrayOfProduct = returnArray
             rvc.willgetCategroyName = returnArray//self.arrayOfProduct
             //rvc.willgetCategroyName = returnArray//self.arrayOfProduct
             self.navigationController?.pushViewController(rvc, animated: true)
-        }
+        }*/
+        
+
+        phpGetData("coffee"){
+                    (jsonData) in //jsonData는 @escaping을 통해 나온 return 값이다.
+                    
+                    var willgetCategroyName : Array<String> = []
+                    var willgetCategroyPrice : Array<Int> = []
+//                    var willgetCategroyPrice : Array<String> = []
+        
+        
+                    /*Productdata에는 json형식으로 받은데이터 Name, Price가 저장되어 있다.*/
+                    for i in 0..<jsonData.count{
+                        let productdata = jsonData.allValues[i] as! NSArray
+                        //                    print(type(of: a[0]))
+                        
+                        let name = productdata[0] as! String
+                        let price = productdata[1] as! Int
+                        
+                        willgetCategroyName.append(name)
+                        willgetCategroyPrice.append(price)
+                    }
+            
+//                    print(willgetCategroyPrice)
+            
+                    rvc.willgetCategroyName = willgetCategroyName//self.arrayOfProduct
+                    rvc.willgetCategroyPrice = willgetCategroyPrice//self.arrayOfProduct
+                    self.navigationController?.pushViewController(rvc, animated: true)
+                }
+        
             
 //        print(self.arrayOfProduct)
             
@@ -89,31 +110,28 @@ class CafeDetailController : UIViewController{
                     return}
                 
                 phpGetData("smoothie"){
-                    (returnArray) in //returnarrray는 @escaping을 통해 나온 return 값이다.
-                    
-        //            self.arrayOfProduct = returnArray
-                    rvc.willgetCategroyName = returnArray//self.arrayOfProduct
-                    //rvc.willgetCategroyName = returnArray//self.arrayOfProduct
-                    self.navigationController?.pushViewController(rvc, animated: true)
-                }
+                            (jsonData) in //jsonData는 @escaping을 통해 나온 return 값이다.
+                            var willgetCategroyName : Array<String>!
+                            var willgetCategroyPrice : Array<Int>!
+                //            self.arrayOfProduct = returnArray
+                            for i in 0..<jsonData.count{
+                                let a = jsonData.allValues[i] as! NSArray
+                                willgetCategroyName.append(a[0] as! String)
+                                willgetCategroyPrice.append(a[1] as! Int)
+                            }
+                            rvc.willgetCategroyName = willgetCategroyName//self.arrayOfProduct
+//                            rvc.willgetCategroyPrice = willgetCategroyPrice//self.arrayOfProduct
+                            self.navigationController?.pushViewController(rvc, animated: true)
+                        }
     }
     
     
     
     //String 배열을 escaping 하여 받겠다.
-    func phpGetData(_ category : String, handler: @escaping ([String])->Void ){
-    //func performRequest(_ section: String, completion: @escaping (Result<[String: Any]>) -> Void) {
+    //func phpGetData(_ category : String, handler: @escaping ([String])->Void ){
     
-    //func phpGetData(_ category : String, completion: @escaping <[String: Any]>)-> Void{
-        
-        /*
-         멀티 쓰레딩 , Grand Central Dispatch를 위한 변수
-         */
-//        let dispatchQueue = DispatchQueue(label: "ALAMOFIRE_REQUEST")
-//        let dispatchGroup  = DispatchGroup()
-        
-        
-        //var arrayOfProduct : [String] = []
+    func phpGetData(_ category : String, handler: @escaping (NSDictionary)->Void ){
+    
         
         let parameter: Parameters=[
             "category": category
@@ -132,14 +150,16 @@ class CafeDetailController : UIViewController{
             
             switch response.result{
                 
+//                print(response.result)
             case .success:
                 
                 if let result = response.result.value {
                     
-                    var arrayOfProductJSON : [String] = []
+//                    var arrayOfProductJSON : [String] = []
                     
                     //converting it as NSDictionary
                     let jsonData = result as! NSDictionary
+                    print(jsonData)
                     //                        print("data is " ,jsonData)
                     //displaying the message in label
                     //                self.coffeesName.text = jsonData.value(forKey: "message") as! String?
@@ -147,11 +167,12 @@ class CafeDetailController : UIViewController{
                     /* jsonData의 allValue를 Array<String>으로 받는다.*/
                     //array = jsonData.allValues as! [String]
                     
-                    arrayOfProductJSON = jsonData.allValues as! [String]
+//                    arrayOfProductJSON = jsonData.allValues as! [String]
                     
-                    print("Inside of alamofire", arrayOfProductJSON)
+//                    print("Inside of alamofire", arrayOfProductJSON)
                     
-                    handler(arrayOfProductJSON)
+//                    handler(arrayOfProductJSON)
+                    handler(jsonData)
                     
                     
 //                    print("INSide alamofire", arrayOfProductJSON)
