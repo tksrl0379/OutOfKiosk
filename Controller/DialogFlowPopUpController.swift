@@ -6,6 +6,8 @@
 //  Copyright © 2020 OOK. All rights reserved.
 //
 
+/* 30초간 아무 말도 안하면 음성인식 기능 종료됨. 음성시작 버튼 눌러줘야 함 */
+
 /*
  TTS기능을 위해서
  -ApiAI
@@ -30,11 +32,16 @@ import Alamofire
 class DialogFlowPopUpController: UIViewController{
     
     var blurEffectView: UIView?
+    var inputNode: AVAudioInputNode?
+    /* ViewController 종료를 알리는 변수 */
+    private var viewIsRunning : Bool = true
     
-    var check :Bool = false
-    var check2 :Bool = false
-    var check3 :Bool = false
-    var check4 : Bool = false
+    /* startRecording()의 콜백함수들 종료 여부 체크 변수  */
+    //var checkMain :Bool = false
+    private var checkSttFinish : Bool = false
+    private var checkSendCompleteToAI :Bool = false
+    private var checkResponseFromAI :Bool = false
+    
     
     /* Dialogflow parameter 변수 */
     private var name: String?
@@ -65,6 +72,37 @@ class DialogFlowPopUpController: UIViewController{
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
     private var audioEngine = AVAudioEngine()
+    
+    
+    /* 녹음 시작, 중단 버튼 시 이벤트 처리 */
+    @IBAction func startStopAct(_ sender: Any) {
+        
+        /* 한국어 설정 */
+        speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "ko-KR"))
+        
+        
+        self.startRecording()
+        
+        /* startRecording() 내부의 콜백함수들 종료 여부 체크 후 startRecording() 재실행 */
+        DispatchQueue.global().async {
+            while(self.viewIsRunning){
+                /* 과도한 CPU 점유 막기 위해 usleep */
+                usleep(10)
+                if(self.checkSttFinish == true && self.checkSendCompleteToAI == true && self.checkResponseFromAI == true ){
+                    
+                    self.checkSttFinish = false
+                    self.checkSendCompleteToAI = false
+                    self.checkResponseFromAI = false
+                    //self.checkMain = false
+                    
+                    self.startRecording()
+                }
+            }
+        }
+        
+        recording_Btn.setTitle("녹음 중", for: .normal)
+        
+    }
     
     /* 가격 정보 출력 */
     /* php - mysql 서버로부터 가격 정보 가져와서 가격 출력 후 receivedMsg_Label에 Dialogflow message 출력 및 TTS */
@@ -168,65 +206,26 @@ class DialogFlowPopUpController: UIViewController{
      2. func startRecording(): 음성인식 시작
      */
     
-    
-    /* 녹음 시작, 중단 버튼 시 이벤트 처리 */
-    @IBAction func startStopAct(_ sender: Any) {
-        
-        /* 한국어 설정 */
-        speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "ko-KR"))
-        
-        
-        self.startRecording() // stop
-    
-        DispatchQueue.global().async {
-            while(true){
-                usleep(100)
-                if(self.check == true && self.check2 == true && self.check3 == true  && self.check4 == true ){
-                    
-                    self.check = false
-                    self.check2 = false
-                    self.check3 = false
-                    self.check4 = false
-                    
-                    self.startRecording()
-                }
-            }
-        }
-        
-        
-        recording_Btn.setTitle("녹음 중", for: .normal)
-        
-    }
-    
-    //func redisSet(key: String, value: )
-    
-    
-    
     /* STT 시작 */
-    func startRecording() -> Bool{
+    func startRecording(){
         
+        /* 사용자의 문장 끝을 파악하기 위한 변수들 */
         var recordingState : Bool = false
         var recordingCount : Int = 0
         var monitorCount : Int = 0
+        var befRecordingCount: Int = 0
+        
+        
+        
         
         if recognitionTask != nil {
             recognitionTask?.cancel()
             recognitionTask = nil
         }
-        
-        /*
-         오디오 녹음을 준비 할 AVAudioSession을 만듭니다. 여기서 우리는
-         세션의 범주를 녹음, 측정 모드로 설정하고 활성화합니다. 이러한 속성을
-         설정하면 예외가 발생할 수 있으므로 try catch 절에 넣어야합니다.
-         */
-        
-        
+       
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         
-        
-        /*
-         recognitionRequest 객체가 인스턴스화되고 nil이 아닌지 확인합니다.
-         */
+        /* recognitionRequest 객체가 인스턴스화되고 nil이 아닌지 확인 */
         guard let recognitionRequest = recognitionRequest else {
             fatalError("Unable to create an SFSpeechAudioBufferRecognitionRequest object")
         }
@@ -234,13 +233,15 @@ class DialogFlowPopUpController: UIViewController{
         /* 사용자의 부분적인 발화도 모두 인식하도록 설정 */
         recognitionRequest.shouldReportPartialResults = true
         
-        
-        
         /* 소리 input을 받기 위해 input node 생성 */
-        let inputNode = audioEngine.inputNode
+        inputNode = audioEngine.inputNode
         
         /* 특정 bus의 outputformat 반환: 보통 0번이 outputformat, 1번이 inputformat ( https://liveupdate.tistory.com/400 ) */
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
+        let recordingFormat = inputNode?.outputFormat(forBus: 0)
+        
+        
+        
+        
         
         /* 1. 음성인식 준비 및 시작 */
         audioEngine.prepare()
@@ -255,11 +256,10 @@ class DialogFlowPopUpController: UIViewController{
         }
         
         
-        var befRecordingCount: Int = 0
         
         /* 새 쓰레드에서 돌아감 */
         /* 2. bus에 audio tap을 설치하여 inputnode의 output 감시: audioEngine이 start인 경우 계속해서 반복 */
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
+        inputNode?.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
             
             self.recognitionRequest?.append(buffer)
             print("monitoring")
@@ -270,8 +270,6 @@ class DialogFlowPopUpController: UIViewController{
                 if(monitorCount / 7 == 1){ // monitorCount가 30이 될 때마다 recordingCount 증가 여부 검사
                     
                     if(recordingCount == befRecordingCount){ // 사용자가 말을 끝마친 경우 전송
-                        
-                        
                         
                         print("EndOfConversation")
                         
@@ -294,18 +292,16 @@ class DialogFlowPopUpController: UIViewController{
                         let request = ApiAI.shared().textRequest()
                         
                         /* request query 만들고 전송*/
-                        DispatchQueue.main.async{
+                        DispatchQueue.main.async{ // UILabel 때문에 Main 쓰레드 내부에서 실행
                             request?.query = self.requestMsg_Label?.text
-                            print(self.requestMsg_Label?.text)
-                            ApiAI.shared().enqueue(request)
+                            ApiAI.shared().enqueue(request) // request.query를 받은 다음 실행해야 하기 때문에 Main 쓰레드 내부에서 같이 실행 (바깥에서 실행 시 비동기적 실행으로 오류 가능성 높음)
+                            
                             self.requestMsg_Label?.text = " "
-                            self.check4 = true
+                            //self.checkMain = true
                         }
                         
                         /* 2.2. requestMsg 전송완료 시 호출되는 콜백함수 */
                         request?.setMappedCompletionBlockSuccess({ (request, response) in
-                            
-                            
                             
                             let response = response as! AIResponse
                
@@ -339,7 +335,7 @@ class DialogFlowPopUpController: UIViewController{
                                     print("휘핑크림: \(String(describing: self.whippedcream))")
                                 };
                                 
-                                self.check2 = true
+                                self.checkSendCompleteToAI = true
                             }
                             
                             /* 2.2.2. Dialogflow 응답 받고 responseMsg_Label에 출력 및 TTS */
@@ -363,10 +359,8 @@ class DialogFlowPopUpController: UIViewController{
                                 }
                                 print("success")
                                 
-                                self.check3 = true
+                                self.checkResponseFromAI = true
                             }
-                            
-                            
                             
                             
                         /* 실패 시 */
@@ -387,6 +381,8 @@ class DialogFlowPopUpController: UIViewController{
         } // End of 2.inputNode.installTap
         
         
+        
+        
         /* 3. inputnode의 output이 감지될 때마다 resultHandler callback 함수 호출 */
         recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
             print("recording")
@@ -403,25 +399,31 @@ class DialogFlowPopUpController: UIViewController{
                 isFinal = (result?.isFinal)!
             }
             
-            
             /* 오류가 없거나 최종 결과가 나오면 audioEngine (오디오 입력)을 중지하고 인식 요청 및 인식 작업을 중지 */
             if error != nil || isFinal {
                 
-                self.audioEngine.stop()
-                inputNode.removeTap(onBus: 0)
+                self.audioEngine.stop() // 이미 앞에서 stop해서 필요 없는 거같은데 일단 보류
+                self.inputNode?.removeTap(onBus: 0)
                 
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
                 
-                self.check = true
+                self.checkSttFinish = true
             }
         })
-        return true
+        
+        
+        
     } /* End of startRecording */
+    
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        viewIsRunning = true
         
         /* Dialogflow에 requestMsg 전송 */
         let request = ApiAI.shared().textRequest()
@@ -451,8 +453,14 @@ class DialogFlowPopUpController: UIViewController{
         }) // End of request complete call back
     }
     
+    
+    
     override func viewDidDisappear(_ animated: Bool) {
         /* DialogFlowPopUpController 가 종료될 때 CafeDetailController에 있는 blurEffectView 삭제 */
         blurEffectView?.removeFromSuperview()
+        
+        viewIsRunning = false
+        inputNode?.removeTap(onBus: 0)
+        
     }
 }
