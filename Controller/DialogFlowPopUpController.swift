@@ -462,6 +462,9 @@ class DialogFlowPopUpController: UIViewController{
                 print("success")
                 self.speechAndText(textResponse)                
                 
+                /*매장의 request.query에 대한 값을 성공적으로 받으면 StartStopAct()를 시작하도록 한다.
+                 VoiceOver 특성상 '뒤로' 버튼이 읽히므
+                 */
                 self.StartStopAct()
             }
             
