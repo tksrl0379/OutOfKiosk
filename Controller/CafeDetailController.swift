@@ -20,6 +20,7 @@ class CafeDetailController : UIViewController{
     var receivedValueFromBeforeVC : Int?
     
     
+    @IBOutlet weak var orderMenu_Btn: UIButton!
     
     /*
      orderMenu_Btn(음성 주문하기 버튼)
@@ -152,6 +153,9 @@ class CafeDetailController : UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        orderMenu_Btn.setTitle("테스트", for: .normal)
+            
+
         //print(receivedValueFromBeforeVC)
         //        test_Text.text = String(receivedValueFromBeforeVC!)
         
@@ -159,9 +163,7 @@ class CafeDetailController : UIViewController{
         
         
         
-        /*ORIGINAL : DialogFlow 팝업창 띄우기
-         
-         
+        /*ORIGINAL : DialogFlow 팝업창 띄우기                  
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyBoard.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as! DialogFlowPopUpController
         
