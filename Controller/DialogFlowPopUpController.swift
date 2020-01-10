@@ -62,7 +62,15 @@ class DialogFlowPopUpController: UIViewController{
     
     /* 응답 출력 및 읽기(TTS) */
     func speechAndText(_ textResponse: String) {
-        
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: .defaultToSpeaker)//.setCategory(AVAudioSession.Category.record)
+            try audioSession.setMode(AVAudioSession.Mode.default)
+            
+        }catch{
+            print("error")
+        }
+
         /* Dialogflow로부터 받은 응답 출력 */
         self.receivedMsg_Label.text = textResponse
         
@@ -75,6 +83,8 @@ class DialogFlowPopUpController: UIViewController{
         
         /* 음성 출력 */
         speechSynthesizer.speak(speechUtterance)
+        
+        
         
     }
     
@@ -253,9 +263,11 @@ class DialogFlowPopUpController: UIViewController{
          세션의 범주를 녹음, 측정 모드로 설정하고 활성화합니다. 이러한 속성을
          설정하면 예외가 발생할 수 있으므로 try catch 절에 넣어야합니다.
          */
+        /*
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(AVAudioSession.Category.record)
+            try audioSession.setCategory(AVAudioSession.Category.playAndRecord)//.setCategory(AVAudioSession.Category.record)
+            
             try audioSession.setMode(AVAudioSession.Mode.measurement)
             //Error 이유는 모르겠음.
             //try audioSession.setActive(true, with: .notifyOthersOnDeactivation)
@@ -263,6 +275,7 @@ class DialogFlowPopUpController: UIViewController{
             print("audioSession properties weren't set because of an error.")
         }
         
+ */
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         
         
@@ -319,8 +332,7 @@ class DialogFlowPopUpController: UIViewController{
                  */
                 self.requestMsg_Label.text = result?.bestTranscription.formattedString
                 /* 명령 Append 받아서 문자열로 받는 곳 */
-                //print(result?.bestTranscription.formattedString)
-                isFinal = (result?.isFinal)!
+                //print(result?.bestTranscription.formattedString)AVAudioSession.Category.playAndRecord)                isFinal = (result?.isFinal)!
             }
             /*
              오류가 없거나 최종 결과가 나오면 audioEngine (오디오 입력)을 중지하고 인식 요청 및 인식 작업을 중지합니다.
