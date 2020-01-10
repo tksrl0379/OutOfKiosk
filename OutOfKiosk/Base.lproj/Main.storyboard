@@ -374,18 +374,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gXu-rb-zay">
-                                <rect key="frame" x="41" y="401" width="293" height="97"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <bool key="isElement" value="NO"/>
-                                </accessibility>
-                                <fontDescription key="fontDescription" type="system" pointSize="50"/>
-                                <state key="normal" title="녹음 시작"/>
-                                <connections>
-                                    <action selector="startStopAct:" destination="Yoj-n0-B9v" eventType="touchUpInside" id="XGD-Vj-DTn"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="fBx-SR-Gvn"/>
@@ -393,7 +381,6 @@
                     <value key="contentSizeForViewInPopover" type="size" width="50" height="200"/>
                     <connections>
                         <outlet property="receivedMsg_Label" destination="eTm-ta-o6V" id="FsD-oA-9ie"/>
-                        <outlet property="recording_Btn" destination="gXu-rb-zay" id="f16-B6-fVx"/>
                         <outlet property="requestMsg_Label" destination="6TA-Vl-fmi" id="0GM-DB-QzK"/>
                     </connections>
                 </viewController>

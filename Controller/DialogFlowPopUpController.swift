@@ -31,7 +31,7 @@ import Alamofire
 
 class DialogFlowPopUpController: UIViewController{
     
-    var blurEffectView: UIView?
+    //var blurEffectView: UIView?
     var inputNode: AVAudioInputNode?
     /* ViewController 종료를 알리는 변수 */
     private var viewIsRunning : Bool = true
@@ -57,7 +57,7 @@ class DialogFlowPopUpController: UIViewController{
      */
     @IBOutlet weak var receivedMsg_Label: UILabel!
     @IBOutlet weak var requestMsg_Label: UITextView!
-    @IBOutlet weak var recording_Btn: UIButton!
+    //@IBOutlet weak var recording_Btn: UIButton!
     
     /* TTS 관련 변수 */
     let speechSynthesizer = AVSpeechSynthesizer()
@@ -73,11 +73,11 @@ class DialogFlowPopUpController: UIViewController{
     private var recognitionTask: SFSpeechRecognitionTask?
     private var audioEngine = AVAudioEngine()
     
-    func testStartStopAct() {
+    /* 녹음 시작, 중단 버튼 시 이벤트 처리 */
+    func StartStopAct() {
         
         /* 한국어 설정 */
         speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "ko-KR"))
-        
         
         self.startRecording()
         
@@ -86,7 +86,7 @@ class DialogFlowPopUpController: UIViewController{
             while(self.viewIsRunning){
                 /* 과도한 CPU 점유 막기 위해 usleep */
                 usleep(10)
-                if(self.checkSttFinish == true && self.checkSendCompleteToAI == true && self.checkResponseFromAI == true ){
+                if(self.checkSttFinish == true && self.checkSendCompleteToAI == true && self.checkResponseFromAI == true && !self.speechSynthesizer.isSpeaking){
                     
                     self.checkSttFinish = false
                     self.checkSendCompleteToAI = false
@@ -103,35 +103,8 @@ class DialogFlowPopUpController: UIViewController{
     }
     
     
-    /* 녹음 시작, 중단 버튼 시 이벤트 처리 */
-    @IBAction func startStopAct(_ sender: Any) {
-        
-        /* 한국어 설정 */
-        speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "ko-KR"))
-        
-        
-        self.startRecording()
-        
-        /* startRecording() 내부의 콜백함수들 종료 여부 체크 후 startRecording() 재실행 */
-        DispatchQueue.global().async {
-            while(self.viewIsRunning){
-                /* 과도한 CPU 점유 막기 위해 usleep */
-                usleep(10)
-                if(self.checkSttFinish == true && self.checkSendCompleteToAI == true && self.checkResponseFromAI == true ){
-                    
-                    self.checkSttFinish = false
-                    self.checkSendCompleteToAI = false
-                    self.checkResponseFromAI = false
-                    //self.checkMain = false
-                    
-                    self.startRecording()
-                }
-            }
-        }
-        
-        recording_Btn.setTitle("녹음 중", for: .normal)
-        
-    }
+
+
     
     /* 가격 정보 출력 */
     /* php - mysql 서버로부터 가격 정보 가져와서 가격 출력 후 receivedMsg_Label에 Dialogflow message 출력 및 TTS */
@@ -306,9 +279,9 @@ class DialogFlowPopUpController: UIViewController{
                         self.audioEngine.stop()
                         recognitionRequest.endAudio()
                         
-                        DispatchQueue.main.async{
+/*                        DispatchQueue.main.async{
                             self.recording_Btn.setTitle("녹음시작", for: .normal)
-                        }
+                        }*/
                         
                         recordingState = false
                         recordingCount = 0
@@ -452,6 +425,19 @@ class DialogFlowPopUpController: UIViewController{
         super.viewDidLoad()
         
         
+        //AudioSession
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: .defaultToSpeaker)//.setCategory(AVAudioSession.Category.record)
+            try audioSession.setMode(AVAudioSession.Mode.default)
+            
+        }catch{
+            print("error")
+        }
+        
+        
+        
+        
         viewIsRunning = true
         
         /* Dialogflow에 requestMsg 전송 */
@@ -475,8 +461,10 @@ class DialogFlowPopUpController: UIViewController{
                 self.speechAndText(textResponse)
                 
                 
-                self.testStartStopAct()
+                self.StartStopAct()
             }
+            
+            
             
         /* 실패 시 */
         }, failure: { (request, error) in
@@ -489,7 +477,6 @@ class DialogFlowPopUpController: UIViewController{
     
     override func viewDidDisappear(_ animated: Bool) {
         /* DialogFlowPopUpController 가 종료될 때 CafeDetailController에 있는 blurEffectView 삭제 */
-        blurEffectView?.removeFromSuperview()
         
         viewIsRunning = false
         inputNode?.removeTap(onBus: 0)
