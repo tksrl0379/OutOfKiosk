@@ -425,7 +425,9 @@ class DialogFlowPopUpController: UIViewController{
         super.viewDidLoad()
         
         
-        //AudioSession
+        /*
+         TTS 초기화를 하여 기능을 원활하게 할 수 있다.
+         */
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: .defaultToSpeaker)//.setCategory(AVAudioSession.Category.record)
@@ -458,8 +460,7 @@ class DialogFlowPopUpController: UIViewController{
             if let textResponse = response.result.fulfillment.speech {
                 print(textResponse)
                 print("success")
-                self.speechAndText(textResponse)
-                
+                self.speechAndText(textResponse)                
                 
                 self.StartStopAct()
             }
