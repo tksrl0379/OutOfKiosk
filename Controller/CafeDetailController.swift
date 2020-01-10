@@ -20,14 +20,42 @@ class CafeDetailController : UIViewController{
     var receivedValueFromBeforeVC : Int?
     
     
-    /*coffee_btn누를시 커피에 관련된 메뉴가 나와야한다.
-     mysql php 통신이 필요함.
-     이곳에선 dictionary로 키,밸류 {0:coffee, 1:smoothie }처럼 만들고
-     DetailMenuController에 키를 전달한다.
-     DetailMenuController에서는 밸류값을 php통신으로 mysql에 있는
-     값을 관련 데이터값들을 불러온다.
-     */
     
+    /*
+     orderMenu_Btn(음성 주문하기 버튼)
+     이 버튼을 클릭시, 챗봇화면으로 연결되어진다.
+     
+     */
+    @IBAction func orderMenu_Btn(_ sender: Any) {
+        
+        /* 영민이 버젼 코드.
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyBoard.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as! DialogFlowPopUpController
+        
+        vc.modalPresentationStyle = .pageSheet
+        self.present(vc, animated: true, completion: nil)
+        */
+        
+        
+        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as? DialogFlowPopUpController else {
+            return}
+        
+        self.navigationController?.pushViewController(rvc, animated: true)
+    }
+    
+    
+    
+    
+    
+    
+    
+    /*coffee_btn누를시 커피에 관련된 메뉴가 나와야한다.
+    mysql php 통신이 필요함.
+    이곳에선 dictionary로 키,밸류 {0:coffee, 1:smoothie }처럼 만들고
+    DetailMenuController에 키를 전달한다.
+    DetailMenuController에서는 밸류값을 php통신으로 mysql에 있는
+    값을 관련 데이터값들을 불러온다.
+    */
     @IBAction func coffee_Btn(_ sender: Any) {
         
         //rvc 가 옵셔널 타입이므로 guard 구문을 통해서 옵셔널 바인딩 처리
@@ -35,6 +63,7 @@ class CafeDetailController : UIViewController{
             //아니면 종료
             return}
         
+        /*ORIGINAL CODE
         //phpGetData("coffee"){
         phpGetData("1"){ //"1"은 coffee의 대한 카테코리 넘버이다.
             
@@ -43,7 +72,11 @@ class CafeDetailController : UIViewController{
             rvc.willgetCategroyName = willgetCategroyName
             rvc.willgetCategroyPrice = willgetCategroyPrice
             self.navigationController?.pushViewController(rvc, animated: true)
-        }
+        }*/
+        
+        rvc.willgetCategroyName = ["Test1","Test2","Test3"]
+        rvc.willgetCategroyPrice = [1000,2000,3000]
+        self.navigationController?.pushViewController(rvc, animated: true)
         
     }
         
@@ -122,10 +155,17 @@ class CafeDetailController : UIViewController{
         //print(receivedValueFromBeforeVC)
         //        test_Text.text = String(receivedValueFromBeforeVC!)
         
-        //DialogFlow 팝업창 띄우기
+        
+        
+        
+        
+        /*ORIGINAL : DialogFlow 팝업창 띄우기
+         
+         
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyBoard.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as! DialogFlowPopUpController
         
+        /*블러 효과 주는 이펙트
         let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = view.bounds
@@ -133,10 +173,11 @@ class CafeDetailController : UIViewController{
         view.addSubview(blurEffectView)
         vc.blurEffectView = blurEffectView
         vc.view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
-        
+        */
         vc.modalPresentationStyle = .pageSheet
         self.present(vc, animated: true, completion: nil)
         
+         */
         
     }
     
