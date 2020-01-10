@@ -62,6 +62,7 @@ class DialogFlowPopUpController: UIViewController{
     
     /* 응답 출력 및 읽기(TTS) */
     func speechAndText(_ textResponse: String) {
+        
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: .defaultToSpeaker)//.setCategory(AVAudioSession.Category.record)

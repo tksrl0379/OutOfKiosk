@@ -35,7 +35,8 @@ class CafeDetailController : UIViewController{
             //아니면 종료
             return}
         
-        phpGetData("coffee"){
+        //phpGetData("coffee"){
+        phpGetData("1"){ //"1"은 coffee의 대한 카테코리 넘버이다.
             
             (willgetCategroyName,willgetCategroyPrice) in
             
@@ -53,7 +54,7 @@ class CafeDetailController : UIViewController{
             //아니면 종료
             return}
         
-        phpGetData("smoothie"){
+        phpGetData("2"){ //"2"은 smoothie의 대한 카테코리 넘버이다.
             
             (willgetCategroyName,willgetCategroyPrice) in
             
@@ -68,10 +69,11 @@ class CafeDetailController : UIViewController{
      따라서 @escaping 방식을 사용하여, NSDictionary에서 파싱한 여러 Array값을 받는다면 그 때, Btn_Method의 값을 전달한다.
      */
     
+    //func phpGetData(_ category : String, handler: @escaping (Array<String>,Array<Int>)->Void ){
     func phpGetData(_ category : String, handler: @escaping (Array<String>,Array<Int>)->Void ){
         
         let parameter: Parameters=[
-            "category": category
+            "category":category
         ]
         
         let URL_GET_PRODUCT = "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/detailMenu/api/category.php"
