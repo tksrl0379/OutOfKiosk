@@ -6,7 +6,7 @@
 //  Copyright © 2020 OOK. All rights reserved.
 //
 
-/* 30초간 아무 말도 안하면 음성인식 기능 종료됨. 음성시작 버튼 눌러줘야 함 */
+/* 30초간 아무 말도 안하면 음성인식 기능 종료됨.*/
 
 /*
  TTS기능을 위해서
@@ -21,6 +21,15 @@
  Alamofire(JSON)을 이용한다.
  
  */
+
+
+/*
+ 1. 가격 정보 띄우기 ( mysql DB테이블 '모카스무디 그란데' 형식으로 바꿔야 함)
+ 2. 음성 녹음 전, 녹음 중 이미지 띄우기
+ 3. 아주 가~끔 음성인식이 안먹을 때가 있는데 여러번 반복해서 테스트해서 원인 알아내기
+ */
+
+
 import ApiAI
 import AVFoundation
 import Speech
@@ -460,7 +469,7 @@ class DialogFlowPopUpController: UIViewController{
             if let textResponse = response.result.fulfillment.speech {
                 print(textResponse)
                 print("success")
-                self.speechAndText(textResponse)                
+                self.speechAndText(textResponse)
                 
                 /*매장의 request.query에 대한 값을 성공적으로 받으면 StartStopAct()를 시작하도록 한다.
                  VoiceOver 특성상 '뒤로' 버튼이 읽히므
