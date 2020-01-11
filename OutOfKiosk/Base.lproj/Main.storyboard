@@ -333,7 +333,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <state key="normal" title="  테스트주문하기"/>
                                 <connections>
-                                    <action selector="orderMenu_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="THd-Rt-Cue"/>
+                                    <action selector="orderMenuByAI_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="v3j-mz-Ikg"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -341,7 +341,7 @@
                         <viewLayoutGuide key="safeArea" id="Wtr-hX-ECd"/>
                     </view>
                     <connections>
-                        <outlet property="orderMenu_Btn" destination="hpp-lh-Xcn" id="q6I-mi-4Am"/>
+                        <outlet property="orderMenuByAI_Btn" destination="hpp-lh-Xcn" id="V9f-jn-quY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="stm-2k-nfP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
