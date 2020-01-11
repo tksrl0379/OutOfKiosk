@@ -27,6 +27,7 @@
  1. 가격 정보 띄우기 ( mysql DB테이블 '모카스무디 그란데' 형식으로 바꿔야 함)
  2. 음성 녹음 전, 녹음 중 이미지 띄우기
  3. 아주 가~끔 음성인식이 안먹을 때가 있는데 여러번 반복해서 테스트해서 원인 알아내기
+ 4. dialogflow 흐름 자연스럽게 변경 필요 및 context 횟수 늘릴 수 있는지 확인
  */
 
 
@@ -47,9 +48,9 @@ class DialogFlowPopUpController: UIViewController{
     
     /* startRecording()의 콜백함수들 종료 여부 체크 변수  */
     //var checkMain :Bool = false
-    private var checkSttFinish : Bool = false
-    private var checkSendCompleteToAI :Bool = false
-    private var checkResponseFromAI :Bool = false
+    private var checkSttFinish : Bool = true
+    private var checkSendCompleteToAI :Bool = true
+    private var checkResponseFromAI :Bool = true
     
     
     /* Dialogflow parameter 변수 */
@@ -88,7 +89,6 @@ class DialogFlowPopUpController: UIViewController{
         /* 한국어 설정 */
         speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "ko-KR"))
         
-        self.startRecording()
         
         /* startRecording() 내부의 콜백함수들 종료 여부 체크 후 startRecording() 재실행 */
         DispatchQueue.global().async {
@@ -490,7 +490,7 @@ class DialogFlowPopUpController: UIViewController{
     
     override func viewDidDisappear(_ animated: Bool) {
         /* DialogFlowPopUpController 가 종료될 때 CafeDetailController에 있는 blurEffectView 삭제 */
-        blurEffectView?.removeFromSuperview()
+        //blurEffectView?.removeFromSuperview()
         
         viewIsRunning = false
         inputNode?.removeTap(onBus: 0)
