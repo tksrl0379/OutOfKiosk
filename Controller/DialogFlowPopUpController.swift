@@ -6,7 +6,7 @@
 //  Copyright © 2020 OOK. All rights reserved.
 //
 
-/* 30초간 아무 말도 안하면 음성인식 기능 종료됨. 음성시작 버튼 눌러줘야 함 */
+/* 30초간 아무 말도 안하면 음성인식 기능 종료됨.*/
 
 /*
  TTS기능을 위해서
@@ -21,6 +21,15 @@
  Alamofire(JSON)을 이용한다.
  
  */
+
+
+/*
+ 1. 가격 정보 띄우기 ( mysql DB테이블 '모카스무디 그란데' 형식으로 바꿔야 함)
+ 2. 음성 녹음 전, 녹음 중 이미지 띄우기
+ 3. 아주 가~끔 음성인식이 안먹을 때가 있는데 여러번 반복해서 테스트해서 원인 알아내기
+ */
+
+
 import ApiAI
 import AVFoundation
 import Speech
@@ -31,7 +40,7 @@ import Alamofire
 
 class DialogFlowPopUpController: UIViewController{
     
-    var blurEffectView: UIView?
+    //var blurEffectView: UIView?
     var inputNode: AVAudioInputNode?
     /* ViewController 종료를 알리는 변수 */
     private var viewIsRunning : Bool = true
@@ -57,7 +66,7 @@ class DialogFlowPopUpController: UIViewController{
      */
     @IBOutlet weak var receivedMsg_Label: UILabel!
     @IBOutlet weak var requestMsg_Label: UITextView!
-    @IBOutlet weak var recording_Btn: UIButton!
+    //@IBOutlet weak var recording_Btn: UIButton!
     
     /* TTS 관련 변수 */
     let speechSynthesizer = AVSpeechSynthesizer()
@@ -73,13 +82,11 @@ class DialogFlowPopUpController: UIViewController{
     private var recognitionTask: SFSpeechRecognitionTask?
     private var audioEngine = AVAudioEngine()
     
-    
     /* 녹음 시작, 중단 버튼 시 이벤트 처리 */
-    @IBAction func startStopAct(_ sender: Any) {
+    func StartStopAct() {
         
         /* 한국어 설정 */
         speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "ko-KR"))
-        
         
         self.startRecording()
         
@@ -88,7 +95,7 @@ class DialogFlowPopUpController: UIViewController{
             while(self.viewIsRunning){
                 /* 과도한 CPU 점유 막기 위해 usleep */
                 usleep(10)
-                if(self.checkSttFinish == true && self.checkSendCompleteToAI == true && self.checkResponseFromAI == true ){
+                if(self.checkSttFinish == true && self.checkSendCompleteToAI == true && self.checkResponseFromAI == true && !self.speechSynthesizer.isSpeaking){
                     
                     self.checkSttFinish = false
                     self.checkSendCompleteToAI = false
@@ -100,9 +107,13 @@ class DialogFlowPopUpController: UIViewController{
             }
         }
         
-        recording_Btn.setTitle("녹음 중", for: .normal)
+        //recording_Btn.setTitle("녹음 중", for: .normal)
         
     }
+    
+    
+
+
     
     /* 가격 정보 출력 */
     /* php - mysql 서버로부터 가격 정보 가져와서 가격 출력 후 receivedMsg_Label에 Dialogflow message 출력 및 TTS */
@@ -277,9 +288,9 @@ class DialogFlowPopUpController: UIViewController{
                         self.audioEngine.stop()
                         recognitionRequest.endAudio()
                         
-                        DispatchQueue.main.async{
+/*                        DispatchQueue.main.async{
                             self.recording_Btn.setTitle("녹음시작", for: .normal)
-                        }
+                        }*/
                         
                         recordingState = false
                         recordingCount = 0
@@ -423,6 +434,21 @@ class DialogFlowPopUpController: UIViewController{
         super.viewDidLoad()
         
         
+        /*
+         TTS 초기화를 하여 기능을 원활하게 할 수 있다.
+         */
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: .defaultToSpeaker)//.setCategory(AVAudioSession.Category.record)
+            try audioSession.setMode(AVAudioSession.Mode.default)
+            
+        }catch{
+            print("error")
+        }
+        
+        
+        
+        
         viewIsRunning = true
         
         /* Dialogflow에 requestMsg 전송 */
@@ -444,7 +470,14 @@ class DialogFlowPopUpController: UIViewController{
                 print(textResponse)
                 print("success")
                 self.speechAndText(textResponse)
+                
+                /*매장의 request.query에 대한 값을 성공적으로 받으면 StartStopAct()를 시작하도록 한다.
+                 VoiceOver 특성상 '뒤로' 버튼이 읽히므
+                 */
+                self.StartStopAct()
             }
+            
+            
             
         /* 실패 시 */
         }, failure: { (request, error) in
