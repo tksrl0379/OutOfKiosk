@@ -24,7 +24,7 @@
 
 
 /*
- 1. 가격 정보 띄우기 ( mysql DB테이블 '모카스무디 그란데' 형식으로 바꿔야 함)
+ 1. 가격 정보 띄우기 ( mysql DB테이블 '모카스무디 라지' 형식으로 바꿔야 함)
  2. 음성 녹음 전, 녹음 중 이미지 띄우기
  3. 아주 가~끔 음성인식이 안먹을 때가 있는데 여러번 반복해서 테스트해서 원인 알아내기
  4. dialogflow 흐름 자연스럽게 변경 필요 및 context 횟수 늘릴 수 있는지 확인
@@ -189,6 +189,8 @@ class DialogFlowPopUpController: UIViewController{
                 self.size = nil
                 self.sugar = nil
                 self.whippedcream = nil
+                
+                self.navigationController?.popViewController(animated: true)
         }
     }
     
