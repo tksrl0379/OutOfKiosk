@@ -51,7 +51,7 @@ class DialogFlowPopUpController: UIViewController{
     private var checkSttFinish : Bool = true
     private var checkSendCompleteToAI :Bool = true
     private var checkResponseFromAI :Bool = true
-    private var checkGetPriceFromDB : Bool = true
+    //private var checkGetPriceFromDB : Bool = true
     
     /* Dialogflow parameter 변수 */
     private var name: String?
@@ -95,7 +95,7 @@ class DialogFlowPopUpController: UIViewController{
             while(self.viewIsRunning){
                 /* 과도한 CPU 점유 막기 위해 usleep */
                 usleep(10)
-                if(self.checkSttFinish == true && self.checkSendCompleteToAI == true && self.checkResponseFromAI == true && !self.speechSynthesizer.isSpeaking && self.checkGetPriceFromDB){
+                if(self.checkSttFinish == true && self.checkSendCompleteToAI == true && self.checkResponseFromAI == true && !self.speechSynthesizer.isSpeaking){ //} && self.checkGetPriceFromDB){
                     print("TTS 2", self.speechSynthesizer.isSpeaking)
                     self.checkSttFinish = false
                     self.checkSendCompleteToAI = false
@@ -113,7 +113,7 @@ class DialogFlowPopUpController: UIViewController{
     
     
 
-
+    /*
     
     /* 가격 정보 출력 */
     /* php - mysql 서버로부터 가격 정보 가져와서 가격 출력 후 receivedMsg_Label에 Dialogflow message 출력 및 TTS */
@@ -150,6 +150,9 @@ class DialogFlowPopUpController: UIViewController{
         task.resume()
     }
     
+    */
+    
+    /*
     /* 주문 정보 전송 */
     /* php - mysql 서버로 주문 정보 전송 후 receivedMsg_Label에 Dialogflow message 출력 및 TTS*/
     func sendOrder(_ textResponse: String){
@@ -190,9 +193,11 @@ class DialogFlowPopUpController: UIViewController{
                 self.sugar = nil
                 self.whippedcream = nil
                 
-                self.navigationController?.popViewController(animated: true)
+                
         }
     }
+    
+    */
     
     
     /* 응답 출력 및 읽기(TTS) */
@@ -360,10 +365,11 @@ class DialogFlowPopUpController: UIViewController{
                             if let textResponse = response.result.fulfillment.speech {
                                 print(textResponse)
                                 
+                                /*
                                 /* 선택 완료 후 가격정보 출력 */
                                 if(textResponse.contains("선택하셨습니다.")){
                                     
-                                    self.checkGetPriceFromDB = false
+                                    //self.checkGetPriceFromDB = false
                                     
                                     /* php - mysql 서버로부터 가격 정보 가져와서 receivedMsg_Label에 'Dialogflow message + 가격정보' 출력 및 TTS */
                                     self.getPriceInfo(textResponse){
@@ -378,7 +384,13 @@ class DialogFlowPopUpController: UIViewController{
                                     
                                     /* php - mysql 서버로 주문 정보 전송 후 receivedMsg_Label에 Dialogflow message 출력 및 TTS*/
                                     self.sendOrder(textResponse)
+                                    */
+                            
+                                if(textResponse.contains("담았습니다.")){
+                                    // 장바구니로 데이터 전송하고
                                     
+                                    //종료
+                                    self.navigationController?.popViewController(animated: true)
                                 }else{
                                     self.speechAndText(textResponse)
                                 }
