@@ -51,7 +51,7 @@ class DialogFlowPopUpController: UIViewController{
     private var checkSttFinish : Bool = true
     private var checkSendCompleteToAI :Bool = true
     private var checkResponseFromAI :Bool = true
-    
+    private var checkGetPriceFromDB : Bool = true
     
     /* Dialogflow parameter 변수 */
     private var name: String?
@@ -95,8 +95,8 @@ class DialogFlowPopUpController: UIViewController{
             while(self.viewIsRunning){
                 /* 과도한 CPU 점유 막기 위해 usleep */
                 usleep(10)
-                if(self.checkSttFinish == true && self.checkSendCompleteToAI == true && self.checkResponseFromAI == true && !self.speechSynthesizer.isSpeaking){
-                    
+                if(self.checkSttFinish == true && self.checkSendCompleteToAI == true && self.checkResponseFromAI == true && !self.speechSynthesizer.isSpeaking && self.checkGetPriceFromDB){
+                    print("TTS 2", self.speechSynthesizer.isSpeaking)
                     self.checkSttFinish = false
                     self.checkSendCompleteToAI = false
                     self.checkResponseFromAI = false
@@ -117,7 +117,7 @@ class DialogFlowPopUpController: UIViewController{
     
     /* 가격 정보 출력 */
     /* php - mysql 서버로부터 가격 정보 가져와서 가격 출력 후 receivedMsg_Label에 Dialogflow message 출력 및 TTS */
-    func getPriceInfo(_ textResponse: String){
+    func getPriceInfo(_ textResponse: String, handler: @escaping (_ responseStrng : NSString?) -> Void){
         /* php 통신 */
         let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/price.php")! as URL)
         request.httpMethod = "POST"
@@ -142,9 +142,10 @@ class DialogFlowPopUpController: UIViewController{
             print("responseString = \(responseString!)")
             
             /* UI 변경은 메인쓰레드에서만 가능 */
-            DispatchQueue.main.async{
-                self.speechAndText(textResponse + " 총 \(responseString!)원입니다. 주문하시겠습니까 ?")
-            }
+            
+            //self.speechAndText(textResponse + " 총 \(responseString!)원입니다. 주문하시겠습니까 ?")
+            handler(responseString)
+            
         }
         task.resume()
     }
@@ -195,8 +196,11 @@ class DialogFlowPopUpController: UIViewController{
     /* 응답 출력 및 읽기(TTS) */
     func speechAndText(_ textResponse: String) {
         
-        /* Dialogflow로부터 받은 응답 출력 */
-        self.receivedMsg_Label.text = textResponse
+        DispatchQueue.main.async {
+            /* Dialogflow로부터 받은 응답 출력 */
+            self.receivedMsg_Label.text = textResponse
+        }
+        
         
         /* 응답 읽기(TTS) */
         let speechUtterance = AVSpeechUtterance(string: textResponse)
@@ -207,6 +211,7 @@ class DialogFlowPopUpController: UIViewController{
         
         /* 음성 출력 */
         speechSynthesizer.speak(speechUtterance)
+        print("TTS:", speechSynthesizer.isSpeaking)
         
     }
     
@@ -356,8 +361,15 @@ class DialogFlowPopUpController: UIViewController{
                                 /* 선택 완료 후 가격정보 출력 */
                                 if(textResponse.contains("선택하셨습니다.")){
                                     
+                                    self.checkGetPriceFromDB = false
+                                    
                                     /* php - mysql 서버로부터 가격 정보 가져와서 receivedMsg_Label에 'Dialogflow message + 가격정보' 출력 및 TTS */
-                                    self.getPriceInfo(textResponse)
+                                    self.getPriceInfo(textResponse){
+                                        responseString in
+                                        
+                                        self.speechAndText(textResponse + " 총 \(responseString!)원입니다. 주문하시겠습니까 ?")
+                                        self.checkGetPriceFromDB = true
+                                    }
                                     
                                 /* 주문 정보 전송 */
                                 } else if(textResponse.contains("주문 완료되었습니다.")){
