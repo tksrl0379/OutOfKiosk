@@ -28,6 +28,9 @@
  2. 음성 녹음 전, 녹음 중 이미지 띄우기
  3. 아주 가~끔 음성인식이 안먹을 때가 있는데 여러번 반복해서 테스트해서 원인 알아내기
  4. dialogflow 흐름 자연스럽게 변경 필요 및 context 횟수 늘릴 수 있는지 확인
+ 
+ // 장바구니에서 선택한 가격정보 php 서버로부터 받아온 다음 shoppinglistcontrollerview한테 넘겨주면 끝.
+ 
  */
 
 
@@ -94,7 +97,7 @@ class DialogFlowPopUpController: UIViewController{
         DispatchQueue.global().async {
             while(self.viewIsRunning){
                 /* 과도한 CPU 점유 막기 위해 usleep */
-                usleep(10)
+                usleep(5)
                 if(self.checkSttFinish == true && self.checkSendCompleteToAI == true && self.checkResponseFromAI == true && !self.speechSynthesizer.isSpeaking){ //} && self.checkGetPriceFromDB){
                     print("TTS 2", self.speechSynthesizer.isSpeaking)
                     self.checkSttFinish = false
@@ -113,17 +116,17 @@ class DialogFlowPopUpController: UIViewController{
     
     
 
-    /*
+    
     
     /* 가격 정보 출력 */
     /* php - mysql 서버로부터 가격 정보 가져와서 가격 출력 후 receivedMsg_Label에 Dialogflow message 출력 및 TTS */
-    func getPriceInfo(_ textResponse: String, handler: @escaping (_ responseStrng : NSString?) -> Void){
+    func getPriceInfo(handler: @escaping (_ responseStrng : NSString?) -> Void){
         /* php 통신 */
         let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/price.php")! as URL)
         request.httpMethod = "POST"
         
-        let postString = "name=\(self.name!)&count=\(self.count!)";
-        
+        let postString = "name=\(self.name!)&size=\(self.size!)&count=\(self.count!)";
+        print(self.size!)
         request.httpBody = postString.data(using: String.Encoding.utf8)
         
         
@@ -150,7 +153,7 @@ class DialogFlowPopUpController: UIViewController{
         task.resume()
     }
     
-    */
+    
     
     /*
     /* 주문 정보 전송 */
@@ -214,7 +217,7 @@ class DialogFlowPopUpController: UIViewController{
         
         /* 한글 설정 및 속도 조절 */
         speechUtterance.voice = AVSpeechSynthesisVoice(language: "ko-KR")
-        speechUtterance.rate = 0.6
+        speechUtterance.rate = 0.65
         
         /* 음성 출력 */
         speechSynthesizer.speak(speechUtterance)
@@ -386,11 +389,20 @@ class DialogFlowPopUpController: UIViewController{
                                     self.sendOrder(textResponse)
                                     */
                             
+                                /* 마지막 단계 (데이터 전송 및 종료) */
                                 if(textResponse.contains("담았습니다.")){
-                                    // 장바구니로 데이터 전송하고
+                                    // Db - php 서버로부터 가격정보 받은 후 장바구니(ShoppingListViewController)로 전송하고,
+                                    self.getPriceInfo(){
+                                        price in
+                                        
+                                        print("가격", price)
+                                        
+                                        
+                                    }
                                     
                                     //종료
                                     self.navigationController?.popViewController(animated: true)
+                                    
                                 }else{
                                     self.speechAndText(textResponse)
                                 }
