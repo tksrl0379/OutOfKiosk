@@ -532,5 +532,39 @@ class DialogFlowPopUpController: UIViewController{
         viewIsRunning = false
         inputNode?.removeTap(onBus: 0)
         
+        /* Dialogflow에 requestMsg 전송 */
+        let request = ApiAI.shared().textRequest()
+        
+        request?.query = "취소"
+        
+        /* Dialogflow 전송 부분 */
+        ApiAI.shared().enqueue(request)
+        
+        /* requestMsg 전송완료 시 콜백함수 호출 */
+        request?.setMappedCompletionBlockSuccess({ (request, response) in
+            
+            /* 성공 시 */
+            let response = response as! AIResponse
+            
+            /* 응답 받고 responseMsg_Label에 출력 */
+            if let textResponse = response.result.fulfillment.speech {
+                print(textResponse)
+                print("success")
+                self.speechAndText(textResponse)
+                
+                /*매장의 request.query에 대한 값을 성공적으로 받으면 StartStopAct()를 시작하도록 한다.
+                 VoiceOver 특성상 '뒤로' 버튼이 읽히므
+                 */
+                self.StartStopAct()
+            }
+            
+            
+            
+        /* 실패 시 */
+        }, failure: { (request, error) in
+            print("error")
+            print(error!)
+        }) // End of request complete call back
+        
     }
 }
