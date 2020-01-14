@@ -292,8 +292,8 @@ class DialogFlowPopUpController: UIViewController{
             /* 사용자의 무음 시간 체크 */
             monitorCount+=1
             if(recordingState){
-                monitorCount %= 8 // monitorCount는 0~30
-                if(monitorCount / 7 == 1){ // monitorCount가 30이 될 때마다 recordingCount 증가 여부 검사
+                monitorCount %= 13 // monitorCount는 0~30
+                if(monitorCount / 12 == 1){ // monitorCount가 30이 될 때마다 recordingCount 증가 여부 검사
                     
                     if(recordingCount == befRecordingCount){ // 사용자가 말을 끝마친 경우 전송
                         
@@ -397,10 +397,20 @@ class DialogFlowPopUpController: UIViewController{
                                         
                                         print("가격", price)
                                         
+                                        
+                                        /*
+                                         AppDelegate.swift를 이용하기.
+                                         모든 View에서 참조 가능하며 앱을 종료하지않는한 지속된다.
+                                         혹시 모를 뒤로가기버튼으로 인해 CafeDetailController를 나가더래도
+                                         AppDelegeate에 저장될 것이다.
+                                         
+                                         */
+                                        
                                     }
                                     
                                     //종료
                                     self.navigationController?.popViewController(animated: true)
+                                    
                                     
                                 }else{
                                     self.speechAndText(textResponse)

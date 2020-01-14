@@ -238,10 +238,10 @@
             </objects>
             <point key="canvasLocation" x="2736.8000000000002" y="777.66116941529242"/>
         </scene>
-        <!--Shopping List Controller-->
+        <!--Shopping Basket Controller-->
         <scene sceneID="G4U-vM-Ick">
             <objects>
-                <viewController storyboardIdentifier="ShoppingListController" id="B88-YK-K4O" customClass="ShoppingListController" customModule="OutOfKiosk" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ShoppingBasketController" id="B88-YK-K4O" customClass="ShoppingBasketController" customModule="OutOfKiosk" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5YG-pU-geX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -257,31 +257,48 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ShoppingList" rowHeight="139" id="2eX-Xd-SuU" customClass="ShoppingList" customModule="OutOfKiosk" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="139"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ShoppingBasket" rowHeight="244" id="2eX-Xd-SuU" customClass="ShoppingBasket" customModule="OutOfKiosk" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="244"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2eX-Xd-SuU" id="aoe-L3-aaI" customClass="ShoppingList" customModule="OutOfKiosk" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="139"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2eX-Xd-SuU" id="aoe-L3-aaI" customClass="ShoppingBasket" customModule="OutOfKiosk" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="244"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="menuName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UzK-KN-ENB">
-                                                    <rect key="frame" x="33" y="11" width="124" height="117"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ProductName" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UzK-KN-ENB">
+                                                    <rect key="frame" x="15" y="21" width="150" height="65"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="#menu" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hku-o7-3B3">
-                                                    <rect key="frame" x="216" y="19" width="107" height="101"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="numberOfProduct" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hku-o7-3B3">
+                                                    <rect key="frame" x="15" y="94" width="150" height="55"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ProductSize" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E5c-mz-2gN">
+                                                    <rect key="frame" x="182" y="21" width="158" height="65"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TotalPrice" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XfF-F2-9cN">
+                                                    <rect key="frame" x="182" y="97" width="170" height="52"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="shoppingListMenuName_Label" destination="UzK-KN-ENB" id="DYy-Tq-G2y"/>
+                                            <outlet property="shoppingBasketNumberOfProduct_Label" destination="Hku-o7-3B3" id="9we-qH-9IS"/>
+                                            <outlet property="shoppingBasketProductName_Label" destination="UzK-KN-ENB" id="nE6-7S-92r"/>
+                                            <outlet property="shoppingBasketProductSize_Label" destination="E5c-mz-2gN" id="GCU-ZS-e6u"/>
+                                            <outlet property="shoppingBasketProductTotalPrice_Label" destination="XfF-F2-9cN" id="4zQ-Cl-nmJ"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -291,7 +308,7 @@
                         <viewLayoutGuide key="safeArea" id="lh8-5K-smF"/>
                     </view>
                     <connections>
-                        <outlet property="ShoppingListTableView" destination="kTm-JY-nua" id="acn-qR-lne"/>
+                        <outlet property="ShoppingBasketTableView" destination="kTm-JY-nua" id="iVh-mz-BMW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nnG-FG-2Wj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
