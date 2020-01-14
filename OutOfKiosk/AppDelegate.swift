@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         /*ApiAi를 사용하여, 구글 다이얼로그플로우의 토큰을 받는 과정이다. 초기설정.*/
         let configuration = AIDefaultConfiguration()
-        configuration.clientAccessToken = "d94411c80a7e46b7bcac2efb46698353"
+        configuration.clientAccessToken = "29bcaea5586b4bc999097ea989e489a9"
         
         let apiai = ApiAI.shared()
         apiai?.configuration = configuration
