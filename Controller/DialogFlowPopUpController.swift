@@ -397,7 +397,6 @@ class DialogFlowPopUpController: UIViewController{
                                         
                                         print("가격", price)
                                         
-                                        
                                     }
                                     
                                     //종료

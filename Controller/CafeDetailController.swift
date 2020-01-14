@@ -85,6 +85,16 @@ class CafeDetailController : UIViewController{
     }
     
     
+    @IBAction func shoppingList_Btn(_ sender: Any) {
+        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingListController") as? ShoppingListController else {
+
+            return}
+        
+        rvc.testshoppingList = ["a","b","c"]
+
+        self.navigationController?.pushViewController(rvc, animated: true)
+    }
+    
     
     
     
