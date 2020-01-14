@@ -24,12 +24,10 @@
 
 
 /*
- 1. 가격 정보 띄우기 ( mysql DB테이블 '모카스무디 라지' 형식으로 바꿔야 함)
- 2. 음성 녹음 전, 녹음 중 이미지 띄우기
- 3. 아주 가~끔 음성인식이 안먹을 때가 있는데 여러번 반복해서 테스트해서 원인 알아내기
- 4. dialogflow 흐름 자연스럽게 변경 필요 및 context 횟수 늘릴 수 있는지 확인
  
- // 장바구니에서 선택한 가격정보 php 서버로부터 받아온 다음 shoppinglistcontrollerview한테 넘겨주면 끝.
+ 1. 아주 가~끔 음성인식이 안먹을 때가 있는데 여러번 반복해서 테스트해서 원인 알아내기
+ -> usleep쪽일 것으로 추측되는데 이런 방식 말고 thread block / wait 방법 찾아보기
+ 
  
  */
 
@@ -39,10 +37,14 @@ import AVFoundation
 import Speech
 import UIKit
 import Alamofire
+import Lottie
 
 
 
 class DialogFlowPopUpController: UIViewController{
+    
+    @IBOutlet weak var animationView: UIView!
+    var animation: AnimationView?
     
     //var blurEffectView: UIView?
     var inputNode: AVAudioInputNode?
@@ -95,15 +97,18 @@ class DialogFlowPopUpController: UIViewController{
         
         /* startRecording() 내부의 콜백함수들 종료 여부 체크 후 startRecording() 재실행 */
         DispatchQueue.global().async {
+            
             while(self.viewIsRunning){
                 /* 과도한 CPU 점유 막기 위해 usleep */
-                usleep(5)
+//                print (self.checkSttFinish, self.checkSendCompleteToAI, self.checkResponseFromAI, self.speechSynthesizer)
+                usleep(1)
                 if(self.checkSttFinish == true && self.checkSendCompleteToAI == true && self.checkResponseFromAI == true && !self.speechSynthesizer.isSpeaking){ //} && self.checkGetPriceFromDB){
                     print("TTS 2", self.speechSynthesizer.isSpeaking)
                     self.checkSttFinish = false
                     self.checkSendCompleteToAI = false
                     self.checkResponseFromAI = false
                     //self.checkMain = false
+                    
                     
                     self.startRecording()
                 }
@@ -208,7 +213,14 @@ class DialogFlowPopUpController: UIViewController{
         
         DispatchQueue.main.async {
             /* Dialogflow로부터 받은 응답 출력 */
+            self.animation?.pause()
+            
             self.receivedMsg_Label.text = textResponse
+            self.receivedMsg_Label.alpha = 0
+            UIView.animate(withDuration: 1.5) {
+                self.receivedMsg_Label.alpha = 1.0
+                
+            }
         }
         
         
@@ -219,9 +231,11 @@ class DialogFlowPopUpController: UIViewController{
         speechUtterance.voice = AVSpeechSynthesisVoice(language: "ko-KR")
         speechUtterance.rate = 0.65
         
-        /* 음성 출력 */
-        speechSynthesizer.speak(speechUtterance)
-        print("TTS:", speechSynthesizer.isSpeaking)
+        if(self.viewIsRunning){
+            /* 음성 출력 */
+            speechSynthesizer.speak(speechUtterance)
+            print("TTS:", speechSynthesizer.isSpeaking)
+        }
         
     }
     
@@ -278,6 +292,7 @@ class DialogFlowPopUpController: UIViewController{
             print("audioEngine couldn't start because of an error.")
         }
         DispatchQueue.main.async {
+            self.animation?.play()
             self.requestMsg_Label.text = " "
         }
         
@@ -407,7 +422,7 @@ class DialogFlowPopUpController: UIViewController{
                                          */
                                         
                                     }
-                                    
+                                    self.viewIsRunning = false
                                     //종료
                                     self.navigationController?.popViewController(animated: true)
                                     
@@ -476,10 +491,37 @@ class DialogFlowPopUpController: UIViewController{
     
     
     
+    @objc func buttonAction(_ sender: UIBarButtonItem) {
+      self.navigationController?.popViewController(animated: true)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //response_Label.layer.borderWidth = 0.5
+        
+        //navigationController?.isNavigationBarHidden = true
+        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController!.navigationBar.shadowImage = UIImage()
+        self.navigationController!.navigationBar.isTranslucent = true
+        
+        let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(DialogFlowPopUpController.buttonAction(_:)))
+        addButton.tintColor = UIColor.black
+        self.navigationItem.leftBarButtonItem = addButton
+        
+        
+        
+        
+        
+        animation = AnimationView(name:"loading")
+        animation!.frame = CGRect(x:0, y:0, width:200, height:200)
+
+        animation!.center = self.view.center
+        
+        animation!.contentMode = .top
+        animation!.loopMode = .loop
+        animationView.addSubview(animation!)
+        //self.animation!.play()
         
         /*
          TTS 초기화를 하여 기능을 원활하게 할 수 있다.

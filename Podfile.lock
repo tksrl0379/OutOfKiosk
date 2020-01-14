@@ -25,20 +25,24 @@ PODS:
     - ApiAI/Core
   - ApiAI/VoiceRequest (0.7.2):
     - ApiAI/Core
+  - lottie-ios (3.1.5)
 
 DEPENDENCIES:
   - Alamofire (~> 4.3)
   - ApiAI
+  - lottie-ios
 
 SPEC REPOS:
   trunk:
     - Alamofire
     - ApiAI
+    - lottie-ios
 
 SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   ApiAI: d4b49d3736f33ce6f3ef66dc33c0e0fccb23579e
+  lottie-ios: 32bf84389337d86fbc8b12266e88452e0abf1dee
 
-PODFILE CHECKSUM: b3bfc3c2ac1a57dad9082fee2652a83e0e937a3f
+PODFILE CHECKSUM: 1803ec811097e85c8faf914a8b0205928bd07629
 
 COCOAPODS: 1.8.4

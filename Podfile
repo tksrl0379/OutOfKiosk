@@ -9,4 +9,5 @@ target 'OutOfKiosk' do
 
   pod 'Alamofire', '~> 4.3'
   pod 'ApiAI'  
+  pod 'lottie-ios'
 end
