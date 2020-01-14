@@ -85,12 +85,17 @@ class CafeDetailController : UIViewController{
     }
     
     
+    /*
+     장바구니가 비어있으면 에러가 나기 때문에, 챗봇으로 인한 rvc값을 넣는다.
+     */
     @IBAction func shoppingList_Btn(_ sender: Any) {
-        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingListController") as? ShoppingListController else {
+        
+        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingBasketController") as? ShoppingBasketController else {
 
             return}
         
-        rvc.testshoppingList = ["a","b","c"]
+        //rvc.testshoppingList = ["a","b","c"]
+        
 
         self.navigationController?.pushViewController(rvc, animated: true)
     }

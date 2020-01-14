@@ -23,8 +23,8 @@
 		561A199013A68AC2CAB7E557 /* Pods_OutOfKiosk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E77C96B32E43C00A091B8A7 /* Pods_OutOfKiosk.framework */; };
 		FA0C2FC523C3192900598506 /* DetailMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0C2FC423C3192900598506 /* DetailMenuController.swift */; };
 		FA1E58AF23C41A79002215BB /* ProductList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1E58AE23C41A79002215BB /* ProductList.swift */; };
-		FAC52D7123CD551B00ADDD34 /* ShoppingListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC52D7023CD551B00ADDD34 /* ShoppingListController.swift */; };
-		FAC52D7323CD569200ADDD34 /* ShoppingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC52D7223CD569200ADDD34 /* ShoppingList.swift */; };
+		FAC52D7523CD887200ADDD34 /* ShoppingBasketController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC52D7423CD887200ADDD34 /* ShoppingBasketController.swift */; };
+		FAC52D7723CD88C200ADDD34 /* ShoppingBasket.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC52D7623CD88C200ADDD34 /* ShoppingBasket.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,8 +48,8 @@
 		F5097F4775439F8A0528E7C8 /* Pods-OutOfKiosk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OutOfKiosk.release.xcconfig"; path = "Target Support Files/Pods-OutOfKiosk/Pods-OutOfKiosk.release.xcconfig"; sourceTree = "<group>"; };
 		FA0C2FC423C3192900598506 /* DetailMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailMenuController.swift; sourceTree = "<group>"; };
 		FA1E58AE23C41A79002215BB /* ProductList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductList.swift; sourceTree = "<group>"; };
-		FAC52D7023CD551B00ADDD34 /* ShoppingListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListController.swift; sourceTree = "<group>"; };
-		FAC52D7223CD569200ADDD34 /* ShoppingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingList.swift; sourceTree = "<group>"; };
+		FAC52D7423CD887200ADDD34 /* ShoppingBasketController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingBasketController.swift; sourceTree = "<group>"; };
+		FAC52D7623CD88C200ADDD34 /* ShoppingBasket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingBasket.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +75,7 @@
 				3308429123BDE67700FCF4C0 /* CafeDetailController.swift */,
 				3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */,
 				FA0C2FC423C3192900598506 /* DetailMenuController.swift */,
-				FAC52D7023CD551B00ADDD34 /* ShoppingListController.swift */,
+				FAC52D7423CD887200ADDD34 /* ShoppingBasketController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -85,7 +85,7 @@
 			children = (
 				3308428F23BDA18400FCF4C0 /* StoreList.swift */,
 				FA1E58AE23C41A79002215BB /* ProductList.swift */,
-				FAC52D7223CD569200ADDD34 /* ShoppingList.swift */,
+				FAC52D7623CD88C200ADDD34 /* ShoppingBasket.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -258,15 +258,15 @@
 				3308428B23BD7F7300FCF4C0 /* SettingController.swift in Sources */,
 				3308428D23BD81B600FCF4C0 /* FavoriteMenuController.swift in Sources */,
 				3308428723BD72DF00FCF4C0 /* MainController.swift in Sources */,
+				FAC52D7723CD88C200ADDD34 /* ShoppingBasket.swift in Sources */,
 				FA0C2FC523C3192900598506 /* DetailMenuController.swift in Sources */,
 				3308429023BDA18400FCF4C0 /* StoreList.swift in Sources */,
 				33259F5323BB017400D44CB0 /* AppDelegate.swift in Sources */,
 				3308428523BD72D400FCF4C0 /* LoginController.swift in Sources */,
+				FAC52D7523CD887200ADDD34 /* ShoppingBasketController.swift in Sources */,
 				33259F5523BB017400D44CB0 /* SceneDelegate.swift in Sources */,
 				3308428923BD7AF000FCF4C0 /* StoreListController.swift in Sources */,
-				FAC52D7323CD569200ADDD34 /* ShoppingList.swift in Sources */,
 				FA1E58AF23C41A79002215BB /* ProductList.swift in Sources */,
-				FAC52D7123CD551B00ADDD34 /* ShoppingListController.swift in Sources */,
 				3386079223BF0D89003208AD /* DialogFlowPopUpController.swift in Sources */,
 				3308429223BDE67700FCF4C0 /* CafeDetailController.swift in Sources */,
 			);

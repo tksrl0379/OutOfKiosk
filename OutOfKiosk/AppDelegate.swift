@@ -9,6 +9,9 @@
 import UIKit
 import ApiAI
 
+/*
+ 모든 View 컨트롤러에서 접근이 가능하며 앱이 종료되지 않는 이상 데이터가 유지가 될 수 있다.
+ */
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -18,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         /*ApiAi를 사용하여, 구글 다이얼로그플로우의 토큰을 받는 과정이다. 초기설정.*/
         let configuration = AIDefaultConfiguration()
-        configuration.clientAccessToken = "29bcaea5586b4bc999097ea989e489a9"
+        configuration.clientAccessToken = "f6ffde9632684fbcafa6b117c4ee7254"
         
         let apiai = ApiAI.shared()
         apiai?.configuration = configuration
