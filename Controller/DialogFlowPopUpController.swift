@@ -364,6 +364,7 @@ class DialogFlowPopUpController: UIViewController{
                                     self.getPriceInfo(){
                                         price in
                                         
+                                        
                                         print("가격", price)
                                         
                                         
@@ -393,20 +394,20 @@ class DialogFlowPopUpController: UIViewController{
                                                 ad?.menuEachPriceArray.append(Int(price.intValue))
                                             }
                                             
-                                            if let sugar = self.sugar{
-                                                if sugar.isEmpty{
-                                                    ad?.menuSugarContent.append("NULL")
-                                                }else{
+                                            if self.sugar == nil{
+                                                ad?.menuSugarContent.append("NULL")
+                                            }else{
+                                                if let sugar = self.sugar{
                                                     ad?.menuSugarContent.append(sugar)
                                                 }
                                             }
-                                            if let whippedcream = self.whippedcream{
-                                                if whippedcream.isEmpty{
-                                                    ad?.menuIsWhippedCream.append("NULL")
-                                                }else{
+                                            if self.whippedcream == nil{
+                                                ad?.menuIsWhippedCream.append("NULL")
+                                            }else{
+                                                if let whippedcream = self.whippedcream{
                                                     ad?.menuIsWhippedCream.append(whippedcream)
                                                 }
-                                            }
+                                            }                                            
                                             
                                         }
                                         
