@@ -15,7 +15,23 @@ import ApiAI
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    /*
+     private var name: String?
+     private var count: Int?
+     private var size: String?
+     private var sugar: String?
+     private var whippedcream: String?
+     */
+    var numOfProducts : Int = 0 
+    
+    var menuNameArray: Array<String> = []
+    var menuSizeArray: Array<String> = []
+    var menuCountArray: Array<Int> = []
+    var menuEachPriceArray: Array<Int> = []
+    
+    var menuSugarContent : Array<String> = []
+    var menuIsWhippedCream : Array<String> = []
+    
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         

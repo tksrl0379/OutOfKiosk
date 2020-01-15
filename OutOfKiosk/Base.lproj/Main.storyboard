@@ -251,6 +251,9 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <state key="normal" title="주문하기"/>
+                                <connections>
+                                    <action selector="orderItems_Btn:" destination="B88-YK-K4O" eventType="touchUpInside" id="wDj-7a-psz"/>
+                                </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kTm-JY-nua">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="525"/>
@@ -424,6 +427,7 @@
                     </view>
                     <connections>
                         <outlet property="orderMenuByAI_Btn" destination="hpp-lh-Xcn" id="V9f-jn-quY"/>
+                        <outlet property="shoppingBasket_Btn" destination="F0E-de-uea" id="Ekj-Nf-o7e"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="stm-2k-nfP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -97,7 +97,7 @@ class DialogFlowPopUpController: UIViewController{
         DispatchQueue.global().async {
             while(self.viewIsRunning){
                 /* 과도한 CPU 점유 막기 위해 usleep */
-                usleep(5)
+                usleep(1)
                 if(self.checkSttFinish == true && self.checkSendCompleteToAI == true && self.checkResponseFromAI == true && !self.speechSynthesizer.isSpeaking){ //} && self.checkGetPriceFromDB){
                     print("TTS 2", self.speechSynthesizer.isSpeaking)
                     self.checkSttFinish = false
@@ -115,7 +115,7 @@ class DialogFlowPopUpController: UIViewController{
     }
     
     
-
+    
     
     
     /* 가격 정보 출력 */
@@ -155,52 +155,7 @@ class DialogFlowPopUpController: UIViewController{
     
     
     
-    /*
-    /* 주문 정보 전송 */
-    /* php - mysql 서버로 주문 정보 전송 후 receivedMsg_Label에 Dialogflow message 출력 및 TTS*/
-    func sendOrder(_ textResponse: String){
-        self.speechAndText(textResponse)
-        
-        
-        /* 아래의 parameter 넣는 곳이 강제 unwrapping인 !이기 때문에 nil이 들어가면 안됨. 따라서 문자열 값 넣어줌 */
-        if self.sugar == nil {
-            self.sugar = "NULL"
-        }
-        
-        if self.whippedcream == nil {
-            self.whippedcream = "NULL"
-        }
-        
-        //creating parameters for the post request
-        let parameters: Parameters=[
-            "name": self.name! ,
-            "count": self.count!,
-            "size": self.size!,
-            "sugar": self.sugar!,
-            "whippedcream": self.whippedcream!
-        ]
-        
-        /* php 서버 위치 */
-        let URL_ORDER = "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/order/api/order.php"
-        //Sending http post request
-        Alamofire.request(URL_ORDER, method: .post, parameters: parameters).responseString
-            {
-                response in
-                
-                print("응답",response)
-                
-                /* 재주문하는 경우를 대비하여 nil로 초기화 해줘야 함. 아니면 query가 여러번 날라감 */
-                self.name = nil
-                self.count = nil
-                self.size = nil
-                self.sugar = nil
-                self.whippedcream = nil
-                
-                
-        }
-    }
     
-    */
     
     
     /* 응답 출력 및 읽기(TTS) */
@@ -248,7 +203,7 @@ class DialogFlowPopUpController: UIViewController{
             recognitionTask?.cancel()
             recognitionTask = nil
         }
-       
+        
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         
         /* recognitionRequest 객체가 인스턴스화되고 nil이 아닌지 확인 */
@@ -303,9 +258,9 @@ class DialogFlowPopUpController: UIViewController{
                         self.audioEngine.stop()
                         recognitionRequest.endAudio()
                         
-/*                        DispatchQueue.main.async{
-                            self.recording_Btn.setTitle("녹음시작", for: .normal)
-                        }*/
+                        /*                        DispatchQueue.main.async{
+                         self.recording_Btn.setTitle("녹음시작", for: .normal)
+                         }*/
                         
                         recordingState = false
                         recordingCount = 0
@@ -330,7 +285,7 @@ class DialogFlowPopUpController: UIViewController{
                         request?.setMappedCompletionBlockSuccess({ (request, response) in
                             
                             let response = response as! AIResponse
-               
+                            
                             /* 2.2.1. Dialogflow의 파라미터 값 받는 공간 */
                             if let parameter = response.result.parameters as? [String : AIResponseParameter]{
                                 
@@ -369,26 +324,26 @@ class DialogFlowPopUpController: UIViewController{
                                 print(textResponse)
                                 
                                 /*
-                                /* 선택 완료 후 가격정보 출력 */
-                                if(textResponse.contains("선택하셨습니다.")){
-                                    
-                                    //self.checkGetPriceFromDB = false
-                                    
-                                    /* php - mysql 서버로부터 가격 정보 가져와서 receivedMsg_Label에 'Dialogflow message + 가격정보' 출력 및 TTS */
-                                    self.getPriceInfo(textResponse){
-                                        responseString in
-                                        
-                                        self.speechAndText(textResponse + " 총 \(responseString!)원입니다. 주문하시겠습니까 ?")
-                                        self.checkGetPriceFromDB = true
-                                    }
-                                    
-                                /* 주문 정보 전송 */
-                                } else if(textResponse.contains("주문 완료되었습니다.")){
-                                    
-                                    /* php - mysql 서버로 주문 정보 전송 후 receivedMsg_Label에 Dialogflow message 출력 및 TTS*/
-                                    self.sendOrder(textResponse)
-                                    */
-                            
+                                 /* 선택 완료 후 가격정보 출력 */
+                                 if(textResponse.contains("선택하셨습니다.")){
+                                 
+                                 //self.checkGetPriceFromDB = false
+                                 
+                                 /* php - mysql 서버로부터 가격 정보 가져와서 receivedMsg_Label에 'Dialogflow message + 가격정보' 출력 및 TTS */
+                                 self.getPriceInfo(textResponse){
+                                 responseString in
+                                 
+                                 self.speechAndText(textResponse + " 총 \(responseString!)원입니다. 주문하시겠습니까 ?")
+                                 self.checkGetPriceFromDB = true
+                                 }
+                                 
+                                 /* 주문 정보 전송 */
+                                 } else if(textResponse.contains("주문 완료되었습니다.")){
+                                 
+                                 /* php - mysql 서버로 주문 정보 전송 후 receivedMsg_Label에 Dialogflow message 출력 및 TTS*/
+                                 self.sendOrder(textResponse)
+                                 */
+                                
                                 /* 마지막 단계 (데이터 전송 및 종료) */
                                 if(textResponse.contains("담았습니다.")){
                                     // Db - php 서버로부터 가격정보 받은 후 장바구니(ShoppingListViewController)로 전송하고,
@@ -402,9 +357,44 @@ class DialogFlowPopUpController: UIViewController{
                                          AppDelegate.swift를 이용하기.
                                          모든 View에서 참조 가능하며 앱을 종료하지않는한 지속된다.
                                          혹시 모를 뒤로가기버튼으로 인해 CafeDetailController를 나가더래도
-                                         AppDelegeate에 저장될 것이다.
-                                         
+                                         AppDelegeate에 저장될 것이다. Main쓰레드에서만 가능하므로
+                                         DispatchQueue를 이용한다.
                                          */
+                                        DispatchQueue.main.async {
+                                            
+                                            let ad = UIApplication.shared.delegate as? AppDelegate
+                                            
+                                            ad?.numOfProducts += 1
+                                            
+                                            if let name = self.name{
+                                                ad?.menuNameArray.append(name)
+                                            }
+                                            if let size = self.size{
+                                                ad?.menuSizeArray.append(size)
+                                            }
+                                            if let count = self.count{
+                                                ad?.menuCountArray.append(count)
+                                            }
+                                            if let price = price{
+                                                ad?.menuEachPriceArray.append(Int(price.intValue))
+                                            }
+                                            
+                                            if let sugar = self.sugar{
+                                                if sugar.isEmpty{
+                                                    ad?.menuSugarContent.append("NULL")
+                                                }else{
+                                                    ad?.menuSugarContent.append(sugar)
+                                                }
+                                            }
+                                            if let whippedcream = self.whippedcream{
+                                                if whippedcream.isEmpty{
+                                                    ad?.menuIsWhippedCream.append("NULL")
+                                                }else{
+                                                    ad?.menuIsWhippedCream.append(whippedcream)
+                                                }
+                                            }
+                                            
+                                        }
                                         
                                     }
                                     
@@ -421,7 +411,7 @@ class DialogFlowPopUpController: UIViewController{
                             }
                             
                             
-                        /* 실패 시 */
+                            /* 실패 시 */
                         }, failure: { (request, error) in
                             print("error")
                             print(error!)
@@ -526,7 +516,7 @@ class DialogFlowPopUpController: UIViewController{
             
             
             
-        /* 실패 시 */
+            /* 실패 시 */
         }, failure: { (request, error) in
             print("error")
             print(error!)
@@ -570,7 +560,7 @@ class DialogFlowPopUpController: UIViewController{
             
             
             
-        /* 실패 시 */
+            /* 실패 시 */
         }, failure: { (request, error) in
             print("error")
             print(error!)
