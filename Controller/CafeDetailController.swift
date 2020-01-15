@@ -22,6 +22,8 @@ class CafeDetailController : UIViewController{
     /* DialogFlow 로 주문하기 버튼 */
     @IBOutlet weak var orderMenuByAI_Btn: UIButton!
     
+    /* 챗봇으로 주문할 때마다 숫자 증가*/
+    @IBOutlet weak var shoppingBasket_Btn: UIButton!
     
     /* DialogFlowPopUpController로 넘어감 */
     @IBAction func orderMenuByAI_Btn(_ sender: Any) {
@@ -90,14 +92,41 @@ class CafeDetailController : UIViewController{
      */
     @IBAction func shoppingList_Btn(_ sender: Any) {
         
-        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingBasketController") as? ShoppingBasketController else {
-
-            return}
+        /* 주문한 정보가 몇개인지를 알아서 0개일시 주문을 먼저 하라는 메시지를 보내기 위한 기능*/
+        let ad = UIApplication.shared.delegate as? AppDelegate
         
-        //rvc.testshoppingList = ["a","b","c"]
+        if let count = ad?.numOfProducts{
+            if count != 0 {
+                guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingBasketController") as? ShoppingBasketController else {
+                    return}
+                
+                self.navigationController?.pushViewController(rvc, animated: true)
+            }else{
+                /* 들어갈 기능 = message alert 혹은 팝업 cotroller를 뛰운다*/
+                self.alertMessage("오류","장바구니가 비어있어요")
+            }
+            
+        }
         
+    }
+    func alertMessage(_ title: String, _ description: String){
+        
+        /* Alert는 MainThread에서 실행해야 함 */
+        DispatchQueue.main.async{
+            
+            /* Alert message 설정 */
+            let alert = UIAlertController(title: title, message: description, preferredStyle: UIAlertController.Style.alert)
+            
+            /* 버튼 설정 및 추가*/
+            let defaultAction = UIAlertAction(title: "확인", style: .destructive) { (action) in
+                
+            }
+            alert.addAction(defaultAction)
 
-        self.navigationController?.pushViewController(rvc, animated: true)
+            
+            /* Alert Message 띄우기 */
+            self.present(alert, animated: false, completion: nil)
+        }
     }
     
     
@@ -164,6 +193,7 @@ class CafeDetailController : UIViewController{
                         willgetCategroyPrice.append(price)
                     }
                     /* 두 개의 배열을 handler 클로저 매개변수를 통해 탈출시킨다. */
+                    
                     handler(willgetCategroyName,willgetCategroyPrice)
                 }
                 
