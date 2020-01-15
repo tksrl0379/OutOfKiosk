@@ -8,25 +8,13 @@
 
 /* 30초간 아무 말도 안하면 음성인식 기능 종료됨.*/
 
-/*
- TTS기능을 위해서
- -ApiAI
- -AVFoundation
- import해 주어야 한다.
- 
- STT기능을 위해
- -Speech해 주어야 한다.
- 
- php통신으로 mysql로 보내기 위해
- Alamofire(JSON)을 이용한다.
- 
- */
-
 
 /*
+ 고칠 것들.
  
  1. 아주 가~끔 음성인식이 안먹을 때가 있는데 여러번 반복해서 테스트해서 원인 알아내기
  -> usleep쪽일 것으로 추측되는데 이런 방식 말고 thread block / wait 방법 찾아보기
+ --> 세마포어를 이용하여 STT중에는 cpu 점유유을 10%대까지 낮추는데 성공했으나 TTS 중에는 아직 방법 찾는 중. 추후 고칠 예정.
  
  
  */
@@ -43,18 +31,24 @@ import Lottie
 
 class DialogFlowPopUpController: UIViewController{
     
+    /* 세마포어 선언*/
+    let semaphore = DispatchSemaphore(value: 0)
+
+    
+    /* Lottie animation을 위한 View 변수 */
     @IBOutlet weak var animationView: UIView!
     var animation: AnimationView?
     
+    /* 뒷배경 blur 처리위한 함수 */
     //var blurEffectView: UIView?
-    var inputNode: AVAudioInputNode?
+    
     /* ViewController 종료를 알리는 변수 */
     private var viewIsRunning : Bool = true
     
     /* startRecording()의 콜백함수들 종료 여부 체크 변수  */
     //var checkMain :Bool = false
-    private var checkSttFinish : Bool = true
-    private var checkSendCompleteToAI :Bool = true
+    //private var checkSttFinish : Bool = true
+    //private var checkSendCompleteToAI :Bool = true
     private var checkResponseFromAI :Bool = true
     //private var checkGetPriceFromDB : Bool = true
     
@@ -82,11 +76,13 @@ class DialogFlowPopUpController: UIViewController{
      2. recognitionRequest: 음성인식 요청 처리
      3. recognitionTask: 음성인식 요청 결과 제공
      4. audioEngine: 순수 소리 인식
+     5. inputNode
      */
     private var speechRecognizer : SFSpeechRecognizer?
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
     private var audioEngine = AVAudioEngine()
+    private var inputNode: AVAudioInputNode?
     
     /* 녹음 시작, 중단 버튼 시 이벤트 처리 */
     func StartStopAct() {
@@ -98,25 +94,27 @@ class DialogFlowPopUpController: UIViewController{
         /* startRecording() 내부의 콜백함수들 종료 여부 체크 후 startRecording() 재실행 */
         DispatchQueue.global().async {
             
+            
             while(self.viewIsRunning){
+                
                 /* 과도한 CPU 점유 막기 위해 usleep */
-//                print (self.checkSttFinish, self.checkSendCompleteToAI, self.checkResponseFromAI, self.speechSynthesizer)
-                usleep(1)
-                if(self.checkSttFinish == true && self.checkSendCompleteToAI == true && self.checkResponseFromAI == true && !self.speechSynthesizer.isSpeaking){ //} && self.checkGetPriceFromDB){
+                //usleep(1)
+                //print (self.checkSttFinish, self.checkSendCompleteToAI, self.checkResponseFromAI, !self.speechSynthesizer.isSpeaking)
+                
+                if(self.checkResponseFromAI == true && !self.speechSynthesizer.isSpeaking){ //} && self.checkGetPriceFromDB){
                     print("TTS 2", self.speechSynthesizer.isSpeaking)
-                    self.checkSttFinish = false
-                    self.checkSendCompleteToAI = false
+                    //self.checkSttFinish = false
+                    //self.checkSendCompleteToAI = false
                     self.checkResponseFromAI = false
                     //self.checkMain = false
                     
-                    
                     self.startRecording()
+                    self.semaphore.wait()
                 }
             }
         }
         
         //recording_Btn.setTitle("녹음 중", for: .normal)
-        
     }
     
     
@@ -231,6 +229,8 @@ class DialogFlowPopUpController: UIViewController{
         speechUtterance.voice = AVSpeechSynthesisVoice(language: "ko-KR")
         speechUtterance.rate = 0.65
         
+
+        /* if문 -> 대화가 모두 끝난 이후에도 TTS가 나와서 이를 막기 위함 */
         if(self.viewIsRunning){
             /* 음성 출력 */
             speechSynthesizer.speak(speechUtterance)
@@ -254,7 +254,6 @@ class DialogFlowPopUpController: UIViewController{
         var recordingCount : Int = 0
         var monitorCount : Int = 0
         var befRecordingCount: Int = 0
-        
         
         
         
@@ -376,7 +375,7 @@ class DialogFlowPopUpController: UIViewController{
                                     print("휘핑크림: \(String(describing: self.whippedcream))")
                                 };
                                 
-                                self.checkSendCompleteToAI = true
+                                //self.checkSendCompleteToAI = true
                             }
                             
                             /* 2.2.2. Dialogflow 응답 받고 responseMsg_Label에 출력 및 TTS */
@@ -422,6 +421,7 @@ class DialogFlowPopUpController: UIViewController{
                                          */
                                         
                                     }
+                                    /* 대화가 모두 끝난 이후에도 TTS가 나와서 이를 막기 위함 */
                                     self.viewIsRunning = false
                                     //종료
                                     self.navigationController?.popViewController(animated: true)
@@ -432,7 +432,12 @@ class DialogFlowPopUpController: UIViewController{
                                 }
                                 print("success")
                                 
-                                self.checkResponseFromAI = true
+                                DispatchQueue.main.async {
+                                
+                                    self.checkResponseFromAI = true
+                                    self.semaphore.signal()
+                                    print("signal")
+                                }
                             }
                             
                             
@@ -481,7 +486,7 @@ class DialogFlowPopUpController: UIViewController{
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
                 
-                self.checkSttFinish = true
+                //self.checkSttFinish = true
             }
         })
         
@@ -490,7 +495,7 @@ class DialogFlowPopUpController: UIViewController{
     } /* End of startRecording */
     
     
-    
+    /* BackButton 클릭 시 수행할 action 지정 */
     @objc func buttonAction(_ sender: UIBarButtonItem) {
       self.navigationController?.popViewController(animated: true)
     }
@@ -498,21 +503,20 @@ class DialogFlowPopUpController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //response_Label.layer.borderWidth = 0.5
+        /* ViewController가 작동중임을 표시*/
+        viewIsRunning = true
         
-        //navigationController?.isNavigationBarHidden = true
+        /* navigationbar 투명 설정 */
         self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController!.navigationBar.shadowImage = UIImage()
         self.navigationController!.navigationBar.isTranslucent = true
         
+        /* backButton 커스터마이징 */
         let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(DialogFlowPopUpController.buttonAction(_:)))
         addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
         
-        
-        
-        
-        
+        /* Lottie animation 설정 */
         animation = AnimationView(name:"loading")
         animation!.frame = CGRect(x:0, y:0, width:200, height:200)
 
@@ -523,9 +527,8 @@ class DialogFlowPopUpController: UIViewController{
         animationView.addSubview(animation!)
         //self.animation!.play()
         
-        /*
-         TTS 초기화를 하여 기능을 원활하게 할 수 있다.
-         */
+        
+        /* 오디오 설정: 이 코드를 넣어줘야 실제 디바이스에서 TTS가 정상적으로 작동 */
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: .defaultToSpeaker)//.setCategory(AVAudioSession.Category.record)
@@ -536,9 +539,6 @@ class DialogFlowPopUpController: UIViewController{
         }
         
         
-        
-        
-        viewIsRunning = true
         
         /* Dialogflow에 requestMsg 전송 */
         let request = ApiAI.shared().textRequest()
