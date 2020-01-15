@@ -31,21 +31,6 @@ These instructions will get you a copy of the project up and running on your loc
   AWS - Server
   Mysql - Database  
   ```
-  
-## Sprint (Agile방법론)
-
- #### 4주간격을 주어 해당되는 코어 기능 및 회의를 통해 나온 기능을 구현하며, 그에 따른 문제점 및 보안점을 모색한다.
- 
- ##### 12/23-1/17 
- * IOS 
-  - Swift언어 학습 및, IOS APP을 구현 할 수 있는 맥북, 아이폰을 준비한다.
-  - 기본적인 회원가입 및 로그인이 가능하도록 한다.
-  - 구글 챗봇을 이용하여 기본적인 주문이 가능하며 이 주문을 토대로 서버로 데이터를 전송할 수 있게 한다.
-
- * POS
-  - 토의를 거쳐 설정한 C#을 학습한다.
-  - 시중에 나온 POS모델의 매뉴얼을 참조하여 기초적인 UI제작 및 관련 기능을 구현하도록 한다.
-  - IOS App과 연동이 가능한 서버를 증설하며, 서버에 기초적인 DB 프레임을 구현한다.
  
 
 ## Versioning
