@@ -14,6 +14,7 @@
 		3308428D23BD81B600FCF4C0 /* FavoriteMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308428C23BD81B600FCF4C0 /* FavoriteMenuController.swift */; };
 		3308429023BDA18400FCF4C0 /* StoreList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308428F23BDA18400FCF4C0 /* StoreList.swift */; };
 		3308429223BDE67700FCF4C0 /* CafeDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3308429123BDE67700FCF4C0 /* CafeDetailController.swift */; };
+		330E8F1A23CE99AF00D21053 /* NanumSquareBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 330E8F1923CE99AF00D21053 /* NanumSquareBold.ttf */; };
 		33259F5323BB017400D44CB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33259F5223BB017400D44CB0 /* AppDelegate.swift */; };
 		33259F5523BB017400D44CB0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33259F5423BB017400D44CB0 /* SceneDelegate.swift */; };
 		33259F5A23BB017400D44CB0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5823BB017400D44CB0 /* Main.storyboard */; };
@@ -22,7 +23,6 @@
 		3386079223BF0D89003208AD /* DialogFlowPopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */; };
 		33F48FC523CDE9280037CC7B /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 33F48FC423CDE9280037CC7B /* loading.json */; };
 		33F48FD123CE091F0037CC7B /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 33F48FD023CE091F0037CC7B /* left.png */; };
-		33F48FD323CE113E0037CC7B /* NanumSquareBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 33F48FD223CE113E0037CC7B /* NanumSquareBold.ttf */; };
 		561A199013A68AC2CAB7E557 /* Pods_OutOfKiosk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E77C96B32E43C00A091B8A7 /* Pods_OutOfKiosk.framework */; };
 		FA0C2FC523C3192900598506 /* DetailMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0C2FC423C3192900598506 /* DetailMenuController.swift */; };
 		FA1E58AF23C41A79002215BB /* ProductList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1E58AE23C41A79002215BB /* ProductList.swift */; };
@@ -40,6 +40,7 @@
 		3308428C23BD81B600FCF4C0 /* FavoriteMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteMenuController.swift; sourceTree = "<group>"; };
 		3308428F23BDA18400FCF4C0 /* StoreList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreList.swift; sourceTree = "<group>"; };
 		3308429123BDE67700FCF4C0 /* CafeDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CafeDetailController.swift; sourceTree = "<group>"; };
+		330E8F1923CE99AF00D21053 /* NanumSquareBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareBold.ttf; sourceTree = "<group>"; };
 		33259F4F23BB017400D44CB0 /* OutOfKiosk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OutOfKiosk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33259F5223BB017400D44CB0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33259F5423BB017400D44CB0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -48,9 +49,8 @@
 		33259F5E23BB017500D44CB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33259F6023BB017500D44CB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogFlowPopUpController.swift; sourceTree = "<group>"; };
-		33F48FC423CDE9280037CC7B /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = loading.json; path = ../../../Downloads/loading.json; sourceTree = "<group>"; };
-		33F48FD023CE091F0037CC7B /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = left.png; path = ../../../Downloads/left.png; sourceTree = "<group>"; };
-		33F48FD223CE113E0037CC7B /* NanumSquareBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = NanumSquareBold.ttf; path = ../../../Downloads/NanumSquareBold.ttf; sourceTree = "<group>"; };
+		33F48FC423CDE9280037CC7B /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
+		33F48FD023CE091F0037CC7B /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
 		F5097F4775439F8A0528E7C8 /* Pods-OutOfKiosk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OutOfKiosk.release.xcconfig"; path = "Target Support Files/Pods-OutOfKiosk/Pods-OutOfKiosk.release.xcconfig"; sourceTree = "<group>"; };
 		FA0C2FC423C3192900598506 /* DetailMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailMenuController.swift; sourceTree = "<group>"; };
 		FA1E58AE23C41A79002215BB /* ProductList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductList.swift; sourceTree = "<group>"; };
@@ -133,7 +133,7 @@
 		33F48FC323CDE8DE0037CC7B /* File */ = {
 			isa = PBXGroup;
 			children = (
-				33F48FD223CE113E0037CC7B /* NanumSquareBold.ttf */,
+				330E8F1923CE99AF00D21053 /* NanumSquareBold.ttf */,
 				33F48FD023CE091F0037CC7B /* left.png */,
 				33F48FC423CDE9280037CC7B /* loading.json */,
 			);
@@ -221,7 +221,7 @@
 				33259F5C23BB017500D44CB0 /* Assets.xcassets in Resources */,
 				33F48FC523CDE9280037CC7B /* loading.json in Resources */,
 				33259F5A23BB017400D44CB0 /* Main.storyboard in Resources */,
-				33F48FD323CE113E0037CC7B /* NanumSquareBold.ttf in Resources */,
+				330E8F1A23CE99AF00D21053 /* NanumSquareBold.ttf in Resources */,
 				33F48FD123CE091F0037CC7B /* left.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
