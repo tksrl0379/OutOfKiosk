@@ -65,107 +65,104 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     }
     
     
+    
     @IBAction func orderItems_Btn(_ sender: Any) {
         
-        /* 주문 정보 전송 */
-        /* php - mysql 서버로 주문 정보 전송 후 receivedMsg_Label에 Dialogflow message 출력 및 TTS*/
+        /* AppDelegate에 저장된 모든 정보를 Dynamic하게 보내야하므로
+         저장된 장바구니의 아이템 개수만큼 for loop를 돌려서 php통신을 이용하여 DB로 보낸다.
+         보내는 아이템은 동시에 보내야 하므로 같은 date를 보낸다.
+         */
+        let now = Date()
+        let date = DateFormatter()
+        date.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let currentDate = date.string(from: now)
+        print(currentDate, type(of: currentDate))
+        
+        for i in 0...shoppingBasket_numOfProducts-1 {
+            
+            let parameters: Parameters=[
+                "name": shoppingBasket_productName[i],
+                "count": shoppingBasket_productCount[i],
+                "size": shoppingBasket_productSize[i],
+                "sugar": shoppingBasket_productSugarContent[i],
+                "whippedcream": shoppingBasket_productIsWhippedCream[i],
+                "currentDate" : currentDate
+            ]
+            
+            /* php 서버 위치 */
+            let URL_ORDER = "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/order/api/order.php"
+            //Sending http post request
+            Alamofire.request(URL_ORDER, method: .post, parameters: parameters).responseString
+                {
+                    response in
+                    print("응답",response)
+                    
+            }
+        }
+        
+        
+        /* 주문이 완료되면 현재 장바구니의 아이템을 삭제해야하므로 appdelegate의 모든 아이템을 초기화한다.*/
+        self.navigationController?.popViewController(animated: true)
+        let ad = UIApplication.shared.delegate as? AppDelegate
+        
+        ad?.numOfProducts = 0
+        ad?.menuNameArray = []
+        ad?.menuSizeArray = []
+        ad?.menuCountArray = []
+        ad?.menuEachPriceArray = []
+        ad?.menuSugarContent = []
+        ad?.menuIsWhippedCream = []
+                
+    }
+    
+    
+    override func viewDidLoad() {
+        
+        super.viewDidLoad()
+        
+        ShoppingBasketTableView.delegate=self
+        ShoppingBasketTableView.dataSource=self
+        self.ShoppingBasketTableView.rowHeight = 150.0
+        
+        
         /*
-        self.speechAndText(textResponse)
+         Appdelegate를 사용하여, 챗봇을 통해 주문한 정보를 AppDelegate에서 불러오는 작업. 이후 각 Array에 넣어준다.
+         */
+        let ad = UIApplication.shared.delegate as? AppDelegate
         
-        
-        /* 아래의 parameter 넣는 곳이 강제 unwrapping인 !이기 때문에 nil이 들어가면 안됨. 따라서 문자열 값 넣어줌 */
-        if self.sugar == nil {
-            self.sugar = "NULL"
+        if let numOfProducts = ad?.numOfProducts{
+            shoppingBasket_numOfProducts = numOfProducts
         }
         
-        if self.whippedcream == nil {
-            self.whippedcream = "NULL"
+        if let menuNameArray = ad?.menuNameArray {
+            
+            shoppingBasket_productName = menuNameArray
+            
         }
-        */
-        //creating parameters for the post request
-        /*
-        let parameters: Parameters=[
-            "name": self.name! ,
-            "count": self.count!,
-            "size": self.size!,
-            "sugar": self.sugar!,
-            "whippedcream": self.whippedcream!
-        ]
-        
-        /* php 서버 위치 */
-        let URL_ORDER = "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/order/api/order.php"
-        //Sending http post request
-        Alamofire.request(URL_ORDER, method: .post, parameters: parameters).responseString
-            {
-                response in
-                
-                print("응답",response)
-                
-                /* 재주문하는 경우를 대비하여 nil로 초기화 해줘야 함. 아니면 query가 여러번 날라감 */
-                self.name = nil
-                self.count = nil
-                self.size = nil
-                self.sugar = nil
-                self.whippedcream = nil
-                
-                
+        if let menuSizeArray = ad?.menuSizeArray {
+            
+            shoppingBasket_productSize = menuSizeArray
+            
         }
-    }*/
-    
-    
-    
-}
-
-
-
-
-
-override func viewDidLoad() {
-    
-    super.viewDidLoad()
-    
-    ShoppingBasketTableView.delegate=self
-    ShoppingBasketTableView.dataSource=self
-    self.ShoppingBasketTableView.rowHeight = 150.0
-    
-    /*
-     Appdelegate를 사용하여, 챗봇을 통해 주문한 정보를 AppDelegate에서 불러오는 작업. 이후 각 Array에 넣어준다.
-     */
-    let ad = UIApplication.shared.delegate as? AppDelegate
-    
-    if let numOfProducts = ad?.numOfProducts{
-        shoppingBasket_numOfProducts = numOfProducts
-    }
-    
-    if let menuNameArray = ad?.menuNameArray {
+        if let menuCountArray = ad?.menuCountArray {
+            
+            shoppingBasket_productCount = menuCountArray
+            
+        }
+        if let menuEachPriceArray = ad?.menuEachPriceArray {
+            
+            shoppingBasket_productEachPrice = menuEachPriceArray
+        }
+        if let menuSugarContent = ad?.menuSugarContent {
+            
+            shoppingBasket_productSugarContent = menuSugarContent
+        }
+        if let menuIsWhippedCream = ad?.menuIsWhippedCream {
+            
+            shoppingBasket_productIsWhippedCream = menuIsWhippedCream
+        }
         
-        shoppingBasket_productName = menuNameArray
         
     }
-    if let menuSizeArray = ad?.menuSizeArray {
-        
-        shoppingBasket_productSize = menuSizeArray
-        
-    }
-    if let menuCountArray = ad?.menuCountArray {
-        
-        shoppingBasket_productCount = menuCountArray
-        
-    }
-    if let menuEachPriceArray = ad?.menuEachPriceArray {
-        
-        shoppingBasket_productEachPrice = menuEachPriceArray
-    }
-    if let menuSugarContent = ad?.menuSugarContent {
-        
-        shoppingBasket_productSugarContent = menuSugarContent
-    }
-    if let menuIsWhippedCream = ad?.menuIsWhippedCream {
-        
-        shoppingBasket_productIsWhippedCream = menuIsWhippedCream
-    }
     
-    
-}
-
 }

@@ -15,23 +15,28 @@ import ApiAI
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    /*
-     private var name: String?
-     private var count: Int?
-     private var size: String?
-     private var sugar: String?
-     private var whippedcream: String?
-     */
-    var numOfProducts : Int = 0 
+    /*ORIGINAL*/
+    
+    var numOfProducts : Int = 0
     
     var menuNameArray: Array<String> = []
     var menuSizeArray: Array<String> = []
     var menuCountArray: Array<Int> = []
     var menuEachPriceArray: Array<Int> = []
-    
     var menuSugarContent : Array<String> = []
     var menuIsWhippedCream : Array<String> = []
     
+    
+    /*TEST : server로 전송하기 위한 변수*/
+    /*
+    var numOfProducts : Int = 1
+    var menuNameArray: Array<String> = ["초콜렛 스무디"]
+    var menuSizeArray: Array<String> = ["라지"]
+    var menuCountArray: Array<Int> = [1]
+    var menuEachPriceArray: Array<Int> = [3500]
+    var menuSugarContent : Array<String> = ["50"]
+    var menuIsWhippedCream : Array<String> = ["NULL"]
+    */
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
