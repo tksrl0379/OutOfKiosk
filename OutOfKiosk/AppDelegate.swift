@@ -16,27 +16,26 @@ import ApiAI
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     /*ORIGINAL*/
-    
+    /*
     var numOfProducts : Int = 0
-    
     var menuNameArray: Array<String> = []
     var menuSizeArray: Array<String> = []
     var menuCountArray: Array<Int> = []
     var menuEachPriceArray: Array<Int> = []
     var menuSugarContent : Array<String> = []
     var menuIsWhippedCream : Array<String> = []
-    
+    */
     
     /*TEST : server로 전송하기 위한 변수*/
-    /*
-    var numOfProducts : Int = 1
-    var menuNameArray: Array<String> = ["초콜렛 스무디"]
-    var menuSizeArray: Array<String> = ["라지"]
-    var menuCountArray: Array<Int> = [1]
-    var menuEachPriceArray: Array<Int> = [3500]
-    var menuSugarContent : Array<String> = ["50"]
-    var menuIsWhippedCream : Array<String> = ["NULL"]
-    */
+    
+    var numOfProducts : Int = 2
+    var menuNameArray: Array<String> = ["초콜렛 스무디","초콜렛 프라푸치노"]
+    var menuSizeArray: Array<String> = ["라지","스몰"]
+    var menuCountArray: Array<Int> = [1,3]
+    var menuEachPriceArray: Array<Int> = [3500,4000]
+    var menuSugarContent : Array<String> = ["50","NULL"]
+    var menuIsWhippedCream : Array<String> = ["NULL","YES"]
+    
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
