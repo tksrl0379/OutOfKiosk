@@ -230,6 +230,12 @@ class CafeDetailController : UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+
+        let ad = UIApplication.shared.delegate as? AppDelegate
+        
+        shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
+        
+        
         /* backButton 커스터마이징 */
         let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(CafeDetailController.buttonAction(_:)))
         addButton.tintColor = UIColor.black
