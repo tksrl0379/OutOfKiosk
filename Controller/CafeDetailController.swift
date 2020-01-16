@@ -104,6 +104,8 @@ class CafeDetailController : UIViewController{
             if count != 0 {
                 guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingBasketController") as? ShoppingBasketController else {
                     return}
+                rvc.willGetShoppingBasket_Btn = shoppingBasket_Btn
+                
                 
                 self.navigationController?.pushViewController(rvc, animated: true)
             }else{
@@ -114,10 +116,7 @@ class CafeDetailController : UIViewController{
         }
         
     }
-//    func setTitleOfShoppingBasket_Btn(){
-//        shoppingBasket_Btn.setTitle("TestByFunc", for: .normal)
-//    }
-    
+
     /* 장바구니가 비어있을 시 경고 메시지 함수*/
     func alertMessage(_ title: String, _ description: String){
         
@@ -218,7 +217,7 @@ class CafeDetailController : UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        let ad = UIApplication.shared.delegate as? AppDelegate
+        let ad = UIApplication.shared.delegate as? AppDelegate
         
 //        orderMenuByAI_Btn.setTitle("테스트", for: .normal)
         
@@ -227,7 +226,7 @@ class CafeDetailController : UIViewController{
         //let numberOfProducts = ad?.numOfProducts
         
 //        print(numberOfProducts!, type(of: numberOfProducts!))
-//        shoppingBasket_Btn.setTitle("장바구니 "+String(numberOfProducts!), for: .normal)
+        shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
         
         
         

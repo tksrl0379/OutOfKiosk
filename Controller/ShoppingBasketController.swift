@@ -34,7 +34,12 @@ import Alamofire
 class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableViewDataSource{
     
     
+    //    @IBOutlet weak var ProductName_Label: UILabel!
+    
     @IBOutlet weak var ShoppingBasketTableView: UITableView!
+    
+    /* 주문을 하면서 CafeDetailController의 UIBtn을 초기화 해주어야한다.*/
+    var willGetShoppingBasket_Btn : UIButton!
     
     var shoppingBasket_numOfProducts : Int = 0
     
@@ -64,6 +69,40 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         return cell
     }
     
+    /*
+     TableView의 해당 Cell을 지우는 버튼.
+     버튼 클릭시 메뉴가 삭제된다.
+     shoppoingBasket_xx의 remove는 현재 테이블에 보여주는 셀을 지운다
+     ad?.menuXXX는 Appdelegate에 실제로 저장되어있는 데이터이므로 지운다.
+     */
+    @IBAction func deleteShoppingBasketProduct_Btn(_ sender : UIButton) {
+        
+        //print("삭제삭제")
+        let point = sender.convert(CGPoint.zero, to: ShoppingBasketTableView)
+        guard let indexPath = ShoppingBasketTableView.indexPathForRow(at: point)else{return}
+        
+        shoppingBasket_numOfProducts -= 1
+        shoppingBasket_productName.remove(at: indexPath.row)
+        shoppingBasket_productSize.remove(at: indexPath.row)
+        shoppingBasket_productCount.remove(at: indexPath.row)
+        shoppingBasket_productEachPrice.remove(at: indexPath.row)
+        shoppingBasket_productSugarContent.remove(at: indexPath.row)
+        shoppingBasket_productIsWhippedCream.remove(at: indexPath.row)
+        
+        let ad = UIApplication.shared.delegate as? AppDelegate
+        ad?.numOfProducts -= 1
+        self.willGetShoppingBasket_Btn.setTitle("장바구니 : " + String(ad!.numOfProducts) + " 개", for: .normal)
+        ad?.menuNameArray.remove(at: Int(indexPath.row))
+        ad?.menuSizeArray.remove(at: Int(indexPath.row))
+        ad?.menuCountArray.remove(at: Int(indexPath.row))
+        ad?.menuEachPriceArray.remove(at: Int(indexPath.row))
+        ad?.menuSugarContent.remove(at: Int(indexPath.row))
+        ad?.menuIsWhippedCream.remove(at: Int(indexPath.row))
+        
+        
+        ShoppingBasketTableView.deleteRows(at: [indexPath], with: .fade)
+        
+    }
     
     
     @IBAction func orderItems_Btn(_ sender: Any) {
@@ -101,18 +140,22 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         }
         
         
-        /* 주문이 완료되면 현재 장바구니의 아이템을 삭제해야하므로 appdelegate의 모든 아이템을 초기화한다.*/
+        
+        
         self.navigationController?.popViewController(animated: true)
         let ad = UIApplication.shared.delegate as? AppDelegate
         
         ad?.numOfProducts = 0
+        /* 주문이 완료되면 현재 장바구니의 아이템을 삭제해야하므로 appdelegate의 모든 아이템을 초기화한다.*/
+        self.willGetShoppingBasket_Btn.setTitle("장바구니 : " + String(ad!.numOfProducts) + " 개", for: .normal)
+        
         ad?.menuNameArray = []
         ad?.menuSizeArray = []
         ad?.menuCountArray = []
         ad?.menuEachPriceArray = []
         ad?.menuSugarContent = []
         ad?.menuIsWhippedCream = []
-                
+        
     }
     
     
@@ -122,7 +165,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         
         ShoppingBasketTableView.delegate=self
         ShoppingBasketTableView.dataSource=self
-        self.ShoppingBasketTableView.rowHeight = 150.0
+        self.ShoppingBasketTableView.rowHeight = 200.0
         
         
         /*
