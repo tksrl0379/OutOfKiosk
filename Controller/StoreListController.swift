@@ -65,9 +65,18 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
         
     }
     
+    @objc func buttonAction(_ sender: UIBarButtonItem) {
+      self.navigationController?.popViewController(animated: true)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        /* backButton 커스터마이징 */
+        let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(StoreListController.buttonAction(_:)))
+        addButton.tintColor = UIColor.black
+        self.navigationItem.leftBarButtonItem = addButton
         
         /* TableView의 대리자(delegate)는 self(StoreListController)가 됨 */
         CafeTableView.delegate = self

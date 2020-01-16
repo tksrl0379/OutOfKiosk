@@ -21,7 +21,9 @@
 		33259F5C23BB017500D44CB0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5B23BB017500D44CB0 /* Assets.xcassets */; };
 		33259F5F23BB017500D44CB0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5D23BB017500D44CB0 /* LaunchScreen.storyboard */; };
 		3386079223BF0D89003208AD /* DialogFlowPopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */; };
-		33F48FC523CDE9280037CC7B /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 33F48FC423CDE9280037CC7B /* loading.json */; };
+		33D04E0423CEFA0E002FB5AE /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 33D04E0123CEFA0E002FB5AE /* loading.json */; };
+		33D04E1023CF07D1002FB5AE /* speak.png in Resources */ = {isa = PBXBuildFile; fileRef = 33D04E0F23CF07D1002FB5AE /* speak.png */; };
+		33E2F44F23D002BD009A751C /* cart.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E2F44E23D002BD009A751C /* cart.png */; };
 		33F48FD123CE091F0037CC7B /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 33F48FD023CE091F0037CC7B /* left.png */; };
 		561A199013A68AC2CAB7E557 /* Pods_OutOfKiosk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E77C96B32E43C00A091B8A7 /* Pods_OutOfKiosk.framework */; };
 		FA0C2FC523C3192900598506 /* DetailMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0C2FC423C3192900598506 /* DetailMenuController.swift */; };
@@ -49,7 +51,9 @@
 		33259F5E23BB017500D44CB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33259F6023BB017500D44CB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogFlowPopUpController.swift; sourceTree = "<group>"; };
-		33F48FC423CDE9280037CC7B /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
+		33D04E0123CEFA0E002FB5AE /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
+		33D04E0F23CF07D1002FB5AE /* speak.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speak.png; sourceTree = "<group>"; };
+		33E2F44E23D002BD009A751C /* cart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cart.png; path = ../../../Downloads/cart.png; sourceTree = "<group>"; };
 		33F48FD023CE091F0037CC7B /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
 		F5097F4775439F8A0528E7C8 /* Pods-OutOfKiosk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OutOfKiosk.release.xcconfig"; path = "Target Support Files/Pods-OutOfKiosk/Pods-OutOfKiosk.release.xcconfig"; sourceTree = "<group>"; };
 		FA0C2FC423C3192900598506 /* DetailMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailMenuController.swift; sourceTree = "<group>"; };
@@ -133,9 +137,11 @@
 		33F48FC323CDE8DE0037CC7B /* File */ = {
 			isa = PBXGroup;
 			children = (
+				33E2F44E23D002BD009A751C /* cart.png */,
+				33D04E0F23CF07D1002FB5AE /* speak.png */,
+				33D04E0123CEFA0E002FB5AE /* loading.json */,
 				330E8F1923CE99AF00D21053 /* NanumSquareBold.ttf */,
 				33F48FD023CE091F0037CC7B /* left.png */,
-				33F48FC423CDE9280037CC7B /* loading.json */,
 			);
 			path = File;
 			sourceTree = "<group>";
@@ -219,8 +225,10 @@
 			files = (
 				33259F5F23BB017500D44CB0 /* LaunchScreen.storyboard in Resources */,
 				33259F5C23BB017500D44CB0 /* Assets.xcassets in Resources */,
-				33F48FC523CDE9280037CC7B /* loading.json in Resources */,
 				33259F5A23BB017400D44CB0 /* Main.storyboard in Resources */,
+				33D04E0423CEFA0E002FB5AE /* loading.json in Resources */,
+				33D04E1023CF07D1002FB5AE /* speak.png in Resources */,
+				33E2F44F23D002BD009A751C /* cart.png in Resources */,
 				330E8F1A23CE99AF00D21053 /* NanumSquareBold.ttf in Resources */,
 				33F48FD123CE091F0037CC7B /* left.png in Resources */,
 			);
