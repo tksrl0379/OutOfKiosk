@@ -33,7 +33,10 @@ class DialogFlowPopUpController: UIViewController{
     
     /* 세마포어 선언*/
     let semaphore = DispatchSemaphore(value: 0)
-
+    
+    /* 장바구니 갯수가 증가함에 따라 CafeDetailController에 있는 장바구니 버튼에 개수를 표현하기 위해*/
+    var willGetShoppingBasket_Btn : UIButton!
+    //var getFromViewController : UIButton!
     
     /* Lottie animation을 위한 View 변수 */
     @IBOutlet weak var animationView: UIView!
@@ -185,7 +188,7 @@ class DialogFlowPopUpController: UIViewController{
         speechUtterance.voice = AVSpeechSynthesisVoice(language: "ko-KR")
         speechUtterance.rate = 0.65
         
-
+        
         /* if문 -> 대화가 모두 끝난 이후에도 TTS가 나와서 이를 막기 위함 */
         if(self.viewIsRunning){
             /* 음성 출력 */
@@ -379,8 +382,11 @@ class DialogFlowPopUpController: UIViewController{
                                         DispatchQueue.main.async {
                                             
                                             let ad = UIApplication.shared.delegate as? AppDelegate
+                                            //                                            print("현재개수(넣기전)" , ad?.numOfProducts)
                                             
+                                            /* 주문이 완료됨에 따라 장바구니 옆에 현재 몇개의 아이템이 있는지 알려준다.*/
                                             ad?.numOfProducts += 1
+                                            self.willGetShoppingBasket_Btn.setTitle("장바구니 : " + String(ad!.numOfProducts) + " 개", for: .normal)
                                             
                                             if let name = self.name{
                                                 ad?.menuNameArray.append(name)
@@ -408,7 +414,9 @@ class DialogFlowPopUpController: UIViewController{
                                                 if let whippedcream = self.whippedcream{
                                                     ad?.menuIsWhippedCream.append(whippedcream)
                                                 }
-                                            }                                            
+                                            }
+                                            
+                                            
                                             
                                         }
                                         
@@ -416,6 +424,7 @@ class DialogFlowPopUpController: UIViewController{
                                     /* 대화가 모두 끝난 이후에도 TTS가 나와서 이를 막기 위함 */
                                     self.viewIsRunning = false
                                     //종료
+                                    
                                     self.navigationController?.popViewController(animated: true)
                                     
                                     
@@ -425,7 +434,7 @@ class DialogFlowPopUpController: UIViewController{
                                 print("success")
                                 
                                 DispatchQueue.main.async {
-                                
+                                    
                                     self.checkResponseFromAI = true
                                     self.semaphore.signal()
                                     print("signal")
@@ -489,7 +498,7 @@ class DialogFlowPopUpController: UIViewController{
     
     /* BackButton 클릭 시 수행할 action 지정 */
     @objc func buttonAction(_ sender: UIBarButtonItem) {
-      self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     override func viewDidLoad() {
