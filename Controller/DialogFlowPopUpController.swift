@@ -34,6 +34,9 @@ class DialogFlowPopUpController: UIViewController{
     /* 세마포어 선언*/
     let semaphore = DispatchSemaphore(value: 0)
 
+    /* 장바구니 갯수가 증가함에 따라 CafeDetailController에 있는 장바구니 버튼에 개수를 표현하기 위해*/
+    var willGetShoppingBasket_Btn : UIButton!
+    //var getFromViewController : UIButton!
     
     /* Lottie animation을 위한 View 변수 */
     @IBOutlet weak var animationView: UIView!
@@ -378,7 +381,7 @@ class DialogFlowPopUpController: UIViewController{
                                         DispatchQueue.main.async {
                                             
                                             let ad = UIApplication.shared.delegate as? AppDelegate
-                                            
+                                            print("현재개수(넣기전)" , ad?.numOfProducts)
                                             ad?.numOfProducts += 1
                                             
                                             if let name = self.name{
@@ -407,7 +410,7 @@ class DialogFlowPopUpController: UIViewController{
                                                 if let whippedcream = self.whippedcream{
                                                     ad?.menuIsWhippedCream.append(whippedcream)
                                                 }
-                                            }                                            
+                                            }
                                             
                                         }
                                         
@@ -415,9 +418,38 @@ class DialogFlowPopUpController: UIViewController{
                                     /* 대화가 모두 끝난 이후에도 TTS가 나와서 이를 막기 위함 */
                                     self.viewIsRunning = false
                                     //종료
+
+//                                    /* 장바구니 개수를 넘겨보기*/
+//                                    guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "CafeDetailController") as? CafeDetailController else {
+//                                    //아니면 종료
+//                                    return}
+                                    let ad = UIApplication.shared.delegate as? AppDelegate
+//                                    
+//                                    rvc.numberOfProducts = ad?.numOfProducts
+//                                        
+//                                    self.navigationController?.popViewController(rvc, animated: true)
+                                    
+//                                    willGetShoppingBasket_Btn.
                                     self.navigationController?.popViewController(animated: true)
+
+                                    print("현재개수(넣은 후)" , ad?.numOfProducts)
+                                    
+                                    /* 주문이 완료됨에 따라 장바구니 버튼의 text에 현재 몇개의 product가 추가되었는지를 알려줄수있다*/
+                                    
+                                    /***************************************/
                                     
                                     
+                                    
+                                    /* 문제점 = 실제로 numOfProduct는 증가한다. 문제는 비동기적으로 AppDelegate에 추가되기 때문에 나머지 코드가 실행 되고 나서야 추가됨.*/
+                                    
+                                    
+                                    
+                                    /***************************************/
+                                    self.willGetShoppingBasket_Btn.setTitle("장바구니 : " + String(ad!.numOfProducts), for: .normal)
+                                    
+                                    //                                    CafeDetailController.setTitleOfShoppingBasket_Btn()
+                                    
+//                                    CafeDetailController.shoppingList_Btn.self.self.s
                                 }else{
                                     self.speechAndText(textResponse)
                                 }
