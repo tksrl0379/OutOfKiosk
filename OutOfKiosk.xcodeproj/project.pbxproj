@@ -53,7 +53,7 @@
 		3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogFlowPopUpController.swift; sourceTree = "<group>"; };
 		33D04E0123CEFA0E002FB5AE /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		33D04E0F23CF07D1002FB5AE /* speak.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speak.png; sourceTree = "<group>"; };
-		33E2F44E23D002BD009A751C /* cart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cart.png; path = ../../../Downloads/cart.png; sourceTree = "<group>"; };
+		33E2F44E23D002BD009A751C /* cart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cart.png; sourceTree = "<group>"; };
 		33F48FD023CE091F0037CC7B /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
 		F5097F4775439F8A0528E7C8 /* Pods-OutOfKiosk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OutOfKiosk.release.xcconfig"; path = "Target Support Files/Pods-OutOfKiosk/Pods-OutOfKiosk.release.xcconfig"; sourceTree = "<group>"; };
 		FA0C2FC423C3192900598506 /* DetailMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailMenuController.swift; sourceTree = "<group>"; };
