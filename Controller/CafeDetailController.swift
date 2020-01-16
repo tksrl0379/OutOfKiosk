@@ -20,6 +20,9 @@ class CafeDetailController : UIViewController{
     
     var receivedValueFromBeforeVC : Int?
     
+    /* 장바구니 개수 */
+//    var numberOfProducts : Int?
+    
     /* DialogFlow 로 주문하기 버튼 */
     @IBOutlet weak var orderMenuByAI_Btn: UIButton!
     
@@ -40,6 +43,8 @@ class CafeDetailController : UIViewController{
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as? DialogFlowPopUpController else {
             return}
         
+        rvc.willGetShoppingBasket_Btn = shoppingBasket_Btn
+//        rvc.
         self.navigationController?.pushViewController(rvc, animated: true)
     }
     
@@ -100,6 +105,8 @@ class CafeDetailController : UIViewController{
             if count != 0 {
                 guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingBasketController") as? ShoppingBasketController else {
                     return}
+                rvc.willGetShoppingBasket_Btn = shoppingBasket_Btn
+                
                 
                 self.navigationController?.pushViewController(rvc, animated: true)
             }else{
@@ -110,6 +117,8 @@ class CafeDetailController : UIViewController{
         }
         
     }
+
+    /* 장바구니가 비어있을 시 경고 메시지 함수*/
     func alertMessage(_ title: String, _ description: String){
         
         /* Alert는 MainThread에서 실행해야 함 */
@@ -272,6 +281,7 @@ class CafeDetailController : UIViewController{
          */
         
     }
+    
     
     
 }
