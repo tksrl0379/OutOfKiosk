@@ -169,6 +169,7 @@ class DialogFlowPopUpController: UIViewController{
             self.animation?.pause()
             
             self.receivedMsg_Label.text = textResponse
+            /* fade in 효과 */
             self.receivedMsg_Label.alpha = 0
             UIView.animate(withDuration: 1.5) {
                 self.receivedMsg_Label.alpha = 1.0
@@ -496,10 +497,7 @@ class DialogFlowPopUpController: UIViewController{
         /* ViewController가 작동중임을 표시*/
         viewIsRunning = true
         
-        /* navigationbar 투명 설정 */
-        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController!.navigationBar.shadowImage = UIImage()
-        self.navigationController!.navigationBar.isTranslucent = true
+        
         
         /* backButton 커스터마이징 */
         let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(DialogFlowPopUpController.buttonAction(_:)))
@@ -508,7 +506,7 @@ class DialogFlowPopUpController: UIViewController{
         
         /* Lottie animation 설정 */
         animation = AnimationView(name:"loading")
-        animation!.frame = CGRect(x:0, y:0, width:200, height:200)
+        animation!.frame = CGRect(x:0, y:0, width:400, height:400)
 
         animation!.center = self.view.center
         

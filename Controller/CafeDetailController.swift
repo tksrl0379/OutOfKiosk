@@ -16,6 +16,7 @@ import Alamofire
 /* 가게 접속하면 뜨는 메인 화면 */
 class CafeDetailController : UIViewController{
     
+    @IBOutlet weak var storeName_Label: UILabel!
     
     var receivedValueFromBeforeVC : Int?
     
@@ -204,10 +205,47 @@ class CafeDetailController : UIViewController{
         }
     }
     
+    
+    @objc func buttonAction(_ sender: UIBarButtonItem) {
+      self.navigationController?.popViewController(animated: true)
+    }
+    
+    @IBOutlet weak var border_View: UIView!
+    @IBOutlet weak var border2_View: UIView!
+    
+    @IBOutlet weak var firstMenu_Btn: UIButton!
+    @IBOutlet weak var secondMenu_Btn: UIButton!
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        orderMenuByAI_Btn.setTitle("테스트", for: .normal)
+        /* backButton 커스터마이징 */
+        let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(CafeDetailController.buttonAction(_:)))
+        addButton.tintColor = UIColor.black
+        self.navigationItem.leftBarButtonItem = addButton
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로"
+        
+        
+        storeName_Label.text = "스타벅스"
+        
+        /* 테두리 만들기 */
+        border_View.layer.borderWidth = 0.4
+        border_View.layer.borderColor = UIColor.gray.cgColor
+        
+        border2_View.layer.borderWidth = 0.4
+        border2_View.layer.borderColor = UIColor.gray.cgColor
+        
+        /* 테두리 둥글게 만들기 */
+        firstMenu_Btn.layer.cornerRadius = 5
+        secondMenu_Btn.layer.cornerRadius = 5
+        shoppingBasket_Btn.layer.cornerRadius = 5
+        
+        //let img = UIImage(named: "left")
+        
+        //orderMenuByAI_Btn.setImage(img, for: .normal)
+        //orderMenuByAI_Btn.setTitle("음성 주문", for: .normal)
         
         
         //print(receivedValueFromBeforeVC)

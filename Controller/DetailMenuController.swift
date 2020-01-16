@@ -35,6 +35,8 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
     
     @IBOutlet weak var ProductTableView: UITableView!
     
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return willgetCategroyName.count
         //return productName.count
@@ -48,7 +50,12 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         /* ProductList 클래스(Cell Class)에 등록한 프로퍼티 이용 가능 */
         //cell.productName_Label.text = productName[indexPath.row]
         cell.productName_Label.text = willgetCategroyName[indexPath.row]
-        cell.productPrice_Label.text = String(willgetCategroyPrice[indexPath.row])
+        cell.productPrice_Label.text = String(willgetCategroyPrice[indexPath.row]) + "원"
+        
+        cell.cellBorder_View.layer.borderWidth = 0.5
+        cell.cellBorder_View.layer.borderColor = UIColor.gray.cgColor
+        
+        
         
         
         return cell
@@ -71,12 +78,22 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         
     }*/
     
-    
+    @objc func buttonAction(_ sender: UIBarButtonItem) {
+      self.navigationController?.popViewController(animated: true)
+    }
     
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        /* backButton 커스터마이징 */
+        let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(DetailMenuController.buttonAction(_:)))
+        addButton.tintColor = UIColor.black
+        self.navigationItem.leftBarButtonItem = addButton
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로"
+        
+        
         
         /*
          ProdcutTableView의 delgate , datasource = self
