@@ -19,6 +19,9 @@ class CafeDetailController : UIViewController{
     
     var receivedValueFromBeforeVC : Int?
     
+    /* 장바구니 개수 */
+//    var numberOfProducts : Int?
+    
     /* DialogFlow 로 주문하기 버튼 */
     @IBOutlet weak var orderMenuByAI_Btn: UIButton!
     
@@ -39,6 +42,8 @@ class CafeDetailController : UIViewController{
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as? DialogFlowPopUpController else {
             return}
         
+        rvc.willGetShoppingBasket_Btn = shoppingBasket_Btn
+//        rvc.
         self.navigationController?.pushViewController(rvc, animated: true)
     }
     
@@ -109,6 +114,11 @@ class CafeDetailController : UIViewController{
         }
         
     }
+//    func setTitleOfShoppingBasket_Btn(){
+//        shoppingBasket_Btn.setTitle("TestByFunc", for: .normal)
+//    }
+    
+    /* 장바구니가 비어있을 시 경고 메시지 함수*/
     func alertMessage(_ title: String, _ description: String){
         
         /* Alert는 MainThread에서 실행해야 함 */
@@ -204,14 +214,20 @@ class CafeDetailController : UIViewController{
         }
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        orderMenuByAI_Btn.setTitle("테스트", for: .normal)
+//        let ad = UIApplication.shared.delegate as? AppDelegate
         
+//        orderMenuByAI_Btn.setTitle("테스트", for: .normal)
         
-        //print(receivedValueFromBeforeVC)
-        //        test_Text.text = String(receivedValueFromBeforeVC!)
+        /* 초기 설정이라 챗봇이 popView가 되어진다고 해도 바뀌지 않는다.*/
+        
+        //let numberOfProducts = ad?.numOfProducts
+        
+//        print(numberOfProducts!, type(of: numberOfProducts!))
+//        shoppingBasket_Btn.setTitle("장바구니 "+String(numberOfProducts!), for: .normal)
         
         
         
@@ -234,6 +250,7 @@ class CafeDetailController : UIViewController{
          */
         
     }
+    
     
     
 }
