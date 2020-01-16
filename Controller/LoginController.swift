@@ -37,10 +37,12 @@ import UIKit
 
 
 /* 로그인, 회원가입 기능: php, mysql server와 통신하여 로그인, 회원가입 구현 */
-class LoginController: UIViewController{
+class LoginController: UIViewController, UITextFieldDelegate{
     
     @IBOutlet weak var id_Textfield: UITextField!
     @IBOutlet weak var pwd_Textfield: UITextField!
+    @IBOutlet weak var autoLogIn_Switch: UISwitch!
+    @IBOutlet weak var login_Btn: UIButton!
     
     func alertMessage(_ title: String, _ description: String){
         
@@ -106,6 +108,15 @@ class LoginController: UIViewController{
             
             /* 로그인 성공 시 화면 전환 */
             if (responseString! == "login success") {
+                DispatchQueue.main.async{
+                    if(self.autoLogIn_Switch.isOn){
+                        UserDefaults.standard.set(self.id_Textfield.text!, forKey: "id")
+                        UserDefaults.standard.set(self.pwd_Textfield.text!, forKey: "pwd")
+
+                    }
+                }
+                
+                
                 /* 화면 전환은 main 쓰레드에서만 가능하므로 main 쓰레드에서 돌아가도록 설정 */
                 DispatchQueue.main.async{
                     if let controller = self.storyboard?.instantiateViewController(withIdentifier: "Main_NavigationController"){
@@ -128,9 +139,70 @@ class LoginController: UIViewController{
         phpCommunication("signup")
     }
     
+    
+    @objc func keyboardWillShow(_ sender: Notification) {
+         self.view.frame.origin.y = -150 // Move view 150 points upward
+    }
+    
+    @objc func keyboardWillHide(_ sender: Notification) {
+
+        self.view.frame.origin.y = 0 // Move view to original position
+    }
+
+    /* UITextFieldDelegate 함수 오버라이딩 : return을 누르면 수행할 작업 기재 */
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            // textField의 상태를 포기 -> 키보드 내려감
+            textField.resignFirstResponder()
+
+            return true
+    }
+    
+    
+    
+    @IBAction func autoLogIn_Switch(_ sender: Any) {
+        if autoLogIn_Switch.isOn{
+            self.login_Btn.setTitle("자동 로그인", for: .normal)
+            
+            self.autoLogIn_Switch.accessibilityLabel = "자동 로그인 기능이 켜졌습니다"
+            self.autoLogIn_Switch.accessibilityValue = nil
+           
+        }else{
+            self.login_Btn.setTitle("로그인", for: .normal)
+            UserDefaults.standard.set(nil, forKey: "id")
+            UserDefaults.standard.set(nil, forKey: "pwd")
+            
+            self.autoLogIn_Switch.accessibilityLabel = "자동 로그인 기능이 꺼졌습니다"
+        }
+    }
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        autoLogIn_Switch(self)
+        
+        /* textfield 선택 시 키보드 크기만큼 view를 올리기 위함 */
+        id_Textfield.delegate = self
+        pwd_Textfield.delegate = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        
+        /* 자동 로그인 기능 */
+        if let userId = UserDefaults.standard.string(forKey: "id"){
+            //print(userId)
+            self.id_Textfield.text = userId
+            self.pwd_Textfield.text = UserDefaults.standard.string(forKey: "pwd")!
+            
+            login_Btn(self)
+        }
+        
+        
+        
+
     }
 }
 
