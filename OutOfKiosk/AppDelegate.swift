@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /*TEST : server로 전송하기 위한 변수*/
     /*
     var numOfProducts : Int = 2
-    var menuNameArray: Array<String> = ["초콜렛 스무디","초콜렛 프라푸치노"]
+    var menuNameArray: Array<String> = ["초콜렛스무디","초콜릿 크림 프라푸치노"]
     var menuSizeArray: Array<String> = ["라지","스몰"]
     var menuCountArray: Array<Int> = [1,3]
     var menuEachPriceArray: Array<Int> = [3500,4000]

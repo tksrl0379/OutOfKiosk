@@ -111,6 +111,7 @@ class DialogFlowPopUpController: UIViewController{
                     self.checkResponseFromAI = false
                     //self.checkMain = false
                     
+                    self.inputNode?.removeTap(onBus: 0)
                     self.startRecording()
                     self.semaphore.wait()
                 }
@@ -427,8 +428,13 @@ class DialogFlowPopUpController: UIViewController{
                                     
                                     self.navigationController?.popViewController(animated: true)
                                     
+                                /* 장바구니에 담지 않고 끝내는 시나리오 */
+                                }else if(textResponse.contains("필요하실때 다시 불러주세요.")){                                    
+                                    self.viewIsRunning = false
+                                    self.navigationController?.popViewController(animated: true)
                                     
                                 }else{
+                                    
                                     self.speechAndText(textResponse)
                                 }
                                 print("success")
