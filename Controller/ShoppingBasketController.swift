@@ -38,8 +38,17 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     
     @IBOutlet weak var ShoppingBasketTableView: UITableView!
     
+    
+    /* 주문하기, 삭제하기 UI oultet*/
+    @IBOutlet weak var orderItems_Btn: UIButton!
+//    @IBOutlet weak var deleteShoppingBasketProduct_Btn: UIButton!
+    
     /* 주문을 하면서 CafeDetailController의 UIBtn을 초기화 해주어야한다.*/
     var willGetShoppingBasket_Btn : UIButton!
+    
+    /*수량 증감에 따른 compare값을 비교하기위해서 */
+    var stepperVal = 0
+    
     
     var shoppingBasket_numOfProducts : Int = 0
     
@@ -59,15 +68,42 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ShoppingBasketTableView.dequeueReusableCell(withIdentifier: "ShoppingBasket", for: indexPath ) as! ShoppingBasket
         
-        cell.shoppingBasketProductName_Label.text = shoppingBasket_productName[indexPath.row]
-        cell.shoppingBasketProductSize_Label.text = shoppingBasket_productSize[indexPath.row]+"사이즈"
+        cell.shoppingBasketProductName_Label.text = shoppingBasket_productName[indexPath.row]+" "+shoppingBasket_productSize[indexPath.row]
+        //cell.shoppingBasketProductSize_Label.text = shoppingBasket_productSize[indexPath.row]+"사이즈"
         cell.shoppingBasketNumberOfProduct_Label.text =
             String(shoppingBasket_productCount[indexPath.row])+"개"
+//        let stepper = UIStepper()
         cell.shoppingBasketProductTotalPrice_Label.text =
             String( shoppingBasket_productEachPrice[indexPath.row]*shoppingBasket_productCount[indexPath.row])+"원"
         
+        /* Stepper 초기값 */
+        cell.shoppingBasketProductSize_Stepper.value = Double(shoppingBasket_productCount[indexPath.row])
+        
+        cell.deleteShoppingBasket_Btn.layer.cornerRadius = 5
+        
         return cell
     }
+    
+    
+    
+    /* 해당 Cell의 Index에 맞게 수량 증감이 가능하도록 한다.*/
+    @IBAction func changeNumberOfProduct_Stepper(_ sender: UIStepper) {
+        
+        /*Index를 찾는다.*/
+        let point = sender.convert(CGPoint.zero, to: ShoppingBasketTableView)
+        guard let indexPath = ShoppingBasketTableView.indexPathForRow(at: point)else{return}
+        
+//        print(sender.value)
+        
+        let ad = UIApplication.shared.delegate as? AppDelegate
+        shoppingBasket_productCount[indexPath.row] = Int(sender.value)
+        ad?.menuCountArray[indexPath.row] = Int(sender.value)
+        
+        ShoppingBasketTableView.reloadData()
+                
+    }
+    
+    
     
     /*
      TableView의 해당 Cell을 지우는 버튼.
@@ -115,17 +151,28 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         let date = DateFormatter()
         date.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let currentDate = date.string(from: now)
-        print(currentDate, type(of: currentDate))
+//        print(currentDate, type(of: currentDate))
+        
+            
         
         for i in 0...shoppingBasket_numOfProducts-1 {
+            /*if let userId = UserDefaults.standard.string(forKey: "id"){
+                
+                    print("My ID : ", userId , "type : ", type(of: userId))
+            }*/
             
+            let userId = UserDefaults.standard.string(forKey: "id")!
+            
+            print("userID type is : ", type(of: userId))
             let parameters: Parameters=[
-                "name": shoppingBasket_productName[i],
+                "name" : shoppingBasket_productName[i]+" "+shoppingBasket_productSize[i],
                 "count": shoppingBasket_productCount[i],
-                "size": shoppingBasket_productSize[i],
                 "sugar": shoppingBasket_productSugarContent[i],
                 "whippedcream": shoppingBasket_productIsWhippedCream[i],
-                "currentDate" : currentDate
+                "currentDate" : currentDate,
+                "userID" : userId//UserDefaults.standard.string(forKey: "id")
+                //user Id또한 넣어주어야한다.
+                //order ID는 DB에서 auto_increament 한다.
             ]
             
             /* php 서버 위치 */
@@ -158,14 +205,30 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         
     }
     
+    @objc func buttonAction(_ sender: UIBarButtonItem) {
+      self.navigationController?.popViewController(animated: true)
+    }
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
+        /* UI : 버튼의 각을 줄인다*/
+        orderItems_Btn.layer.cornerRadius = 5
+//        deleteShoppingBasketProduct_Btn
+//        deleteShoppingBasketProduct_Btn.layer.cornerRadius = 5
+        
+        
         ShoppingBasketTableView.delegate=self
         ShoppingBasketTableView.dataSource=self
         self.ShoppingBasketTableView.rowHeight = 200.0
+        
+        /* backButton 커스터마이징 */        
+        let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(ShoppingBasketController.buttonAction(_:)))
+        addButton.tintColor = UIColor.black
+        self.navigationItem.leftBarButtonItem = addButton
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로"
+        
         
         
         /*
