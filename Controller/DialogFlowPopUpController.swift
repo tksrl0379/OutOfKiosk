@@ -31,6 +31,12 @@ import Lottie
 
 class DialogFlowPopUpController: UIViewController{
     
+    /* 사용자의 이전 발화 기록용 */
+    var befResponse: String?
+    /* 유사도 높은 Entity */
+    var similarEntity: NSString?
+    var similarEntityIsOn: Bool = false
+    
     /* 세마포어 선언*/
     let semaphore = DispatchSemaphore(value: 0)
     
@@ -87,6 +93,13 @@ class DialogFlowPopUpController: UIViewController{
     private var audioEngine = AVAudioEngine()
     private var inputNode: AVAudioInputNode?
     
+    @IBAction func select_Btn(_ sender: Any) {
+        //print("유사도 선택")
+        self.similarEntityIsOn = true
+        
+        
+        
+    }
     /* 녹음 시작, 중단 버튼 시 이벤트 처리 */
     func StartStopAct() {
         
@@ -199,6 +212,32 @@ class DialogFlowPopUpController: UIViewController{
         
     }
     
+    func getSimilarEntity(_ undefinedString: String?, _ FullWord: String?, handler: @escaping (_ responseStr : NSString?)-> Void ){
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/similarity/measureSimilarity\(FullWord!).php")! as URL)
+            request.httpMethod = "POST"
+            
+            //let postString = "mode=\(mode)&id=\(id_Textfield.text!)&pwd=\(pwd_Textfield.text!)"
+            
+        let postString = "word=\(undefinedString!)"
+            
+            request.httpBody = postString.data(using: String.Encoding.utf8)
+            
+            /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
+            let task = URLSession.shared.dataTask(with: request as URLRequest) {
+                data, response, error in
+                
+                //print("response = \(response)")
+                
+                var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+                /* php서버와 통신 시 NSString에 생기는 개행 제거 */
+                responseString = responseString?.trimmingCharacters(in: .newlines) as NSString?
+                //print("responseString = \(responseString!)")
+                handler(responseString)
+            }
+            //실행
+            task.resume()
+    }
+    
     
     /*
      STT관련 함수
@@ -265,9 +304,19 @@ class DialogFlowPopUpController: UIViewController{
             print("monitoring")
             /* 사용자의 무음 시간 체크 */
             monitorCount+=1
+            
+            /* 사용자가 유사도 높은 단어 사용 선택 시 */
+            if(self.similarEntityIsOn){
+                recordingState = true
+                monitorCount = 12
+                recordingCount = befRecordingCount
+                
+            }
+            
+            /* 사용자가 말을 하기 시작하면 recordingState가 true가 됨*/
             if(recordingState){
-                monitorCount %= 13 // monitorCount는 0~30
-                if(monitorCount / 12 == 1){ // monitorCount가 30이 될 때마다 recordingCount 증가 여부 검사
+                monitorCount %= 13 // monitorCount는 0~12
+                if(monitorCount / 12 == 1){ // monitorCount가 12이 될 때마다 recordingCount 증가 여부 검사
                     
                     if(recordingCount == befRecordingCount){ // 사용자가 말을 끝마친 경우 전송
                         
@@ -293,7 +342,13 @@ class DialogFlowPopUpController: UIViewController{
                         
                         /* request query 만들고 전송*/
                         DispatchQueue.main.async{ // UILabel 때문에 Main 쓰레드 내부에서 실행
-                            request?.query = self.requestMsg_Label?.text
+                            if(self.similarEntityIsOn){
+                                print("들어왔음", self.similarEntity)
+                                request?.query = self.similarEntity
+                                self.similarEntityIsOn = false
+                            }else{
+                                request?.query = self.requestMsg_Label?.text
+                            }
                             ApiAI.shared().enqueue(request) // request.query를 받은 다음 실행해야 하기 때문에 Main 쓰레드 내부에서 같이 실행 (바깥에서 실행 시 비동기적 실행으로 오류 가능성 높음)
                             
                             self.requestMsg_Label?.text = " "
@@ -363,8 +418,32 @@ class DialogFlowPopUpController: UIViewController{
                                  self.sendOrder(textResponse)
                                  */
                                 
-                                /* 마지막 단계 (데이터 전송 및 종료) */
-                                if(textResponse.contains("담았습니다.")){
+                                
+                                /* Dialogflow가 질문자의 발화를 이해하지 못한 경우 (2가지로 판단 가능) */
+                                if(textResponse.contains("정확한 메뉴 이름을 말씀해주시겠어요 ?")){ // 1. fallback intents 로 들어간 경우 혹은,
+                                    self.getSimilarEntity(self.requestMsg_Label.text, "FullWord"){
+                                        response in
+                                        print(response)
+                                        self.speechAndText(textResponse + "\(response!)를 말씀하신거라면 하단을 눌러주세요.")
+                                        
+                                        self.similarEntity = response
+                                    }
+                                    
+                                }else if(self.befResponse == textResponse){ // 2. 같은 질문 반복
+                                    print("same response")
+                                    
+                                    self.getSimilarEntity(self.requestMsg_Label.text, ""){
+                                        response in
+                                        print(response)
+                                        self.speechAndText(textResponse + "\(response!)를 말씀하신거라면 하단을 눌러주세요.")
+                                        
+                                        self.similarEntity = response
+                                    }
+                                    
+                                    
+                                    /* 마지막 단계 (데이터 전송 및 종료) - 2가지 시나리오 */
+                                    // 1. 장바구니에 담고 끝내는 시나리오 혹은,
+                                }else if(textResponse.contains("담았습니다.")){
                                     // Db - php 서버로부터 가격정보 받은 후 장바구니(ShoppingListViewController)로 전송하고,
                                     self.getPriceInfo(){
                                         price in
@@ -418,24 +497,26 @@ class DialogFlowPopUpController: UIViewController{
                                             }
                                             
                                             
-                                            
                                         }
                                         
                                     }
                                     /* 대화가 모두 끝난 이후에도 TTS가 나와서 이를 막기 위함 */
                                     self.viewIsRunning = false
                                     //종료
-                                    
                                     self.navigationController?.popViewController(animated: true)
                                     
-                                /* 장바구니에 담지 않고 끝내는 시나리오 */
+                                    /* 2. 장바구니에 담지 않고 끝내는 시나리오 */
                                 }else if(textResponse.contains("필요하실때 다시 불러주세요.")){                                    
                                     self.viewIsRunning = false
                                     self.navigationController?.popViewController(animated: true)
                                     
+                                /* 일반적인 경우 */
                                 }else{
                                     
                                     self.speechAndText(textResponse)
+                                    
+                                    // 질문이 반복되는지 감지하기 위해
+                                    self.befResponse = textResponse
                                 }
                                 print("success")
                                 
@@ -462,6 +543,8 @@ class DialogFlowPopUpController: UIViewController{
             }
             
             print("\(recordingCount), \(befRecordingCount), \(monitorCount)")
+            
+            
             
         } // End of 2.inputNode.installTap
         
@@ -523,7 +606,7 @@ class DialogFlowPopUpController: UIViewController{
         /* Lottie animation 설정 */
         animation = AnimationView(name:"loading")
         animation!.frame = CGRect(x:0, y:0, width:400, height:400)
-
+        
         animation!.center = self.view.center
         
         animation!.contentMode = .top
