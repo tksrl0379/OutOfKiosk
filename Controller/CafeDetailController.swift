@@ -240,7 +240,9 @@ class CafeDetailController : UIViewController{
         let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(CafeDetailController.buttonAction(_:)))
         addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로"
+        //self.navigationItem.leftBarButtonItem?.isAccessibilityElement = true
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        //self.navigationItem.leftBarButtonItem?.accessibilityTraits = .none
         
         
         storeName_Label.text = "스타벅스"

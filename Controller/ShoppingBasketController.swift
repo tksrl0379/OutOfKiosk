@@ -227,7 +227,9 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(ShoppingBasketController.buttonAction(_:)))
         addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로"
+        //self.navigationItem.leftBarButtonItem?.isAccessibilityElement = true
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        //self.navigationItem.leftBarButtonItem?.accessibilityTraits = .none
         
         
         
