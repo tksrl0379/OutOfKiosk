@@ -21,7 +21,10 @@ class FavoriteMenuController : UIViewController{
         let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(FavoriteMenuController.buttonAction(_:)))
         addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-       
+        //self.navigationItem.leftBarButtonItem?.isAccessibilityElement = true
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        //self.navigationItem.leftBarButtonItem?.accessibilityTraits = .none
+        
     }
     
     

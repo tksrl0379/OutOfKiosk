@@ -643,9 +643,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W14-yB-pjt">
-                                <rect key="frame" x="0.0" y="318" width="376" height="349"/>
+                                <rect key="frame" x="0.0" y="73" width="376" height="594"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" none="YES"/>
+                                </accessibility>
                                 <connections>
                                     <action selector="select_Btn:" destination="Yoj-n0-B9v" eventType="touchUpInside" id="RGr-sc-ToI"/>
                                 </connections>

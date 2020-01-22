@@ -31,16 +31,21 @@ import Lottie
 
 class DialogFlowPopUpController: UIViewController{
     
+    /* 유사한 단어 추천 관련 변수 */
+    
+    // 1. 유사도 높은 단어 선택 버튼
     @IBOutlet weak var select_Btn: UIButton!
-    /* 사용자의 이전 발화 기록용 */
+    // 2. 사용자의 이전 발화 기록용
     var befResponse: String?
-    /* 유사도 높은 Entity */
+    // 3. 유사도 높은 Entity (DB로부터 가져옴)
     var similarEntity: NSString?
+    // 4. 사용자가 유사한 단어를 사용하기 위해 선택한 경우
     var similarEntityIsOn: Bool = false
     
-    /* 세마포어 선언*/
+    /* STT 동기화를 위한 세마포어 선언: STT가 끝나면 wait로 블록시키고, TTS가 끝나면 signal 전송하여 다시 STT 시작. CPU점유율을 낮추는 역할도 함  */
     let semaphore = DispatchSemaphore(value: 0)
     
+
     /* 장바구니 갯수가 증가함에 따라 CafeDetailController에 있는 장바구니 버튼에 개수를 표현하기 위해*/
     var willGetShoppingBasket_Btn : UIButton!
     //var getFromViewController : UIButton!
@@ -55,12 +60,15 @@ class DialogFlowPopUpController: UIViewController{
     /* ViewController 종료를 알리는 변수 */
     private var viewIsRunning : Bool = true
     
-    /* startRecording()의 콜백함수들 종료 여부 체크 변수  */
+    /* startRecording()의 콜백함수들 종료 여부 체크 변수 (STT / TTS 타이밍을 맞추기 위한 변수들)  */
     //var checkMain :Bool = false
     //private var checkSttFinish : Bool = true
     //private var checkSendCompleteToAI :Bool = true
     private var checkResponseFromAI :Bool = true
     //private var checkGetPriceFromDB : Bool = true
+    
+    // checkSimilarEntityIsGet은 1. 유사한 단어 정보를 DB로부터 받고 -> 2. TTS를 수행하고 나서 3. startStopAct()의 쓰레드의 if문으로 들어가 STT(startRecording)를 수행하기 위한 변수. 이 변수가 없으면 DB로부터 아직 유사 단어 추천을 받지 못했는데 STT가 시작된다. (STT-> DB순서가 되버리기 때문에 이 순서를 맞춰주기 위함)
+    var checkSimilarEntityIsGet: Bool = true
     
     /* Dialogflow parameter 변수 */
     private var name: String?
@@ -95,7 +103,7 @@ class DialogFlowPopUpController: UIViewController{
     private var inputNode: AVAudioInputNode?
     
     @IBAction func select_Btn(_ sender: Any) {
-        //print("유사도 선택")
+        
         self.similarEntityIsOn = true
         
         self.select_Btn.isHidden = true
@@ -118,21 +126,23 @@ class DialogFlowPopUpController: UIViewController{
                 //usleep(1)
                 //print (self.checkSttFinish, self.checkSendCompleteToAI, self.checkResponseFromAI, !self.speechSynthesizer.isSpeaking)
                 
-                if(self.checkResponseFromAI == true && !self.speechSynthesizer.isSpeaking){ //} && self.checkGetPriceFromDB){
+                if(self.checkResponseFromAI == true && !self.speechSynthesizer.isSpeaking && self.checkSimilarEntityIsGet){ //} && self.checkGetPriceFromDB){
                     print("TTS 2", self.speechSynthesizer.isSpeaking)
+                    
+                    self.checkResponseFromAI = false
                     //self.checkSttFinish = false
                     //self.checkSendCompleteToAI = false
-                    self.checkResponseFromAI = false
                     //self.checkMain = false
                     
+                    // startRecording에서 STT를 다시 시작하는데 Tap이 remove되지 않는 경우가 아주 가끔 존재하여 removeTap을 확실히 한 번 또 해줌
                     self.inputNode?.removeTap(onBus: 0)
+                    // STT 시작
                     self.startRecording()
                     self.semaphore.wait()
                 }
             }
         }
-        
-        //recording_Btn.setTitle("녹음 중", for: .normal)
+       
     }
     
     
@@ -213,30 +223,27 @@ class DialogFlowPopUpController: UIViewController{
         
     }
     
+    /* Dialogflow가 이해하지 못한 단어와 가장 유사도가 높은 Entity를 DB로부터 추천받음 */
     func getSimilarEntity(_ undefinedString: String?, _ FullWord: String?, handler: @escaping (_ responseStr : NSString?)-> Void ){
         let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/similarity/measureSimilarity\(FullWord!).php")! as URL)
-            request.httpMethod = "POST"
-            
-            //let postString = "mode=\(mode)&id=\(id_Textfield.text!)&pwd=\(pwd_Textfield.text!)"
-            
+        request.httpMethod = "POST"
+        
         let postString = "word=\(undefinedString!)"
+        
+        request.httpBody = postString.data(using: String.Encoding.utf8)
+        
+        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
+        let task = URLSession.shared.dataTask(with: request as URLRequest) {
+            data, response, error in
             
-            request.httpBody = postString.data(using: String.Encoding.utf8)
-            
-            /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
-            let task = URLSession.shared.dataTask(with: request as URLRequest) {
-                data, response, error in
-                
-                //print("response = \(response)")
-                
-                var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-                /* php서버와 통신 시 NSString에 생기는 개행 제거 */
-                responseString = responseString?.trimmingCharacters(in: .newlines) as NSString?
-                //print("responseString = \(responseString!)")
-                handler(responseString)
-            }
-            //실행
-            task.resume()
+            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+            /* php서버와 통신 시 NSString에 생기는 개행 제거 */
+            responseString = responseString?.trimmingCharacters(in: .newlines) as NSString?
+            //print("responseString = \(responseString!)")
+            handler(responseString)
+        }
+        //실행
+        task.resume()
     }
     
     
@@ -308,6 +315,7 @@ class DialogFlowPopUpController: UIViewController{
             
             /* 사용자가 유사도 높은 단어 사용 선택 시 */
             if(self.similarEntityIsOn){
+                
                 recordingState = true
                 monitorCount = 12
                 recordingCount = befRecordingCount
@@ -326,10 +334,6 @@ class DialogFlowPopUpController: UIViewController{
                         /* STT 멈추기 */
                         self.audioEngine.stop()
                         recognitionRequest.endAudio()
-                        
-                        /*                        DispatchQueue.main.async{
-                         self.recording_Btn.setTitle("녹음시작", for: .normal)
-                         }*/
                         
                         recordingState = false
                         recordingCount = 0
@@ -353,7 +357,7 @@ class DialogFlowPopUpController: UIViewController{
                             ApiAI.shared().enqueue(request) // request.query를 받은 다음 실행해야 하기 때문에 Main 쓰레드 내부에서 같이 실행 (바깥에서 실행 시 비동기적 실행으로 오류 가능성 높음)
                             
                             self.requestMsg_Label?.text = " "
-                            //self.checkMain = true
+                           
                         }
                         
                         /* 2.2. requestMsg 전송완료 시 호출되는 콜백함수 */
@@ -422,33 +426,37 @@ class DialogFlowPopUpController: UIViewController{
                                 
                                 /* Dialogflow가 질문자의 발화를 이해하지 못한 경우 (2가지로 판단 가능) */
                                 if(textResponse.contains("정확한 메뉴 이름을 말씀해주시겠어요 ?")){ // 1. fallback intents 로 들어간 경우 혹은,
+                                    self.checkSimilarEntityIsGet = false
                                     self.getSimilarEntity(self.requestMsg_Label.text, "FullWord"){
                                         response in
                                         print(response)
-                                        self.speechAndText(textResponse + "\(response!)이 맞다면 하단을 터치, 아니면 다시 말씀해주세요.")
                                         
+                                        self.speechAndText(textResponse + " \(response!)가 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
+                                        self.checkSimilarEntityIsGet = true
+                                        self.similarEntity = response
                                         DispatchQueue.main.async{
-                                            self.similarEntity = response
                                             self.select_Btn.isHidden = false
-                                            self.select_Btn.accessibilityElementDidBecomeFocused()
                                         }
+                                        UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.select_Btn)
                                         
                                         
                                     }
                                     
                                 }else if(self.befResponse == textResponse){ // 2. 같은 질문 반복
                                     print("same response")
-                                    
+                                    self.checkSimilarEntityIsGet = false
                                     self.getSimilarEntity(self.requestMsg_Label.text, ""){
                                         response in
                                         print(response)
-                                        self.speechAndText(textResponse + "\(response!)이 맞다면 하단을 더블탭, 아니면 다시 말씀해주세요.")
                                         
+                                        self.speechAndText(textResponse + " \(response!)가 맞다면 하단을 더블탭, 아니면 다시 말씀해주세요.")
+                                        self.checkSimilarEntityIsGet = true
+                                        self.similarEntity = response
                                         DispatchQueue.main.async{
-                                            self.similarEntity = response
                                             self.select_Btn.isHidden = false
-                                            self.select_Btn.accessibilityElementDidBecomeFocused()
                                         }
+                                        UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.select_Btn)
+                                        
                                     }
                                     
                                     
@@ -473,7 +481,6 @@ class DialogFlowPopUpController: UIViewController{
                                         DispatchQueue.main.async {
                                             
                                             let ad = UIApplication.shared.delegate as? AppDelegate
-                                            //                                            print("현재개수(넣기전)" , ad?.numOfProducts)
                                             
                                             /* 주문이 완료됨에 따라 장바구니 옆에 현재 몇개의 아이템이 있는지 알려준다.*/
                                             ad?.numOfProducts += 1
@@ -521,9 +528,9 @@ class DialogFlowPopUpController: UIViewController{
                                     self.viewIsRunning = false
                                     self.navigationController?.popViewController(animated: true)
                                     
-                                /* 일반적인 경우 */
+                                    /* 일반적인 경우 */
                                 }else{
-                                    
+                                    self.select_Btn.isHidden = true
                                     self.speechAndText(textResponse)
                                     
                                     // 질문이 반복되는지 감지하기 위해
@@ -604,6 +611,8 @@ class DialogFlowPopUpController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        
         /* ViewController가 작동중임을 표시*/
         viewIsRunning = true
         
@@ -614,6 +623,9 @@ class DialogFlowPopUpController: UIViewController{
         let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(DialogFlowPopUpController.buttonAction(_:)))
         addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
+        //self.navigationItem.leftBarButtonItem?.isAccessibilityElement = true
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        //self.navigationItem.leftBarButtonItem?.accessibilityTraits = .none
         
         /* Lottie animation 설정 */
         animation = AnimationView(name:"loading")
@@ -680,10 +692,11 @@ class DialogFlowPopUpController: UIViewController{
         /* DialogFlowPopUpController 가 종료될 때 CafeDetailController에 있는 blurEffectView 삭제 */
         //blurEffectView?.removeFromSuperview()
         
+        
         viewIsRunning = false
         inputNode?.removeTap(onBus: 0)
         
-        /* Dialogflow에 requestMsg 전송 */
+        /* Dialogflow에 requestMsg 전송: Dialogflow의 context를 초기화 시켜줘야 함 */
         let request = ApiAI.shared().textRequest()
         
         request?.query = "취소"
