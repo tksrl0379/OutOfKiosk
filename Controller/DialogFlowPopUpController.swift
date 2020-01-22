@@ -31,6 +31,7 @@ import Lottie
 
 class DialogFlowPopUpController: UIViewController{
     
+    @IBOutlet weak var select_Btn: UIButton!
     /* 사용자의 이전 발화 기록용 */
     var befResponse: String?
     /* 유사도 높은 Entity */
@@ -97,7 +98,7 @@ class DialogFlowPopUpController: UIViewController{
         //print("유사도 선택")
         self.similarEntityIsOn = true
         
-        
+        self.select_Btn.isHidden = true
         
     }
     /* 녹음 시작, 중단 버튼 시 이벤트 처리 */
@@ -424,9 +425,15 @@ class DialogFlowPopUpController: UIViewController{
                                     self.getSimilarEntity(self.requestMsg_Label.text, "FullWord"){
                                         response in
                                         print(response)
-                                        self.speechAndText(textResponse + "\(response!)를 말씀하신거라면 하단을 눌러주세요.")
+                                        self.speechAndText(textResponse + "\(response!)이 맞다면 하단을 터치, 아니면 다시 말씀해주세요.")
                                         
-                                        self.similarEntity = response
+                                        DispatchQueue.main.async{
+                                            self.similarEntity = response
+                                            self.select_Btn.isHidden = false
+                                            self.select_Btn.accessibilityElementDidBecomeFocused()
+                                        }
+                                        
+                                        
                                     }
                                     
                                 }else if(self.befResponse == textResponse){ // 2. 같은 질문 반복
@@ -435,9 +442,13 @@ class DialogFlowPopUpController: UIViewController{
                                     self.getSimilarEntity(self.requestMsg_Label.text, ""){
                                         response in
                                         print(response)
-                                        self.speechAndText(textResponse + "\(response!)를 말씀하신거라면 하단을 눌러주세요.")
+                                        self.speechAndText(textResponse + "\(response!)이 맞다면 하단을 더블탭, 아니면 다시 말씀해주세요.")
                                         
-                                        self.similarEntity = response
+                                        DispatchQueue.main.async{
+                                            self.similarEntity = response
+                                            self.select_Btn.isHidden = false
+                                            self.select_Btn.accessibilityElementDidBecomeFocused()
+                                        }
                                     }
                                     
                                     
@@ -596,6 +607,7 @@ class DialogFlowPopUpController: UIViewController{
         /* ViewController가 작동중임을 표시*/
         viewIsRunning = true
         
+        self.select_Btn.isHidden = true
         
         
         /* backButton 커스터마이징 */

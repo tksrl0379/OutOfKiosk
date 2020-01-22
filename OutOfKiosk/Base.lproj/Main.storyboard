@@ -643,7 +643,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W14-yB-pjt">
-                                <rect key="frame" x="163" y="305" width="46" height="30"/>
+                                <rect key="frame" x="0.0" y="318" width="376" height="349"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
@@ -659,6 +659,7 @@
                         <outlet property="animationView" destination="cDy-Ge-Vgf" id="S5W-9L-R1s"/>
                         <outlet property="receivedMsg_Label" destination="eTm-ta-o6V" id="FsD-oA-9ie"/>
                         <outlet property="requestMsg_Label" destination="6TA-Vl-fmi" id="0GM-DB-QzK"/>
+                        <outlet property="select_Btn" destination="W14-yB-pjt" id="C7k-A6-plQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bzp-LX-pIM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
