@@ -13,21 +13,13 @@ class MainController : UIViewController{
     @IBOutlet weak var title_View: UIView!
     
     
-    @IBOutlet weak var cafe_Btn: UIButton!
-    @IBOutlet weak var chicken_Btn: UIButton!
-    @IBOutlet weak var koreaFood_Btn: UIButton!
-    @IBOutlet weak var pizza_Btn: UIButton!
+    @IBOutlet weak var storeSelect_Btn: UIButton!
+  
+    @IBOutlet weak var id_Label: UILabel!
     
     @IBOutlet weak var favorite_Btn: UIButton!
     
-    func addShadow(btn : UIButton){
-        btn.layer.shadowColor = UIColor.black.cgColor
-        btn.layer.shadowOpacity = 0.1
-        btn.layer.shadowOffset = CGSize(width: 5, height: 5)
-        btn.layer.shadowRadius = 0.5
-        
-        btn.layer.cornerRadius = 1
-    }
+    
     
     
     @IBOutlet weak var sub_View: UIView!
@@ -56,19 +48,30 @@ class MainController : UIViewController{
         sub_View.layer.shadowRadius = 4
         sub_View.layer.cornerRadius = 5
         
-        cafe_Btn.layer.cornerRadius = 5
-        pizza_Btn.layer.cornerRadius = 5
-        koreaFood_Btn.layer.cornerRadius = 5
-        chicken_Btn.layer.cornerRadius = 5
+        storeSelect_Btn.layer.cornerRadius = 5
+        
         favorite_Btn.layer.cornerRadius = 5
+        
+        let userId = UserDefaults.standard.string(forKey: "id")!
+        
+        id_Label.text = userId
         
         
         
     }
     
+    func addShadow(btn : UIButton){
+        btn.layer.shadowColor = UIColor.black.cgColor
+        btn.layer.shadowOpacity = 0.1
+        btn.layer.shadowOffset = CGSize(width: 5, height: 5)
+        btn.layer.shadowRadius = 0.5
+        
+        btn.layer.cornerRadius = 1
+    }
+    
     
     /* 카페 버튼 */
-    @IBAction func cafe_Btn(_ sender: Any) {
+    @IBAction func storeSelect_Btn(_ sender: Any) {
         if let controller = self.storyboard?.instantiateViewController(withIdentifier: "StoreListController"){
             self.navigationController?.pushViewController(controller, animated: true)
         }

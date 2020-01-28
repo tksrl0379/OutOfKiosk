@@ -53,10 +53,10 @@ class CafeDetailController : UIViewController{
     
     
     /*
-     커피에 관련된 메뉴로 전환. mysql php 통신을 통해
+     프라푸치노에 관련된 메뉴로 전환. mysql php 통신을 통해
      phpGetData() 함수를 통해 DetailMenuController 에 메뉴에 대한 value를 Array type에 담아서 전송.
      */
-    @IBAction func coffee_Btn(_ sender: Any) {
+    @IBAction func frapuccino_Btn(_ sender: Any) {
         
         //rvc 가 옵셔널 타입이므로 guard 구문을 통해서 옵셔널 바인딩 처리
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController") as? DetailMenuController else {
@@ -64,7 +64,7 @@ class CafeDetailController : UIViewController{
             return}
         
         /* phpGetData는 Escaping closure 사용. 따라서 phpGetData 실행 후 대괄호 안의 코드 실행 */
-        phpGetData(1){ //1은 coffee의 대한 카테코리 넘버.
+        phpGetData(5){ //1은 frapuccino의 대한 카테코리 넘버.
             
             (willgetCategroyName,willgetCategroyPrice) in
             
@@ -199,7 +199,9 @@ class CafeDetailController : UIViewController{
                         let name = productdata[0] as! String
                         let price = productdata[1] as! Int
                         
-                        willgetCategroyName.append(name)
+                        
+                        // 서버로부터 스몰 사이즈 메뉴 정보만 받아옴. ( ex) 모카 프라푸치노 스몰, 모카 스무디 스몰 )
+                        willgetCategroyName.append(name.components(separatedBy: "스몰")[0])
                         willgetCategroyPrice.append(price)
                     }
                     /* 두 개의 배열을 handler 클로저 매개변수를 통해 탈출시킨다. */

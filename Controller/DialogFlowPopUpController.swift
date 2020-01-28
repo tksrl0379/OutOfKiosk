@@ -184,6 +184,31 @@ class DialogFlowPopUpController: UIViewController{
         task.resume()
     }
     
+    /* Dialogflow가 이해하지 못한 단어와 가장 유사도가 높은 Entity를 DB로부터 추천받음 */
+    func getSimilarEntity(_ undefinedString: String?, _ FullWord: String?, handler: @escaping (_ responseStr : NSString?)-> Void ){
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/similarity/measureSimilarity\(FullWord!).php")! as URL)
+        request.httpMethod = "POST"
+        
+        let postString = "word=\(undefinedString!)"
+        
+        request.httpBody = postString.data(using: String.Encoding.utf8)
+        
+        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
+        let task = URLSession.shared.dataTask(with: request as URLRequest) {
+            data, response, error in
+            
+            
+            
+            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+            /* php서버와 통신 시 NSString에 생기는 개행 제거 */
+            responseString = responseString?.trimmingCharacters(in: .newlines) as NSString?
+            //print("responseString = \(responseString!)")
+            print("유사도 높은 단어:", responseString)
+            handler(responseString)
+        }
+        //실행
+        task.resume()
+    }
     
     
     
@@ -223,28 +248,7 @@ class DialogFlowPopUpController: UIViewController{
         
     }
     
-    /* Dialogflow가 이해하지 못한 단어와 가장 유사도가 높은 Entity를 DB로부터 추천받음 */
-    func getSimilarEntity(_ undefinedString: String?, _ FullWord: String?, handler: @escaping (_ responseStr : NSString?)-> Void ){
-        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/similarity/measureSimilarity\(FullWord!).php")! as URL)
-        request.httpMethod = "POST"
-        
-        let postString = "word=\(undefinedString!)"
-        
-        request.httpBody = postString.data(using: String.Encoding.utf8)
-        
-        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
-        let task = URLSession.shared.dataTask(with: request as URLRequest) {
-            data, response, error in
-            
-            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-            /* php서버와 통신 시 NSString에 생기는 개행 제거 */
-            responseString = responseString?.trimmingCharacters(in: .newlines) as NSString?
-            //print("responseString = \(responseString!)")
-            handler(responseString)
-        }
-        //실행
-        task.resume()
-    }
+    
     
     
     /*
@@ -431,13 +435,20 @@ class DialogFlowPopUpController: UIViewController{
                                         response in
                                         print(response)
                                         
-                                        self.speechAndText(textResponse + " \(response!)가 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
-                                        self.checkSimilarEntityIsGet = true
-                                        self.similarEntity = response
-                                        DispatchQueue.main.async{
-                                            self.select_Btn.isHidden = false
+                                        /* 유사한 단어가 없을 경우 */
+                                        if(response == ""){
+                                            self.speechAndText(textResponse)
+                                            self.checkSimilarEntityIsGet = true
+                                        /* 있을 경우 */
+                                        }else{
+                                            self.speechAndText("\(response!)가 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
+                                            self.checkSimilarEntityIsGet = true
+                                            self.similarEntity = response
+                                            DispatchQueue.main.async{
+                                                self.select_Btn.isHidden = false
+                                            }
+                                            UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.select_Btn)
                                         }
-                                        UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.select_Btn)
                                         
                                         
                                     }
@@ -449,13 +460,20 @@ class DialogFlowPopUpController: UIViewController{
                                         response in
                                         print(response)
                                         
-                                        self.speechAndText(textResponse + " \(response!)가 맞다면 하단을 더블탭, 아니면 다시 말씀해주세요.")
-                                        self.checkSimilarEntityIsGet = true
-                                        self.similarEntity = response
-                                        DispatchQueue.main.async{
-                                            self.select_Btn.isHidden = false
+                                        /* 유사한 단어가 없을 경우 */
+                                        if(response == ""){
+                                            self.speechAndText(textResponse)
+                                            self.checkSimilarEntityIsGet = true
+                                        /* 있을 경우 */
+                                        }else{
+                                            self.speechAndText("\(response!)가 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
+                                            self.checkSimilarEntityIsGet = true
+                                            self.similarEntity = response
+                                            DispatchQueue.main.async{
+                                                self.select_Btn.isHidden = false
+                                            }
+                                            UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.select_Btn)
                                         }
-                                        UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.select_Btn)
                                         
                                     }
                                     
