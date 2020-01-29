@@ -14,7 +14,9 @@ class ProductList : UITableViewCell{
     
     @IBOutlet weak var productPrice_Label: UILabel!
     
-    @IBOutlet weak var cellBorder_View: UIView!
+    
     
     @IBOutlet weak var addFavoriteItem_Btn: UIButton!
+    
+    @IBOutlet weak var cell_view: UIButton!
 }

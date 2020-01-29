@@ -16,6 +16,12 @@ import Alamofire
 /* 가게 접속하면 뜨는 메인 화면 */
 class CafeDetailController : UIViewController{
     
+    /* voiceover 접근성 전용 */
+    @IBOutlet weak var menu_Label: UILabel!
+    
+    
+    
+    
     @IBOutlet weak var storeName_Label: UILabel!
     
     var receivedValueFromBeforeVC : Int?
@@ -43,7 +49,7 @@ class CafeDetailController : UIViewController{
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as? DialogFlowPopUpController else {
             return}
         
-        rvc.willGetShoppingBasket_Btn = shoppingBasket_Btn
+        //rvc.willGetShoppingBasket_Btn = shoppingBasket_Btn
 //        rvc.
         self.navigationController?.pushViewController(rvc, animated: true)
     }
@@ -105,7 +111,7 @@ class CafeDetailController : UIViewController{
             if count != 0 {
                 guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingBasketController") as? ShoppingBasketController else {
                     return}
-                rvc.willGetShoppingBasket_Btn = shoppingBasket_Btn
+                //rvc.willGetShoppingBasket_Btn = shoppingBasket_Btn
                 
                 
                 self.navigationController?.pushViewController(rvc, animated: true)
@@ -228,14 +234,23 @@ class CafeDetailController : UIViewController{
     @IBOutlet weak var secondMenu_Btn: UIButton!
     
     
+    override func viewDidAppear(_ animated: Bool) {
+        
+        let ad = UIApplication.shared.delegate as? AppDelegate
+        shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
+        shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
+        
+        
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
 
-        let ad = UIApplication.shared.delegate as? AppDelegate
+        //let ad = UIApplication.shared.delegate as? AppDelegate
         
-        shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
+        //shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
         
         
         /* backButton 커스터마이징 */
@@ -260,6 +275,12 @@ class CafeDetailController : UIViewController{
         firstMenu_Btn.layer.cornerRadius = 5
         secondMenu_Btn.layer.cornerRadius = 5
         shoppingBasket_Btn.layer.cornerRadius = 5
+        
+        /* 접근성 */
+        orderMenuByAI_Btn.accessibilityLabel = "스타벅스 음성주문"
+        menu_Label.accessibilityLabel = "아래에 스타벅스 메뉴가 있습니다"
+        
+        
         
         //let img = UIImage(named: "left")
         

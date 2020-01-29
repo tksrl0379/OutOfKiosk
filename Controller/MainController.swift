@@ -28,6 +28,7 @@ class MainController : UIViewController{
     @IBOutlet weak var grade_Label: UILabel!
     
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //        navigationItem.hidesBackButton = true // hide button
@@ -82,19 +83,27 @@ class MainController : UIViewController{
         
         //id_Label.text = userId! + " 님은"
         
+        
+        
+        
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         self.getPurchaseCount(){
             responseString in
             DispatchQueue.main.async {
                 self.purchaseCount_Label.text = (responseString! as String) as String + " / 25"
                 self.purchaseCount = Float(responseString! as String)! / 25.0
+                
+                self.grade_Label.text = "Bronze"
+                self.grade_Label.accessibilityLabel = "현재 브론즈 단계이시며 실버 단계까지 주문 \(25 - Int(responseString! as String)!)번 남았습니다"
+
+                
                 self.perform(#selector(self.animateProgress), with: nil, afterDelay: 1.0)
+                
             }
         }
-        
-        grade_Label.text = "Bronze"
-        
-        
-        
     }
     
     
