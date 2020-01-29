@@ -11,6 +11,7 @@ import UIKit
 class MainController : UIViewController{
     
     private var userId: String?
+    private var purchaseCount: Float = 0
     
     @IBOutlet weak var title_View: UIView!
     @IBOutlet weak var sub_View: UIView!
@@ -69,7 +70,7 @@ class MainController : UIViewController{
         //cp.center = self.progressBar_view.center
         
         
-        self.perform(#selector(animateProgress), with: nil, afterDelay: 1.0)
+        
         
         //CircularProgress.trackColor = UIColor.white
         //CircularProgress.progressColor = UIColor.purple
@@ -84,6 +85,8 @@ class MainController : UIViewController{
             responseString in
             DispatchQueue.main.async {
                 self.purchaseCount_Label.text = (responseString! as String) as String + " / 25"
+                self.purchaseCount = Float(responseString! as String)! / 25.0
+                self.perform(#selector(self.animateProgress), with: nil, afterDelay: 1.0)
             }
         }
         
@@ -96,7 +99,7 @@ class MainController : UIViewController{
     
     @objc func animateProgress() {
         let cP = self.view.viewWithTag(101) as! CircularProgressView
-        cP.setProgressWithAnimation(duration: 0.7, value: 0.3)
+        cP.setProgressWithAnimation(duration: 0.7, value: self.purchaseCount)
         
     }
     
