@@ -55,7 +55,7 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         cell.productName_Label.text = willgetCategroyName[indexPath.row]
         cell.productPrice_Label.text = String(willgetCategroyPrice[indexPath.row]) + "원"
         cell.addFavoriteItem_Btn.layer.cornerRadius = 5
-        cell.cell_view.accessibilityTraits = UIAccessibilityTraits.none
+        //cell.cell_view.accessibilityTraits = UIAccessibilityTraits.none
         
 //        cell.cellBorder_View.layer.borderWidth = 0.5
 //        cell.cellBorder_View.layer.borderColor = UIColor.gray.cgColor

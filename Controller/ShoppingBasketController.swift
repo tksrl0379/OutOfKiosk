@@ -156,7 +156,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         
         let ad = UIApplication.shared.delegate as? AppDelegate
         ad?.numOfProducts -= 1
-        self.willGetShoppingBasket_Btn.setTitle("장바구니 : " + String(ad!.numOfProducts) + " 개", for: .normal)
+//        self.willGetShoppingBasket_Btn.setTitle("장바구니 : " + String(ad!.numOfProducts) + " 개", for: .normal)
         ad?.menuNameArray.remove(at: Int(indexPath.row))
         ad?.menuSizeArray.remove(at: Int(indexPath.row))
         ad?.menuCountArray.remove(at: Int(indexPath.row))
@@ -166,6 +166,11 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         
         
         ShoppingBasketTableView.deleteRows(at: [indexPath], with: .fade)
+        
+        /* 개수가 0개면 알아서 pop 되기.*/
+        if ad?.numOfProducts == 0 {
+            self.navigationController?.popViewController(animated: true)
+        }
         
     }
     
