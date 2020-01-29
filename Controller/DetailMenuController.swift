@@ -6,8 +6,11 @@
 //  Copyright © 2020 OOK. All rights reserved.
 //
 
+/* 이곳에서 사용자가 favorite 설정한 메뉴는 PHP통신으로 데이터를 전송하여 DB에 쏘아서 후에
+    FavoriteMenuController에서 받을 수 있다.
+ */
 import UIKit
-
+import Alamofire
 
 
 /*
@@ -51,10 +54,10 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         //cell.productName_Label.text = productName[indexPath.row]
         cell.productName_Label.text = willgetCategroyName[indexPath.row]
         cell.productPrice_Label.text = String(willgetCategroyPrice[indexPath.row]) + "원"
-        
-        cell.cellBorder_View.layer.borderWidth = 0.5
-        cell.cellBorder_View.layer.borderColor = UIColor.gray.cgColor
-        
+        cell.addFavoriteItem_Btn.layer.cornerRadius = 5
+//        cell.cellBorder_View.layer.borderWidth = 0.5
+//        cell.cellBorder_View.layer.borderColor = UIColor.gray.cgColor
+//
         
         
         
@@ -78,6 +81,52 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         
     }*/
     
+    /*
+     아이템을 즐겨찾기 창에 추가시키는 버튼
+     php통신이 요구됨,DB Table 만들어야함.(user_ID,menu)전송)
+     */
+    @IBAction func addFavoriteItem_Btn(_ sender: UIButton) {
+        
+        /* 현재 cell의 위치를 알기 위해서 사용한다.*/
+        let point = sender.convert(CGPoint.zero, to: ProductTableView)
+        guard let indexPath = ProductTableView.indexPathForRow(at: point)else{return}
+        
+        
+//        ProductTableView.reloadData()
+//        self.addFavoriteItem_Btn[indexPath.row].set
+                
+        let userId = UserDefaults.standard.string(forKey: "id")!
+        
+//        print(willgetCategroyName[indexPath.row] , " and ", userId)
+        
+        let parameters: Parameters = [
+            "name" : willgetCategroyName[indexPath.row],
+            "userID" : userId
+        ]
+        /* php 서버에 해당하는 아이템을 즐겨찾기로 추가한다.
+         하지만 이미 즐겨찾기에 저장된 아이템이 있을시 즐겨찾기가 추가되는것이아니라 해제가 되어야한다.
+         플래그를 이용하여 일단 즐겨찾기가 된 상황에서는 버튼을 누르면 다시 해제가 되게 하기.
+         
+         1. 해당 id에 등록된 즐겨찾기 아이템을 모두 검색하고 있으면 '즐겨찾기추가'를 '즐겨찾기해제'로 변경하게 한다.
+         2. 즐겨찾기추가를 누를 시 추가가 되고 동시에 즐겨찾기 해제로 변경하게 함.
+         3. 즐겨찾기해제를 누를 시 삭제가 되고 동시에 즐겨찾기 추가로 변경하게 함.
+         
+         위 방법은 현재 안하기로함. 메뉴정보도 받아야하고, 사용자별 즐겨찾기 한 메뉴도 받아와서 비교하여 버튼을 즐겨찾기 추가/해제를 알려주어야 하므로
+         더욱 복잡하고 효율적으로 보이지도 않다.
+         
+         *지금은 추가하는대로 추가하되 즐겨찾기에서는 보여줄 때 distinct 쿼리문으로 보여주며, 삭제 시 중복 추가된 모든 메뉴를 한번에 삭제 해버리게 함.
+         */
+        let URL_ORDER = "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/favoriteMenu/api/addFavoriteMenu.php"
+        //Sending http post request
+        Alamofire.request(URL_ORDER, method: .post, parameters: parameters).responseString
+        {
+                response in
+                print("응답",response)
+        }
+        
+    }
+    
+    
     @objc func buttonAction(_ sender: UIBarButtonItem) {
       self.navigationController?.popViewController(animated: true)
     }
@@ -91,20 +140,13 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(DetailMenuController.buttonAction(_:)))
         addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        //self.navigationItem.leftBarButtonItem?.isAccessibilityElement = true
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
-        //self.navigationItem.leftBarButtonItem?.accessibilityTraits = .none
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로"
         
         
-        
-        /*
-         ProdcutTableView의 delgate , datasource = self
-         */
-//        print(self.willgetCategroyName) //optional로 먹힘.
         
         ProductTableView.delegate = self
         ProductTableView.dataSource = self
-        self.ProductTableView.rowHeight = 93.0
+        self.ProductTableView.rowHeight = 110.0
     }
     
 }
