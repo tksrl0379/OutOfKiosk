@@ -46,10 +46,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     /* 주문을 하면서 CafeDetailController의 UIBtn을 초기화 해주어야한다.*/
     var willGetShoppingBasket_Btn : UIButton!
     
-    /*수량 증감에 따른 compare값을 비교하기위해서 */
-    var stepperVal = 0
-    
-    
+    /* Table의 Cell을 위한 변수들로써, 음성주문한 메뉴들의 정보를 갖고와 저장하여 출력이 가능하다.*/
     var shoppingBasket_numOfProducts : Int = 0
     
     var shoppingBasket_productName : Array<String>! = []//["초콜렛 스무디","초콜레 프라푸치노","자바칩 프라푸치노"] //test용도
@@ -58,6 +55,8 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     var shoppingBasket_productEachPrice : Array<Int>! = []//[3000,5000,4500]
     var shoppingBasket_productSugarContent : Array<String>! = []//[3000,5000,4500]
     var shoppingBasket_productIsWhippedCream : Array<String>! = []//[3000,5000,4500]
+    
+    var totlaPrice : Int = 0
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -76,10 +75,36 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         cell.shoppingBasketProductTotalPrice_Label.text =
             String( shoppingBasket_productEachPrice[indexPath.row]*shoppingBasket_productCount[indexPath.row])+"원"
         
+        /* 주문하기 버튼 옆에 총액수 표현*/
+        
+        totlaPrice += shoppingBasket_productEachPrice[indexPath.row]*shoppingBasket_productCount[indexPath.row]
+        
+        orderItems_Btn.setTitle("주문하기 "+String(totlaPrice)+"원", for: .normal)
+        
         /* Stepper 초기값 */
         cell.shoppingBasketProductSize_Stepper.value = Double(shoppingBasket_productCount[indexPath.row])
         
+        /* delete customizing*/
         cell.deleteShoppingBasket_Btn.layer.cornerRadius = 5
+        
+        /* option(당도 or 휘핑크림) 보여주기
+         NUll이면 hidden.
+         */
+        if (shoppingBasket_productSugarContent[indexPath.row] == "NULL") {
+            if (shoppingBasket_productIsWhippedCream[indexPath.row] == "없이") {
+                cell.ProductSugar_Label.isHidden = true                
+                cell.ProductWhippedCream.text = "휘핑크림 추가 안함"
+            }else if(shoppingBasket_productIsWhippedCream[indexPath.row] == "올려서"){
+                cell.ProductSugar_Label.isHidden = true
+                cell.ProductWhippedCream.text = "휘핑크림 추가"
+            }
+            
+        }else if (shoppingBasket_productIsWhippedCream[indexPath.row] == "NULL"){
+            cell.ProductWhippedCream.isHidden = true
+            cell.ProductSugar_Label.text = "당도 : " + String(shoppingBasket_productSugarContent[indexPath.row]) + "%"
+        }
+        
+        
         
         return cell
     }
@@ -99,6 +124,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         shoppingBasket_productCount[indexPath.row] = Int(sender.value)
         ad?.menuCountArray[indexPath.row] = Int(sender.value)
         
+        totlaPrice = 0 //개수가 바뀔때마다 0으로 초기화
         ShoppingBasketTableView.reloadData()
                 
     }
@@ -124,6 +150,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         shoppingBasket_productEachPrice.remove(at: indexPath.row)
         shoppingBasket_productSugarContent.remove(at: indexPath.row)
         shoppingBasket_productIsWhippedCream.remove(at: indexPath.row)
+        
         
         let ad = UIApplication.shared.delegate as? AppDelegate
         ad?.numOfProducts -= 1
@@ -223,13 +250,11 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         ShoppingBasketTableView.dataSource=self
         self.ShoppingBasketTableView.rowHeight = 200.0
         
-        /* backButton 커스터마이징 */        
+        /* backButton 커스터마이징 */
         let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(ShoppingBasketController.buttonAction(_:)))
         addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        //self.navigationItem.leftBarButtonItem?.isAccessibilityElement = true
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
-        //self.navigationItem.leftBarButtonItem?.accessibilityTraits = .none
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로"
         
         
         

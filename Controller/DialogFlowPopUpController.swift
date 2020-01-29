@@ -45,6 +45,8 @@ class DialogFlowPopUpController: UIViewController{
     /* STT 동기화를 위한 세마포어 선언: STT가 끝나면 wait로 블록시키고, TTS가 끝나면 signal 전송하여 다시 STT 시작. CPU점유율을 낮추는 역할도 함  */
     let semaphore = DispatchSemaphore(value: 0)
     
+    /* 즐겨찾기를 통해서 주문이 들어왔을 때의 값이 저장되는 곳*/
+    var favoriteMenuName : String? = nil
 
     /* 장바구니 갯수가 증가함에 따라 CafeDetailController에 있는 장바구니 버튼에 개수를 표현하기 위해*/
     var willGetShoppingBasket_Btn : UIButton!
@@ -687,12 +689,42 @@ class DialogFlowPopUpController: UIViewController{
             if let textResponse = response.result.fulfillment.speech {
                 print(textResponse)
                 print("success")
-                self.speechAndText(textResponse)
                 
-                /*매장의 request.query에 대한 값을 성공적으로 받으면 StartStopAct()를 시작하도록 한다.
-                 VoiceOver 특성상 '뒤로' 버튼이 읽히므
+                /*
+                 스타벅스 가게로 들어온 상황, 이곳에서 favoriteMenuName이 nil인지 아닌지 확인
+                 favoriteMenuName != nil <-FavoriteMenuController에서 주문이 들어온 상황
+                 favoriteMenuName == nil <-CafeDetailControlelr에서 음성주문 시작
                  */
-                self.StartStopAct()
+                
+                if (self.favoriteMenuName != nil) { //값이 들어있을때 예) 초콜렛 스무디 <-다시한번 다이얼로그챗봇 대화한다.
+                    
+                    let request = ApiAI.shared().textRequest()
+                    request?.query = self.favoriteMenuName!
+                    ApiAI.shared().enqueue(request)
+                    
+                    request?.setMappedCompletionBlockSuccess({ (request, response) in
+                        /* 성공 시 */
+                        let response = response as! AIResponse
+                        /* 응답 받고 responseMsg_Label에 출력 */
+                        if let textResponse = response.result.fulfillment.speech {
+                            print(textResponse)
+                            print("success")
+                            self.speechAndText(textResponse)
+                            /*매장의 request.query에 대한 값을 성공적으로 받으면 StartStopAct()를 시작하도록 한다.
+                             VoiceOver 특성상 '뒤로' 버튼이 읽히므
+                             */
+                            self.StartStopAct()
+                        }
+                        /* 실패 시 (즐겨찾기)*/
+                    }, failure: { (request, error) in
+                        print("error")
+                        print(error!)
+                    })
+                }else{
+                    /* 즐겨찾기 주문이 아닌 일반 주문*/
+                    self.speechAndText(textResponse)
+                    self.StartStopAct()
+                }
             }
             
             

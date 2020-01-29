@@ -16,5 +16,5 @@ class ProductList : UITableViewCell{
     
     @IBOutlet weak var cellBorder_View: UIView!
     
-    
+    @IBOutlet weak var addFavoriteItem_Btn: UIButton!
 }
