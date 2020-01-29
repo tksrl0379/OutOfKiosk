@@ -117,7 +117,7 @@ class CafeDetailController : UIViewController{
                 self.navigationController?.pushViewController(rvc, animated: true)
             }else{
                 /* 들어갈 기능 = message alert 혹은 팝업 cotroller를 뛰운다*/
-                self.alertMessage("오류","장바구니가 비어있어요")
+                self.alertMessage("","장바구니가 비어있어요")
             }
             
         }
