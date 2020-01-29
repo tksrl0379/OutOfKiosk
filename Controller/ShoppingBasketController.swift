@@ -56,7 +56,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     var shoppingBasket_productSugarContent : Array<String>! = []//[3000,5000,4500]
     var shoppingBasket_productIsWhippedCream : Array<String>! = []//[3000,5000,4500]
     
-    var totlaPrice : Int = 0
+    var totalPrice : Int = 0
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -77,9 +77,11 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         
         /* 주문하기 버튼 옆에 총액수 표현*/
         
-        totlaPrice += shoppingBasket_productEachPrice[indexPath.row]*shoppingBasket_productCount[indexPath.row]
+        totalPrice += shoppingBasket_productEachPrice[indexPath.row]*shoppingBasket_productCount[indexPath.row]
         
-        orderItems_Btn.setTitle("주문하기 "+String(totlaPrice)+"원", for: .normal)
+        orderItems_Btn.setTitle("주문하기 "+String(totalPrice)+"원", for: .normal)
+        /* 접근성 */
+        orderItems_Btn.accessibilityLabel = "주문하기 버튼. \(totalPrice)원 입니다"
         
         /* Stepper 초기값 */
         cell.shoppingBasketProductSize_Stepper.value = Double(shoppingBasket_productCount[indexPath.row])
@@ -124,7 +126,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         shoppingBasket_productCount[indexPath.row] = Int(sender.value)
         ad?.menuCountArray[indexPath.row] = Int(sender.value)
         
-        totlaPrice = 0 //개수가 바뀔때마다 0으로 초기화
+        totalPrice = 0 //개수가 바뀔때마다 0으로 초기화
         ShoppingBasketTableView.reloadData()
                 
     }
@@ -221,7 +223,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         
         ad?.numOfProducts = 0
         /* 주문이 완료되면 현재 장바구니의 아이템을 삭제해야하므로 appdelegate의 모든 아이템을 초기화한다.*/
-        self.willGetShoppingBasket_Btn.setTitle("장바구니 : " + String(ad!.numOfProducts) + " 개", for: .normal)
+        //self.willGetShoppingBasket_Btn.setTitle("장바구니 : " + String(ad!.numOfProducts) + " 개", for: .normal)
         
         ad?.menuNameArray = []
         ad?.menuSizeArray = []
@@ -254,7 +256,8 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(ShoppingBasketController.buttonAction(_:)))
         addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        
         
         
         

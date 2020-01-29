@@ -55,6 +55,8 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         cell.productName_Label.text = willgetCategroyName[indexPath.row]
         cell.productPrice_Label.text = String(willgetCategroyPrice[indexPath.row]) + "원"
         cell.addFavoriteItem_Btn.layer.cornerRadius = 5
+        cell.cell_view.accessibilityTraits = UIAccessibilityTraits.none
+        
 //        cell.cellBorder_View.layer.borderWidth = 0.5
 //        cell.cellBorder_View.layer.borderColor = UIColor.gray.cgColor
 //
@@ -140,13 +142,19 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(DetailMenuController.buttonAction(_:)))
         addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
         
         
         
         ProductTableView.delegate = self
         ProductTableView.dataSource = self
-        self.ProductTableView.rowHeight = 110.0
+        self.ProductTableView.rowHeight = 93.0
+        
+        
+        
+        
+        
+        
     }
     
 }

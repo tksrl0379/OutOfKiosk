@@ -505,7 +505,8 @@ class DialogFlowPopUpController: UIViewController{
                                             
                                             /* 주문이 완료됨에 따라 장바구니 옆에 현재 몇개의 아이템이 있는지 알려준다.*/
                                             ad?.numOfProducts += 1
-                                            self.willGetShoppingBasket_Btn.setTitle("장바구니 : " + String(ad!.numOfProducts) + " 개", for: .normal)
+                                            
+                                            //self.willGetShoppingBasket_Btn.setTitle("장바구니 : " + String(ad!.numOfProducts) + " 개", for: .normal)
                                             
                                             if let name = self.name{
                                                 ad?.menuNameArray.append(name)
@@ -782,4 +783,6 @@ class DialogFlowPopUpController: UIViewController{
         }) // End of request complete call back
         
     }
+    
+    
 }
