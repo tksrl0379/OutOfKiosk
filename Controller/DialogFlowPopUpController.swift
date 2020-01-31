@@ -42,6 +42,9 @@ class DialogFlowPopUpController: UIViewController{
     // 4. 사용자가 유사한 단어를 사용하기 위해 선택한 경우
     var similarEntityIsOn: Bool = false
     
+    //var categoryOfSimilarity: String?
+    
+    
     /* STT 동기화를 위한 세마포어 선언: STT가 끝나면 wait로 블록시키고, TTS가 끝나면 signal 전송하여 다시 STT 시작. CPU점유율을 낮추는 역할도 함  */
     let semaphore = DispatchSemaphore(value: 0)
     
@@ -188,11 +191,11 @@ class DialogFlowPopUpController: UIViewController{
     
     
     /* Dialogflow가 이해하지 못한 단어와 가장 유사도가 높은 Entity를 DB로부터 추천받음 */
-    func getSimilarEntity(_ undefinedString: String?, _ FullWord: String?, handler: @escaping (_ responseStr : NSString?)-> Void ){
-        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/similarity/measureSimilarity\(FullWord!).php")! as URL)
+    func getSimilarEntity(_ undefinedString: String?, _ category: String?, handler: @escaping (_ responseStr : NSString?)-> Void ){
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/similarity/measureSimilarity.php")! as URL)
         request.httpMethod = "POST"
         
-        let postString = "word=\(undefinedString!)"
+        let postString = "word=\(undefinedString!)&category=\(category!)"
         
         request.httpBody = postString.data(using: String.Encoding.utf8)
         
@@ -366,6 +369,9 @@ class DialogFlowPopUpController: UIViewController{
                             self.sendMessage(request){
                                 textResponse, intentName, parameter in
                                 
+                                
+                                
+                                
                                 // 2-1. Dialogflow의 파라미터 값 받기
                                 let parameter_name = intentName + "_NAME"
                                 if let name = parameter[parameter_name]{
@@ -395,7 +401,10 @@ class DialogFlowPopUpController: UIViewController{
                                 };
                                 
                                 
-                                /* 2-2. Dialogflow의 response message에 따른 유형 */
+                                
+                                
+                                
+                                /* 2-2. Dialogflow의 response message 유사도 분석 */
                                 
                                 /* 2-2-1 Dialogflow가 질문자의 발화를 이해하지 못한 경우 (2가지로 판단 가능) */
                                 if(textResponse.contains("정확한 메뉴 이름을 말씀해주시겠어요 ?")){ // 1. fallback intents 로 들어간 경우 혹은,
@@ -403,53 +412,43 @@ class DialogFlowPopUpController: UIViewController{
                                     
                                     self.checkSimilarEntityIsGet = false
                                     //print("request:",request)
-                                    self.getSimilarEntity(request, "_menuName"){
+                                    self.getSimilarEntity(request, "MENU"){
                                         response in
                                         print(response)
-                                        
-                                        /* 유사한 단어가 없을 경우 */
-                                        if(response == ""){
-                                            self.speechAndText(textResponse)
-                                            self.checkSimilarEntityIsGet = true
-                                            /* 있을 경우 */
-                                        }else{
-                                            self.speechAndText("\(response!)가 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
-                                            self.checkSimilarEntityIsGet = true
-                                            self.similarEntity = response
-                                            DispatchQueue.main.async{
-                                                self.select_Btn.isHidden = false
-                                            }
-                                            // Voiceover 포커스를 select_Btn으로 바꿈
-                                            UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.select_Btn)
-                                        }
-                                        
+                                        self.getSimilarEntityHandler(response!, textResponse, "")
                                         
                                     }
                                     
-                                }else if(self.befResponse == textResponse && textResponse.contains("어떤") ){ // 2. 같은 질문 반복 (메뉴 질문에 대해서만)
-                                    
-                                    print("same response")
-                                    self.checkSimilarEntityIsGet = false
-                                    print("request",request)
-                                    self.getSimilarEntity(request, ""){
-                                        response in
-                                        print(response)
-                                        
-                                        /* 유사한 단어가 없을 경우 */
-                                        if(response == ""){
-                                            self.speechAndText(textResponse)
-                                            self.checkSimilarEntityIsGet = true
-                                            /* 있을 경우 */
-                                        }else{
-                                            self.speechAndText("\(response!)가 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
-                                            self.checkSimilarEntityIsGet = true
-                                            self.similarEntity = response
-                                            print("유사단어:", self.similarEntity)
-                                            DispatchQueue.main.async{
-                                                self.select_Btn.isHidden = false
-                                            }
-                                            UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.select_Btn)
+                                }else if(self.befResponse == textResponse){ // 2. 같은 질문 반복 (메뉴 질문에 대해서만)
+                                    if( textResponse.contains("어떤") ){ // 2-1. 메뉴 이름에 대해
+                                        print("메뉴 이름 same response")
+                                        self.checkSimilarEntityIsGet = false
+                                        print("request",request)
+                                        print("intentName",intentName)
+                                        self.getSimilarEntity(request, intentName){
+                                            response in
+                                            print(response)
+                                            
+                                            self.getSimilarEntityHandler(response!, textResponse, "")
                                         }
+                                    }else if (textResponse.contains("사이즈")){ // 2-2. 사이즈에 대해
+                                        print("사이즈 same response")
+                                        self.checkSimilarEntityIsGet = false
+                                        print("request",request)
+                                        
+                                        self.getSimilarEntity(request, "SIZE"){
+                                            response in
+                                            print(response)
+                                            
+                                            self.getSimilarEntityHandler(response!, textResponse, "사이즈")
+                                        }
+                                        
+                                    }else{ // 유사도 추천이 없는 질문의 경우
+                                        self.select_Btn.isHidden = true
+                                        self.speechAndText(textResponse)
+                                        print("일반")
+                                        // 질문이 반복되는지 감지하기 위해
+                                        self.befResponse = textResponse
                                     }
                                     
                                  // 2-2-2 장바구니에 담은 경우
@@ -649,7 +648,7 @@ class DialogFlowPopUpController: UIViewController{
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         /* HTTP 헤더 */
-        request.addValue("Bearer d94411c80a7e46b7bcac2efb46698353", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer c0d7c288c75b4b4bb4cba2170344b142", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         /* HTTP 바디 */
         request.httpBody = payload
@@ -678,6 +677,9 @@ class DialogFlowPopUpController: UIViewController{
                     }
                     /* 2. 일반 주문 시 */
                 }else{
+                    //유사도 분석을 위함
+                    //self.categoryOfSimilarity = "메뉴"
+                    
                     self.speechAndText(response)
                     self.StartStopAct()
                 }
@@ -699,10 +701,18 @@ class DialogFlowPopUpController: UIViewController{
         inputNode?.removeTap(onBus: 0)
         
         /* Dialogflow에 requestMsg 전송: Dialogflow의 context를 초기화 시켜줘야 함 */
-        self.sendMessage("취소"){
-            _, _, _ in
-            
+        guard let url = URL(string: "https://api.dialogflow.com/v1/contexts?sessionId=12345") else
+        {
+            return
         }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.addValue("Bearer c0d7c288c75b4b4bb4cba2170344b142", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        }.resume()
         
     }
     
@@ -733,7 +743,7 @@ class DialogFlowPopUpController: UIViewController{
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue("Bearer d94411c80a7e46b7bcac2efb46698353", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer c0d7c288c75b4b4bb4cba2170344b142", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = payload
         
@@ -761,5 +771,25 @@ class DialogFlowPopUpController: UIViewController{
         
     }
     
+    
+    func getSimilarEntityHandler(_ response: NSString, _ textResponse: String, _ helpText: String){
+        
+        /* 유사한 단어가 없을 경우 */
+        if(response == ""){
+            self.speechAndText(textResponse)
+            self.checkSimilarEntityIsGet = true
+            /* 있을 경우 */
+        }else{
+            self.speechAndText("\(response)\(helpText)가 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
+            self.checkSimilarEntityIsGet = true
+            self.similarEntity = response
+            DispatchQueue.main.async{
+                self.select_Btn.isHidden = false
+            }
+            // Voiceover 포커스를 select_Btn으로 바꿈
+            UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.select_Btn)
+        }
+        
+    }
     
 }
