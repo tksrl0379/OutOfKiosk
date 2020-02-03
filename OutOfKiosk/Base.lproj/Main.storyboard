@@ -411,11 +411,19 @@
                                                         <action selector="addFavoriteItem_Btn:" destination="Pwi-ve-Dd6" eventType="touchUpInside" id="5ae-cZ-ueD"/>
                                                     </connections>
                                                 </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="즐겨찾기 추가" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v3W-8n-Kfh">
+                                                    <rect key="frame" x="267" y="71" width="93" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="addFavoriteItem_Btn" destination="NKE-bh-jf4" id="Z3D-pn-ikW"/>
                                             <outlet property="cell_view" destination="NKE-bh-jf4" id="obX-Rk-ttV"/>
+                                            <outlet property="productFavorite_Label" destination="v3W-8n-Kfh" id="dqa-rk-rN6"/>
                                             <outlet property="productName_Label" destination="htS-gX-Ten" id="lTN-qt-f0d"/>
                                             <outlet property="productPrice_Label" destination="xHt-1X-D34" id="fHH-Sd-FZt"/>
                                         </connections>

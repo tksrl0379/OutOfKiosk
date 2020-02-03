@@ -25,6 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var menuSugarContent : Array<String> = []
     var menuIsWhippedCream : Array<String> = []
     
+    /* 즐겨찾기된 menu를 저장하는 배열.*/
+//    var menuFavoriteArray: Array<String> = []
+    
     
     /*TEST : server로 전송하기 위한 변수*/
     /*
@@ -41,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         /*ApiAi를 사용하여, 구글 다이얼로그플로우의 토큰을 받는 과정이다. 초기설정.*/
         let configuration = AIDefaultConfiguration()
-        configuration.clientAccessToken = "f6ffde9632684fbcafa6b117c4ee7254"
+        configuration.clientAccessToken = "d94411c80a7e46b7bcac2efb46698353"
         
         let apiai = ApiAI.shared()
         apiai?.configuration = configuration

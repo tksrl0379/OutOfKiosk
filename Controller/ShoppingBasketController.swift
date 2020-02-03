@@ -167,7 +167,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         
         ShoppingBasketTableView.deleteRows(at: [indexPath], with: .fade)
         
-        /* 개수가 0개면 알아서 pop 되기.*/
+        /* 장바구니에 담겨진 메뉴 개수가 0개면 알아서 popView 되기.*/
         if ad?.numOfProducts == 0 {
             self.navigationController?.popViewController(animated: true)
         }

@@ -48,7 +48,7 @@ class DialogFlowPopUpController: UIViewController{
     
     /* 즐겨찾기를 통해서 주문이 들어왔을 때의 값이 저장되는 곳*/
     var favoriteMenuName : String? = nil
-
+    
     /* 장바구니 갯수가 증가함에 따라 CafeDetailController에 있는 장바구니 버튼에 개수를 표현하기 위해*/
     var willGetShoppingBasket_Btn : UIButton!
     //var getFromViewController : UIButton!
@@ -145,7 +145,7 @@ class DialogFlowPopUpController: UIViewController{
                 }
             }
         }
-       
+        
     }
     
     
@@ -233,6 +233,7 @@ class DialogFlowPopUpController: UIViewController{
             }
         }
         
+        //        AVAudioSession.CategoryOptions.allowBluetooth
         
         /* 응답 읽기(TTS) */
         let speechUtterance = AVSpeechUtterance(string: textResponse)
@@ -364,7 +365,7 @@ class DialogFlowPopUpController: UIViewController{
                             ApiAI.shared().enqueue(request) // request.query를 받은 다음 실행해야 하기 때문에 Main 쓰레드 내부에서 같이 실행 (바깥에서 실행 시 비동기적 실행으로 오류 가능성 높음)
                             
                             self.requestMsg_Label?.text = " "
-                           
+                            
                         }
                         
                         /* 2.2. requestMsg 전송완료 시 호출되는 콜백함수 */
@@ -434,7 +435,7 @@ class DialogFlowPopUpController: UIViewController{
                                 /* Dialogflow가 질문자의 발화를 이해하지 못한 경우 (2가지로 판단 가능) */
                                 if(textResponse.contains("정확한 메뉴 이름을 말씀해주시겠어요 ?")){ // 1. fallback intents 로 들어간 경우 혹은,
                                     self.checkSimilarEntityIsGet = false
-                                    self.getSimilarEntity(self.requestMsg_Label.text, "FullWord"){
+                                    self.getSimilarEntity(self.requestMsg_Label.text, "_menuName"){
                                         response in
                                         print(response)
                                         
@@ -442,7 +443,7 @@ class DialogFlowPopUpController: UIViewController{
                                         if(response == ""){
                                             self.speechAndText(textResponse)
                                             self.checkSimilarEntityIsGet = true
-                                        /* 있을 경우 */
+                                            /* 있을 경우 */
                                         }else{
                                             self.speechAndText("\(response!)가 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
                                             self.checkSimilarEntityIsGet = true
@@ -467,7 +468,7 @@ class DialogFlowPopUpController: UIViewController{
                                         if(response == ""){
                                             self.speechAndText(textResponse)
                                             self.checkSimilarEntityIsGet = true
-                                        /* 있을 경우 */
+                                            /* 있을 경우 */
                                         }else{
                                             self.speechAndText("\(response!)가 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
                                             self.checkSimilarEntityIsGet = true
@@ -662,14 +663,18 @@ class DialogFlowPopUpController: UIViewController{
         
         
         /* 오디오 설정: 이 코드를 넣어줘야 실제 디바이스에서 TTS가 정상적으로 작동 */
+        /* 블루투스 설정 : 음성주문이 블루투스에서도 사용 가능하도록 하게 하기*/
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: .defaultToSpeaker)//.setCategory(AVAudioSession.Category.record)
             try audioSession.setMode(AVAudioSession.Mode.default)
+            try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: AVAudioSession.CategoryOptions.allowBluetoothA2DP)
             
         }catch{
             print("error")
         }
+        
+        
         
         
         
@@ -708,6 +713,7 @@ class DialogFlowPopUpController: UIViewController{
                         /* 성공 시 */
                         let response = response as! AIResponse
                         /* 응답 받고 responseMsg_Label에 출력 */
+                        //                        if let textResponse = response.result.fulfillment.{
                         if let textResponse = response.result.fulfillment.speech {
                             print(textResponse)
                             print("success")

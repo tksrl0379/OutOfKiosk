@@ -19,4 +19,7 @@ class ProductList : UITableViewCell{
     @IBOutlet weak var addFavoriteItem_Btn: UIButton!
     
     @IBOutlet weak var cell_view: UIButton!
+    
+    
+    @IBOutlet weak var productFavorite_Label: UILabel!
 }

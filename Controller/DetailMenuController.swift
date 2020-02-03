@@ -20,68 +20,33 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
     
     //var receivedValueFromBeforeVC : Int?
     
-    //var willgetCategroyName : String!
+    /*
+     willGetCategoryName = PHP통신으로 받은 메뉴의 이름 변수이다.
+     willgetCategroyPrice = PHP통신으로 받은 메뉴의 가격(스몰기준) 변수이다.
+     favoriteTag = 메뉴가 즐겨찾기가 되었는지를 CafeDetailController에서 비교하여 Label에 표시할 변수이다..
+     */
     var willgetCategroyName : Array<String>!
     var willgetCategroyPrice : Array<Int>!
-    
-    //var willgetCategroyPrice : Array<Int>!
-    
-    /*php통신으로 product의 이름들을 가져와서 append시켜줘야한다.*/
-    /*php통신에 menu의 대분류가 coffee 인지 smoothie 인지를 알수 있는 방법이 필요하다.*/
-    
-    
+    var favoriteTag : Array<String> = []
         
     
-//    var productName = ["a","b"]
-    
-    /*php*/
-    
     @IBOutlet weak var ProductTableView: UITableView!
-    
-    
-    
+        
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return willgetCategroyName.count
-        //return productName.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         /* 재사용할 수 있는 cell을 ProductTableView에 넣는다는 뜻. UITableViewCell을 반환하기 때문에 Storelist로 다운캐스팅 */
         let cell = ProductTableView.dequeueReusableCell(withIdentifier: "ProductList", for: indexPath ) as! ProductList
         
-//        print("indexPath si ", indexPath.row)
-        /* ProductList 클래스(Cell Class)에 등록한 프로퍼티 이용 가능 */
-        //cell.productName_Label.text = productName[indexPath.row]
         cell.productName_Label.text = willgetCategroyName[indexPath.row]
         cell.productPrice_Label.text = String(willgetCategroyPrice[indexPath.row]) + "원"
+        cell.productFavorite_Label.text = favoriteTag[indexPath.row]
         cell.addFavoriteItem_Btn.layer.cornerRadius = 5
-        //cell.cell_view.accessibilityTraits = UIAccessibilityTraits.none
-        
-//        cell.cellBorder_View.layer.borderWidth = 0.5
-//        cell.cellBorder_View.layer.borderColor = UIColor.gray.cgColor
-//
-        
-        
-        
+
         return cell
     }
-    
-    /*
-    /* 특정 Cell 클릭 이벤트 처리 */
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-                
-        /* view controller 간 데이터 교환
-        : instantiateViewController를 통해 생성된 객체는 UIViewController타입이기 때문에 StoreDetailController 타입으로 다운캐스팅. */
-        let vc = self.storyboard?.instantiateViewController(identifier: "DetailMenuController") as! DetailMenuController
-        vc.receivedValueFromBeforeVC = indexPath.row
-        //print(indexPath.row)
-        
-        /* StoreDetailController 로 화면 전환 */
-        //self.present(vc, animated: true, completion: nil) // present 방식
-        self.navigationController?.pushViewController(vc, animated: true) // navigation controller 방식
-        
-        
-    }*/
     
     /*
      아이템을 즐겨찾기 창에 추가시키는 버튼
@@ -92,39 +57,50 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         /* 현재 cell의 위치를 알기 위해서 사용한다.*/
         let point = sender.convert(CGPoint.zero, to: ProductTableView)
         guard let indexPath = ProductTableView.indexPathForRow(at: point)else{return}
-        
-        
-//        ProductTableView.reloadData()
-//        self.addFavoriteItem_Btn[indexPath.row].set
-                
-        let userId = UserDefaults.standard.string(forKey: "id")!
-        
-//        print(willgetCategroyName[indexPath.row] , " and ", userId)
-        
-        let parameters: Parameters = [
-            "name" : willgetCategroyName[indexPath.row],
-            "userID" : userId
-        ]
-        /* php 서버에 해당하는 아이템을 즐겨찾기로 추가한다.
-         하지만 이미 즐겨찾기에 저장된 아이템이 있을시 즐겨찾기가 추가되는것이아니라 해제가 되어야한다.
-         플래그를 이용하여 일단 즐겨찾기가 된 상황에서는 버튼을 누르면 다시 해제가 되게 하기.
-         
-         1. 해당 id에 등록된 즐겨찾기 아이템을 모두 검색하고 있으면 '즐겨찾기추가'를 '즐겨찾기해제'로 변경하게 한다.
-         2. 즐겨찾기추가를 누를 시 추가가 되고 동시에 즐겨찾기 해제로 변경하게 함.
-         3. 즐겨찾기해제를 누를 시 삭제가 되고 동시에 즐겨찾기 추가로 변경하게 함.
-         
-         위 방법은 현재 안하기로함. 메뉴정보도 받아야하고, 사용자별 즐겨찾기 한 메뉴도 받아와서 비교하여 버튼을 즐겨찾기 추가/해제를 알려주어야 하므로
-         더욱 복잡하고 효율적으로 보이지도 않다.
-         
-         *지금은 추가하는대로 추가하되 즐겨찾기에서는 보여줄 때 distinct 쿼리문으로 보여주며, 삭제 시 중복 추가된 모든 메뉴를 한번에 삭제 해버리게 함.
+      
+        /* 성공 시, UserDefualts 에 즐겨찾기 메뉴 추가
+         UserDefaults 특성 상, append될 수 가없어서 데이터를 뽑은 후, favoriteMenu 오브젝트를 삭제 한 후에,
+         배열에 메뉴이름 추가 후, 다시 오브젝트를 세팅한다.
          */
+        
+        /*
+         수정부분
+         1. 중복으로 array에 저장이 된다. => 완료
+         2. 추가 하는 동시에 lable.text가 바뀌었으면 좋겠다. => 완료
+         ->label.text를 바꾸는 동시에 버튼을 hidden처리 한다. 그 이후에 label.text가 추가됨으로 변경 되면
+         다시 들어와도 변경된 상태로 유지가 되어야한다. 이것은 tableView cell에서 처리하기.
+         */
+        let defaults = UserDefaults.standard
+        var favoriteMenuArray = defaults.stringArray(forKey: "favoriteMenuArray") ?? [String]()
+        
+        /* 이미 추가된 메뉴가 있을경우 중복 추가를 방지 하기위해 만들어 놓은 if stmt*/
+        if (favoriteMenuArray.contains(self.willgetCategroyName[indexPath.row])){
+            print("Already contained")
+        }else{
+            
+            UserDefaults.standard.removeObject(forKey: "favoriteMenuArray")
+            favoriteMenuArray.append(self.willgetCategroyName[indexPath.row])
+            print("favorite menu : ", favoriteMenuArray,"\n") //print test
+            UserDefaults.standard.set(favoriteMenuArray, forKey: "favoriteMenuArray")
+            self.favoriteTag[indexPath.row] = "이미 찜!"
+            self.ProductTableView.reloadRows(at: [indexPath], with: .automatic)
+            
+        }
+
+        /*
+         PHP 추가 연동기능 동기화 제거 -> 어플 자체에 저장하는 방식으로 변경함.
+         let userId = UserDefaults.standard.string(forKey: "id")!
+         let parameters: Parameters = [
+             "name" : willgetCategroyName[indexPath.row],
+             "userID" : userId
+         ]
         let URL_ORDER = "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/favoriteMenu/api/addFavoriteMenu.php"
         //Sending http post request
         Alamofire.request(URL_ORDER, method: .post, parameters: parameters).responseString
-        {
+            {
                 response in
                 print("응답",response)
-        }
+        }*/
         
     }
     
@@ -132,8 +108,7 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
     @objc func buttonAction(_ sender: UIBarButtonItem) {
       self.navigationController?.popViewController(animated: true)
     }
-    
-    
+        
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -145,14 +120,32 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
         
         
-        
         ProductTableView.delegate = self
         ProductTableView.dataSource = self
         self.ProductTableView.rowHeight = 93.0
         
         
         
+        /* TableView를 생성하기 전, UserDefault에 저장된 메뉴이름(favoriteMenuArray) 데이터 값과 카테고리별 메뉴이름배열(willgetCategoryName)을 비교하여 이미 즐겨찾기가 되었는지 아닌지에 따라 즐겨찾기라벨(favoriteTag)에 text값을 설정해 준다.*/
+
+        let defaults = UserDefaults.standard
+        let favoriteMenuArray = defaults.stringArray(forKey: "favoriteMenuArray") ?? [String]()
         
+
+        /* 일단 ""문자로 초기화를 시킨다. 그 이후, UserDefaults에 저장되어 있는 즐겨찾기 이름이 있다면
+            favoriteTag를 "이미 찜!" 으로 변경한다.
+         */
+        for productName in willgetCategroyName{
+            /* 이곳에서 UserDefault에 있는 문자와 비교하여 실제로 존재하면 favoriteTag의 값을 바꾼다.*/
+            favoriteTag.append("")
+            for favoriteMenuName in favoriteMenuArray{
+                if(productName == favoriteMenuName){
+//                    print("match!!", productName, favoriteMenuName)
+                    favoriteTag[willgetCategroyName.firstIndex(of: productName)!] = "이미 찜!"
+                    break
+                }
+            }
+        }
         
         
     }

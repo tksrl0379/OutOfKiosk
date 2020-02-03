@@ -19,15 +19,12 @@ class CafeDetailController : UIViewController{
     /* voiceover 접근성 전용 */
     @IBOutlet weak var menu_Label: UILabel!
     
-    
-    
-    
     @IBOutlet weak var storeName_Label: UILabel!
     
     var receivedValueFromBeforeVC : Int?
     
-    /* 장바구니 개수 */
-//    var numberOfProducts : Int?
+    /* php 카테고리별 메뉴 데이터를 가져와서 appDelegate에 속한지 비교 후 T/F값을 전달하는 배열.*/
+    var willgetFavoriteTag : Array<String> = []
     
     /* DialogFlow 로 주문하기 버튼 */
     @IBOutlet weak var orderMenuByAI_Btn: UIButton!
@@ -74,8 +71,27 @@ class CafeDetailController : UIViewController{
             
             (willgetCategroyName,willgetCategroyPrice) in
             
+            /* 나중에 함수로 변환하기 => 여기서 즐겨찾기 한 목록의 이름과 비교하여 맞으면*/
+//            var willgetFavoriteTag : Array<String> = []
+//            let ad = UIApplication.shared.delegate as? AppDelegate
+            
+            /* MxN으로 목록 이름과 즐겨찾기에(ad) 저장된 이름을 비교한다.*/
+            
+            /*for i in 0..<willgetCategroyName.count{
+                for j in 0..<ad!.menuFavoriteArray.count{
+                    if willgetCategroyName[i] == ad!.menuFavoriteArray[j] {
+                        willgetFavoriteTag.append("즐겨찾기 이미 추가됨")
+                    }else{
+                        willgetFavoriteTag.append("즐겨찾기 추가")
+                    }
+                }
+            }*/
+            
+            //
+            
             rvc.willgetCategroyName = willgetCategroyName
             rvc.willgetCategroyPrice = willgetCategroyPrice
+//            rvc.willgetFavoriteTag = willgetFavoriteTag
             self.navigationController?.pushViewController(rvc, animated: true)
         }
         
@@ -117,7 +133,7 @@ class CafeDetailController : UIViewController{
                 self.navigationController?.pushViewController(rvc, animated: true)
             }else{
                 /* 들어갈 기능 = message alert 혹은 팝업 cotroller를 뛰운다*/
-                self.alertMessage("","장바구니가 비어있어요")
+                self.alertMessage(" ","장바구니가 비어있어요")
             }
             
         }
