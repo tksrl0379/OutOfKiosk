@@ -374,27 +374,27 @@ class DialogFlowPopUpController: UIViewController{
                                 
                                 // 2-1. Dialogflow의 파라미터 값 받기
                                 let parameter_name = intentName + "_NAME"
-                                if let name = parameter[parameter_name]{
+                                if let name = parameter?[parameter_name]{
                                     
                                     self.name = name as? String
                                     print("이름: \(String(describing: self.name))")
                                 };
-                                if let count = parameter["number"]{
+                                if let count = parameter?["number"]{
                                     
                                     self.count = Int(count as! String)
                                     print("개수: \(String(describing: self.count))")
                                 };
-                                if let size = parameter["SIZE_NAME"]{
+                                if let size = parameter?["SIZE_NAME"]{
                                     
                                     self.size = size as? String
                                     print("사이즈: \(String(describing: self.size))")
                                 };
-                                if let sugar = parameter["SUGAR"]{
+                                if let sugar = parameter?["SUGAR"]{
                                     
                                     self.sugar = sugar as? String
                                     print("당도: \(String(describing: self.sugar))")
                                 };
-                                if let whippedcream = parameter["WHIPPEDCREAM"]{
+                                if let whippedcream = parameter?["WHIPPEDCREAM"]{
                                     
                                     self.whippedcream = whippedcream as? String
                                     print("휘핑크림: \(String(describing: self.whippedcream))")
@@ -638,54 +638,51 @@ class DialogFlowPopUpController: UIViewController{
         
         
         
-        /* 시작할 때 스타벅스 intents에 진입하기 위해 */
-        guard let url = URL(string: "https://api.dialogflow.com/v1/query?v=20150910"),
-            let payload = "{\"query\": \"스타벅스\", \"sessionId\": \"12345\",\"lang\": \"en\" }".data(using: .utf8) else
-        {
-            return
-        }
-        
-        var request = URLRequest(url: url)
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/vendor/intent_query.php")! as URL)
         request.httpMethod = "POST"
-        /* HTTP 헤더 */
-        request.addValue("Bearer c0d7c288c75b4b4bb4cba2170344b142", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        /* HTTP 바디 */
-        request.httpBody = payload
         
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard error == nil else { print(error!.localizedDescription); return }
-            guard let data = data else { print("Empty data"); return }
+        let postString = "query=스타벅스"
+        
+        request.httpBody = postString.data(using: String.Encoding.utf8)
+        
+        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
+        let task = URLSession.shared.dataTask(with: request as URLRequest) {
+            data, response, error in
             
-            if let str = String(data: data, encoding: .utf8) {
-                print(str)
-                
-                /* Dialogflow가 반환한 json문자열을 NSDictionary 형태로 변환 */
-                let dict = self.convertStringToDictionary(text: str)
-                
-                // Json에서 응답만 골라냄
-                let response = ((dict!["result"] as! NSDictionary)["fulfillment"] as! NSDictionary)["speech"] as! String
-                
-                /* 1. 즐겨찾기 시*/
-                if (self.favoriteMenuName != nil) { //값이 들어있을때 예) 초콜렛 스무디 <-다시한번 다이얼로그챗봇 대화한다.
+            print("response = \(response!)")
+            
+            /* php server에서 echo한 내용들이 담김 */
+            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+            print("responseString = \(responseString!)")
+            
+            var dict = self.convertStringToDictionary(text: responseString as! String)
+            
+            let responseMessage = dict!["response"] as! String
+            
+            /* 1. 즐겨찾기 시*/
+            if (self.favoriteMenuName != nil) { //값이 들어있을때 예) 초콜렛 스무디 <-다시한번 다이얼로그챗봇 대화한다.
+                print(self.favoriteMenuName!)
+                self.sendMessage(self.favoriteMenuName!){
+                    responseMessage, _, _ in
                     
-                    self.sendMessage(self.favoriteMenuName!){
-                        response, _, _ in
-                        
-                        self.speechAndText(response)
-                        self.StartStopAct()
-                    }
-                    /* 2. 일반 주문 시 */
-                }else{
-                    //유사도 분석을 위함
-                    //self.categoryOfSimilarity = "메뉴"
-                    
-                    self.speechAndText(response)
+                    self.speechAndText(responseMessage)
                     self.StartStopAct()
                 }
+                /* 2. 일반 주문 시 */
+            }else{
+                //유사도 분석을 위함
+                //self.categoryOfSimilarity = "메뉴"
                 
+                self.speechAndText(responseMessage)
+                self.StartStopAct()
             }
-        }.resume()
+            
+            
+        }
+        
+        //실행
+        task.resume()
+        
         
         
     }
@@ -733,7 +730,8 @@ class DialogFlowPopUpController: UIViewController{
     }
     
     
-    func sendMessage(_ message: String?, handler: @escaping(_ textResponse : String, _ intentName : String, _ parameter : NSDictionary)-> Void){
+    func sendMessage(_ message: String?, handler: @escaping(_ textResponse : String, _ intentName : String, _ parameter : NSDictionary?)-> Void){
+        /*
         print("message", message)
         guard let url = URL(string: "https://api.dialogflow.com/v1/query?v=20150910"),
             let payload = "{\"query\": \"\(message!)\", \"sessionId\": \"12345\",\"lang\": \"ko\" }".data(using: .utf8) else
@@ -768,6 +766,41 @@ class DialogFlowPopUpController: UIViewController{
                 
             }
         }.resume()
+ */
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/vendor/intent_query.php")! as URL)
+        request.httpMethod = "POST"
+        
+        let postString = "query=\(message!)"
+        
+        request.httpBody = postString.data(using: String.Encoding.utf8)
+        
+        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
+        let task = URLSession.shared.dataTask(with: request as URLRequest) {
+            data, response, error in
+            
+            print("response = \(response!)")
+            
+            /* php server에서 echo한 내용들이 담김 */
+            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+            print("responseString = \(responseString!)")
+            
+            var dict = self.convertStringToDictionary(text: responseString as! String)
+            
+            let responseMessage = dict!["response"] as! String
+            let intentName = dict!["intentName"] as! String
+            
+            let parameters = dict!["parameters"] as? NSDictionary
+            
+            
+            print("1.\n",responseMessage)
+            print("2.\n",intentName)
+            //print("3.\n",parameters["SMOOTHIE_NAME"])
+                
+            handler(responseMessage, intentName, parameters)
+        }
+        
+        //실행
+        task.resume()
         
     }
     
