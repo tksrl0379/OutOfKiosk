@@ -22,13 +22,11 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        //        print("갯수는 ", favoriteProduct.count)
-        
         return willgetFavoriteMenuName.count
         
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         
         /* 재사용할 수 있는 cell을 FavoriteMenuTableView에 넣는다는 뜻. UITableViewCell을 반환하기 때문에 Storelist로 다운캐스팅 */
         let cell = FavoriteMenuTableView.dequeueReusableCell(withIdentifier: "FavoriteList", for: indexPath ) as! FavoriteList
@@ -41,8 +39,7 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
         return cell
         
     }
-    
-    
+        
     /* 즐겨찾기 추가한 아이템을 주문(챗봇음성안내)로 바로가게 하기.*/
     @IBAction func orderFavoriteProduct_Btn(_ sender: UIButton) {
         
@@ -67,13 +64,9 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
         
         
         /*
-            Todo : PHP 통신으로 실제로 즐겨찾기 추가 된 아이템을 삭제하기.
-            userID와 Name을 전송해야함.
-         
-        */
-        
+            //PHP 통신으로 favoriteItem 삭제하기.
+            //userID와 Name을 전송해야함.
         let userId = UserDefaults.standard.string(forKey: "id")!
-        
         /* 해당 테이블 뷰의 이름을 얻기위해 indexPath.row를 사용함.*/
         let parameters: Parameters=[
             "name" : willgetFavoriteMenuName[indexPath.row],
@@ -86,21 +79,37 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
             {
                 response in
                 print("응답",response)
-                
         }
+         */
         
         
+        /* UserDefault에 저장된 즐겨찾기메뉴를 삭제한다.
+            favoriteMenuArray로 UserDefault에 저장된 "favoriteMenuArray"키를 unwrap 한다.
+         */
+        let defaults = UserDefaults.standard
+        var favoriteMenuArray = defaults.stringArray(forKey: "favoriteMenuArray") ?? [String]()
+                
+        
+        /* 즐겨찾기 메뉴 배열에서 값에 대한 인덱스 값을 찾아 그 인덱스를 지우는 작업*/
+        favoriteMenuArray.remove(at: favoriteMenuArray.firstIndex(of: willgetFavoriteMenuName[indexPath.row])!)
+        
+        UserDefaults.standard.set(favoriteMenuArray, forKey: "favoriteMenuArray")
         
         /* willgetFavoriteMenuName = 현재 즐겨찾기목록에 있는 메뉴들의 이름 배열.*/
+        /* UI적으로 TableViewCell을 삭제하기 위한 작업*/
         willgetFavoriteMenuName.remove(at: indexPath.row)
-
         FavoriteMenuTableView.deleteRows(at: [indexPath], with: .fade)
+        
+        /* 즐겨찾기에 담겨진 메뉴 개수가 0개면 popView 되기.*/
+        if willgetFavoriteMenuName.count == 0 {
+            self.navigationController?.popViewController(animated: true)
+        }
+        
     }
     
     
     
-    
-    
+
     @objc func buttonAction(_ sender: UIBarButtonItem) {
         self.navigationController?.popViewController(animated: true)
     }

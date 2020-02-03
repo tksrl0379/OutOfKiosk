@@ -113,6 +113,10 @@ class LoginController: UIViewController, UITextFieldDelegate{
                         UserDefaults.standard.set(self.id_Textfield.text!, forKey: "id")
                         UserDefaults.standard.set(self.pwd_Textfield.text!, forKey: "pwd")
 
+                        /* UserDefaults 에 favoirteMenu를 설정한다.*/
+                        let favoirteMenuArray : Array<String> = []
+                        UserDefaults.standard.set(favoirteMenuArray, forKey: "favoirteMenuArray")
+
                     }
                 }
                 

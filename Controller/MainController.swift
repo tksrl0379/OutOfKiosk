@@ -70,10 +70,7 @@ class MainController : UIViewController{
         cp.tag = 101
         self.sub2_View.addSubview(cp)
         //cp.center = self.progressBar_view.center
-        
-        
-        
-        
+  
         //CircularProgress.trackColor = UIColor.white
         //CircularProgress.progressColor = UIColor.purple
         //CircularProgress.setProgressWithAnimation(duration: 1.0, value: 0.3)
@@ -178,19 +175,32 @@ class MainController : UIViewController{
         
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteMenuController") as? FavoriteMenuController else {return}
         
-        phpGetFavoriteData(){
+        
+        let defaults = UserDefaults.standard
+        let favoriteMenuArray = defaults.stringArray(forKey: "favoriteMenuArray") ?? [String]()
+        if favoriteMenuArray.count != 0 {
+            rvc.willgetFavoriteMenuName = favoriteMenuArray
+            self.navigationController?.pushViewController(rvc, animated: true)
             
-            (willgetFavoriteMenuName) in
-            
-            /* count를 확인하여 즐겨찾기 추가 된 메뉴가 있는지 없는지에 따라 목록을 보여주거나, 알림 메시지를 보여준다.*/
-            if willgetFavoriteMenuName.count != 0 {
-                rvc.willgetFavoriteMenuName = willgetFavoriteMenuName
-                self.navigationController?.pushViewController(rvc, animated: true)
-            
-            }else{
-                self.alertMessage("오류","즐겨찾기 메뉴가 없어요.")
-            }
+        }else{
+            self.alertMessage("오류","즐겨찾기 메뉴가 없어요.")
         }
+
+        
+        /* PHP통신이다.*/
+//        phpGetFavoriteData(){
+//
+//            (willgetFavoriteMenuName) in
+//
+//            /* count를 확인하여 즐겨찾기 추가 된 메뉴가 있는지 없는지에 따라 목록을 보여주거나, 알림 메시지를 보여준다.*/
+//            if willgetFavoriteMenuName.count != 0 {
+//                rvc.willgetFavoriteMenuName = willgetFavoriteMenuName
+//                self.navigationController?.pushViewController(rvc, animated: true)
+//
+//            }else{
+//                self.alertMessage("오류","즐겨찾기 메뉴가 없어요.")
+//            }
+//        }
         
     }
     
