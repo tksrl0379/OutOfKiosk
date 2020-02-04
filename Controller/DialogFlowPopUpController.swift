@@ -610,9 +610,8 @@ class DialogFlowPopUpController: UIViewController{
         let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(DialogFlowPopUpController.buttonAction(_:)))
         addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        //self.navigationItem.leftBarButtonItem?.isAccessibilityElement = true
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
-        //self.navigationItem.leftBarButtonItem?.accessibilityTraits = .none
+        
         
         /* Lottie animation 설정 */
         animation = AnimationView(name:"loading")
@@ -635,7 +634,6 @@ class DialogFlowPopUpController: UIViewController{
         }catch{
             print("error")
         }
-        
         
         
         let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/vendor/intent_query.php")! as URL)
@@ -697,19 +695,23 @@ class DialogFlowPopUpController: UIViewController{
         viewIsRunning = false
         inputNode?.removeTap(onBus: 0)
         
-        /* Dialogflow에 requestMsg 전송: Dialogflow의 context를 초기화 시켜줘야 함 */
-        guard let url = URL(string: "https://api.dialogflow.com/v1/contexts?sessionId=12345") else
-        {
-            return
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/vendor/context_deleteAll.php")! as URL)
+        request.httpMethod = "POST"
+        
+        
+        //request.httpBody = postString.data(using: String.Encoding.utf8)
+        
+        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
+        let task = URLSession.shared.dataTask(with: request as URLRequest) {
+            data, response, error in
+            
+            print("response = \(response!)")
+            
+            print("컨텍스트 초기화")
+            
         }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "DELETE"
-        request.addValue("Bearer c0d7c288c75b4b4bb4cba2170344b142", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-        }.resume()
+        //실행
+        task.resume()
         
     }
     
@@ -731,42 +733,7 @@ class DialogFlowPopUpController: UIViewController{
     
     
     func sendMessage(_ message: String?, handler: @escaping(_ textResponse : String, _ intentName : String, _ parameter : NSDictionary?)-> Void){
-        /*
-        print("message", message)
-        guard let url = URL(string: "https://api.dialogflow.com/v1/query?v=20150910"),
-            let payload = "{\"query\": \"\(message!)\", \"sessionId\": \"12345\",\"lang\": \"ko\" }".data(using: .utf8) else
-        {
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("Bearer c0d7c288c75b4b4bb4cba2170344b142", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = payload
-        
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard error == nil else { print(error!.localizedDescription); return }
-            guard let data = data else { print("Empty data"); return }
-            
-            if let str = String(data: data, encoding: .utf8) {
-                print(str)
-                
-                /* Dialogflow의 응답 출력 */
-                let dict = self.convertStringToDictionary(text: str)
-                
-                let response = ((dict!["result"] as! NSDictionary)["fulfillment"] as! NSDictionary)["speech"] as! String
-                let intentName = ((dict!["result"] as! NSDictionary)["metadata"] as! NSDictionary)["intentName"] as! String
-                let parameter = (dict!["result"] as! NSDictionary)["parameters"] as! NSDictionary
-                
-                /* 응답 출력 */
-                print(response)
-                
-                handler(response, intentName, parameter)
-                
-            }
-        }.resume()
- */
+       
         let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/vendor/intent_query.php")! as URL)
         request.httpMethod = "POST"
         
@@ -788,15 +755,37 @@ class DialogFlowPopUpController: UIViewController{
             
             let responseMessage = dict!["response"] as! String
             let intentName = dict!["intentName"] as! String
-            
             let parameters = dict!["parameters"] as? NSDictionary
             
             
             print("1.\n",responseMessage)
             print("2.\n",intentName)
             //print("3.\n",parameters["SMOOTHIE_NAME"])
-                
+            
+            self.checkAndDeleteContext()
             handler(responseMessage, intentName, parameters)
+        }
+        
+        //실행
+        task.resume()
+        
+    }
+    
+    func checkAndDeleteContext(){
+       
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/vendor/context_delete.php")! as URL)
+        request.httpMethod = "POST"
+        
+        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
+        let task = URLSession.shared.dataTask(with: request as URLRequest) {
+            data, response, error in
+            
+            print("response = \(response!)")
+            
+            /* php server에서 echo한 내용들이 담김 */
+            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+            print("responseString = \(responseString!)")
+            
         }
         
         //실행
