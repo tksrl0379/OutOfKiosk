@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import ApiAI
 
 /*
  모든 View 컨트롤러에서 접근이 가능하며 앱이 종료되지 않는 이상 데이터가 유지가 될 수 있다.
@@ -26,25 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var menuIsWhippedCream : Array<String> = []
     
     
-    /*TEST : server로 전송하기 위한 변수*/
-    /*
-    var numOfProducts : Int = 2
-    var menuNameArray: Array<String> = ["초콜렛스무디","초콜릿 크림 프라푸치노"]
-    var menuSizeArray: Array<String> = ["라지","스몰"]
-    var menuCountArray: Array<Int> = [1,3]
-    var menuEachPriceArray: Array<Int> = [3500,4000]
-    var menuSugarContent : Array<String> = ["50","NULL"]
-    var menuIsWhippedCream : Array<String> = ["NULL","YES"]
-    */
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        /*ApiAi를 사용하여, 구글 다이얼로그플로우의 토큰을 받는 과정이다. 초기설정.*/
-        let configuration = AIDefaultConfiguration()
-        configuration.clientAccessToken = "d94411c80a7e46b7bcac2efb46698353"
         
-        let apiai = ApiAI.shared()
-        apiai?.configuration = configuration
         
         
         return true
