@@ -21,7 +21,6 @@
  */
 
 
-import ApiAI
 import AVFoundation
 import Speech
 import UIKit
@@ -42,6 +41,9 @@ class DialogFlowPopUpController: UIViewController{
     var similarEntity: NSString?
     // 4. 사용자가 유사한 단어를 사용하기 위해 선택한 경우
     var similarEntityIsOn: Bool = false
+    
+    //var categoryOfSimilarity: String?
+    
     
     /* STT 동기화를 위한 세마포어 선언: STT가 끝나면 wait로 블록시키고, TTS가 끝나면 signal 전송하여 다시 STT 시작. CPU점유율을 낮추는 역할도 함  */
     let semaphore = DispatchSemaphore(value: 0)
@@ -187,12 +189,13 @@ class DialogFlowPopUpController: UIViewController{
         task.resume()
     }
     
+    
     /* Dialogflow가 이해하지 못한 단어와 가장 유사도가 높은 Entity를 DB로부터 추천받음 */
-    func getSimilarEntity(_ undefinedString: String?, _ FullWord: String?, handler: @escaping (_ responseStr : NSString?)-> Void ){
-        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/similarity/measureSimilarity\(FullWord!).php")! as URL)
+    func getSimilarEntity(_ undefinedString: String?, _ category: String?, handler: @escaping (_ responseStr : NSString?)-> Void ){
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/similarity/measureSimilarity.php")! as URL)
         request.httpMethod = "POST"
         
-        let postString = "word=\(undefinedString!)"
+        let postString = "word=\(undefinedString!)&category=\(category!)"
         
         request.httpBody = postString.data(using: String.Encoding.utf8)
         
@@ -348,142 +351,108 @@ class DialogFlowPopUpController: UIViewController{
                         monitorCount = 0
                         befRecordingCount = 0
                         
+                        /* Dialogflow에 requestMsg 전송 */
+                        var request: String?
                         
-                        
-                        /* 2.1. Dialogflow에 requestMsg 전송: 이 전송이 완료 되면 아래의 전송완료 콜백함수 호출 */
-                        let request = ApiAI.shared().textRequest()
-                        
-                        /* request query 만들고 전송*/
                         DispatchQueue.main.async{ // UILabel 때문에 Main 쓰레드 내부에서 실행
                             if(self.similarEntityIsOn){
                                 print("들어왔음", self.similarEntity)
-                                request?.query = self.similarEntity
+                                request = self.similarEntity as String?
                                 self.similarEntityIsOn = false
                             }else{
-                                request?.query = self.requestMsg_Label?.text
+                                request = self.requestMsg_Label?.text
+                                
                             }
-                            ApiAI.shared().enqueue(request) // request.query를 받은 다음 실행해야 하기 때문에 Main 쓰레드 내부에서 같이 실행 (바깥에서 실행 시 비동기적 실행으로 오류 가능성 높음)
-                            
                             self.requestMsg_Label?.text = " "
                             
-                        }
-                        
-                        /* 2.2. requestMsg 전송완료 시 호출되는 콜백함수 */
-                        request?.setMappedCompletionBlockSuccess({ (request, response) in
                             
-                            let response = response as! AIResponse
-                            
-                            /* 2.2.1. Dialogflow의 파라미터 값 받는 공간 */
-                            if let parameter = response.result.parameters as? [String : AIResponseParameter]{
+                            /* request 전송 후 handler 호출 */
+                            self.sendMessage(request){
+                                textResponse, intentName, parameter in
                                 
-                                let parameter_name = response.result.metadata.intentName + "_NAME"
-                                if let name = parameter[parameter_name]?.stringValue{
+                                
+                                
+                                
+                                // 2-1. Dialogflow의 파라미터 값 받기
+                                let parameter_name = intentName + "_NAME"
+                                if let name = parameter?[parameter_name]{
                                     
-                                    self.name = name
+                                    self.name = name as? String
                                     print("이름: \(String(describing: self.name))")
                                 };
-                                if let count = parameter["number"]?.numberValue{
+                                if let count = parameter?["number"]{
                                     
-                                    self.count = count as? Int
+                                    self.count = Int(count as! String)
                                     print("개수: \(String(describing: self.count))")
                                 };
-                                if let size = parameter["SIZE_NAME"]?.stringValue{
+                                if let size = parameter?["SIZE_NAME"]{
                                     
-                                    self.size = size
+                                    self.size = size as? String
                                     print("사이즈: \(String(describing: self.size))")
                                 };
-                                if let sugar = parameter["SUGAR"]?.stringValue{
+                                if let sugar = parameter?["SUGAR"]{
                                     
-                                    self.sugar = sugar
+                                    self.sugar = sugar as? String
                                     print("당도: \(String(describing: self.sugar))")
                                 };
-                                if let whippedcream = parameter["WHIPPEDCREAM"]?.stringValue{
+                                if let whippedcream = parameter?["WHIPPEDCREAM"]{
                                     
-                                    self.whippedcream = whippedcream
+                                    self.whippedcream = whippedcream as? String
                                     print("휘핑크림: \(String(describing: self.whippedcream))")
                                 };
                                 
-                                //self.checkSendCompleteToAI = true
-                            }
-                            
-                            /* 2.2.2. Dialogflow 응답 받고 responseMsg_Label에 출력 및 TTS */
-                            if let textResponse = response.result.fulfillment.speech {
-                                print(textResponse)
-                                
-                                /*
-                                 /* 선택 완료 후 가격정보 출력 */
-                                 if(textResponse.contains("선택하셨습니다.")){
-                                 
-                                 //self.checkGetPriceFromDB = false
-                                 
-                                 /* php - mysql 서버로부터 가격 정보 가져와서 receivedMsg_Label에 'Dialogflow message + 가격정보' 출력 및 TTS */
-                                 self.getPriceInfo(textResponse){
-                                 responseString in
-                                 
-                                 self.speechAndText(textResponse + " 총 \(responseString!)원입니다. 주문하시겠습니까 ?")
-                                 self.checkGetPriceFromDB = true
-                                 }
-                                 
-                                 /* 주문 정보 전송 */
-                                 } else if(textResponse.contains("주문 완료되었습니다.")){
-                                 
-                                 /* php - mysql 서버로 주문 정보 전송 후 receivedMsg_Label에 Dialogflow message 출력 및 TTS*/
-                                 self.sendOrder(textResponse)
-                                 */
                                 
                                 
-                                /* Dialogflow가 질문자의 발화를 이해하지 못한 경우 (2가지로 판단 가능) */
+                                
+                                
+                                /* 2-2. Dialogflow의 response message 유사도 분석 */
+                                
+                                /* 2-2-1 Dialogflow가 질문자의 발화를 이해하지 못한 경우 (2가지로 판단 가능) */
                                 if(textResponse.contains("정확한 메뉴 이름을 말씀해주시겠어요 ?")){ // 1. fallback intents 로 들어간 경우 혹은,
+                                    
+                                    
                                     self.checkSimilarEntityIsGet = false
-                                    self.getSimilarEntity(self.requestMsg_Label.text, "_menuName"){
+                                    //print("request:",request)
+                                    self.getSimilarEntity(request, "MENU"){
                                         response in
                                         print(response)
-                                        
-                                        /* 유사한 단어가 없을 경우 */
-                                        if(response == ""){
-                                            self.speechAndText(textResponse)
-                                            self.checkSimilarEntityIsGet = true
-                                            /* 있을 경우 */
-                                        }else{
-                                            self.speechAndText("\(response!)가 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
-                                            self.checkSimilarEntityIsGet = true
-                                            self.similarEntity = response
-                                            DispatchQueue.main.async{
-                                                self.select_Btn.isHidden = false
-                                            }
-                                            UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.select_Btn)
-                                        }
-                                        
+                                        self.getSimilarEntityHandler(response!, textResponse, "")
                                         
                                     }
                                     
-                                }else if(self.befResponse == textResponse){ // 2. 같은 질문 반복
-                                    print("same response")
-                                    self.checkSimilarEntityIsGet = false
-                                    self.getSimilarEntity(self.requestMsg_Label.text, ""){
-                                        response in
-                                        print(response)
+                                }else if(self.befResponse == textResponse){ // 2. 같은 질문 반복 (메뉴 질문에 대해서만)
+                                    if( textResponse.contains("어떤") ){ // 2-1. 메뉴 이름에 대해
+                                        print("메뉴 이름 same response")
+                                        self.checkSimilarEntityIsGet = false
+                                        print("request",request)
+                                        print("intentName",intentName)
+                                        self.getSimilarEntity(request, intentName){
+                                            response in
+                                            print(response)
+                                            
+                                            self.getSimilarEntityHandler(response!, textResponse, "")
+                                        }
+                                    }else if (textResponse.contains("사이즈")){ // 2-2. 사이즈에 대해
+                                        print("사이즈 same response")
+                                        self.checkSimilarEntityIsGet = false
+                                        print("request",request)
                                         
-                                        /* 유사한 단어가 없을 경우 */
-                                        if(response == ""){
-                                            self.speechAndText(textResponse)
-                                            self.checkSimilarEntityIsGet = true
-                                            /* 있을 경우 */
-                                        }else{
-                                            self.speechAndText("\(response!)가 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
-                                            self.checkSimilarEntityIsGet = true
-                                            self.similarEntity = response
-                                            DispatchQueue.main.async{
-                                                self.select_Btn.isHidden = false
-                                            }
-                                            UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.select_Btn)
+                                        self.getSimilarEntity(request, "SIZE"){
+                                            response in
+                                            print(response)
+                                            
+                                            self.getSimilarEntityHandler(response!, textResponse, "사이즈")
                                         }
                                         
+                                    }else{ // 유사도 추천이 없는 질문의 경우
+                                        self.select_Btn.isHidden = true
+                                        self.speechAndText(textResponse)
+                                        print("일반")
+                                        // 질문이 반복되는지 감지하기 위해
+                                        self.befResponse = textResponse
                                     }
                                     
-                                    
-                                    /* 마지막 단계 (데이터 전송 및 종료) - 2가지 시나리오 */
-                                    // 1. 장바구니에 담고 끝내는 시나리오 혹은,
+                                 // 2-2-2 장바구니에 담은 경우
                                 }else if(textResponse.contains("담았습니다.")){
                                     // Db - php 서버로부터 가격정보 받은 후 장바구니(ShoppingListViewController)로 전송하고,
                                     self.getPriceInfo(){
@@ -543,39 +512,40 @@ class DialogFlowPopUpController: UIViewController{
                                     }
                                     /* 대화가 모두 끝난 이후에도 TTS가 나와서 이를 막기 위함 */
                                     self.viewIsRunning = false
-                                    //종료
-                                    self.navigationController?.popViewController(animated: true)
                                     
-                                    /* 2. 장바구니에 담지 않고 끝내는 시나리오 */
-                                }else if(textResponse.contains("필요하실때 다시 불러주세요.")){                                    
+                                    DispatchQueue.main.async {
+                                        //종료
+                                        self.navigationController?.popViewController(animated: true)
+                                    }
+                                    
+                                    
+                                    /* 2-2-3. 장바구니에 담지 않고 끝내는 시나리오 */
+                                }else if(textResponse.contains("필요하실때 다시 불러주세요.")){
                                     self.viewIsRunning = false
-                                    self.navigationController?.popViewController(animated: true)
+                                    DispatchQueue.main.async {
+                                        //종료
+                                        self.navigationController?.popViewController(animated: true)
+                                    }
                                     
-                                    /* 일반적인 경우 */
+                                    /* 2-2-4 일반적인 경우 */
                                 }else{
                                     self.select_Btn.isHidden = true
                                     self.speechAndText(textResponse)
-                                    
+                                    print("일반")
                                     // 질문이 반복되는지 감지하기 위해
                                     self.befResponse = textResponse
                                 }
                                 print("success")
                                 
                                 DispatchQueue.main.async {
-                                    
+                                    /* STT 타이밍을 제어하는 global thread 동기화 */
                                     self.checkResponseFromAI = true
                                     self.semaphore.signal()
                                     print("signal")
                                 }
-                            }
-                            
-                            
-                            /* 실패 시 */
-                        }, failure: { (request, error) in
-                            print("error")
-                            print(error!)
-                        }) // End of 2.2 setMappedCompletionBlockSuccess
-                        
+                                
+                            }//End of sendMessage
+                        }// End of Dispatch.main.async
                     }else{
                         
                         befRecordingCount = recordingCount
@@ -587,7 +557,7 @@ class DialogFlowPopUpController: UIViewController{
             
             
             
-        } // End of 2.inputNode.installTap
+        } // End of 2. inputNode.installTap
         
         
         
@@ -617,11 +587,8 @@ class DialogFlowPopUpController: UIViewController{
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
                 
-                //self.checkSttFinish = true
             }
         })
-        
-        
         
     } /* End of startRecording */
     
@@ -634,8 +601,6 @@ class DialogFlowPopUpController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
         /* ViewController가 작동중임을 표시*/
         viewIsRunning = true
         
@@ -646,9 +611,8 @@ class DialogFlowPopUpController: UIViewController{
         let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(DialogFlowPopUpController.buttonAction(_:)))
         addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        //self.navigationItem.leftBarButtonItem?.isAccessibilityElement = true
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
-        //self.navigationItem.leftBarButtonItem?.accessibilityTraits = .none
+        
         
         /* Lottie animation 설정 */
         animation = AnimationView(name:"loading")
@@ -677,73 +641,53 @@ class DialogFlowPopUpController: UIViewController{
         }
         
         
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/vendor/intent_query.php")! as URL)
+        request.httpMethod = "POST"
         
+        let postString = "query=스타벅스"
         
+        request.httpBody = postString.data(using: String.Encoding.utf8)
         
-        /* Dialogflow에 requestMsg 전송 */
-        let request = ApiAI.shared().textRequest()
-        
-        request?.query = "스타벅스"
-        
-        /* Dialogflow 전송 부분 */
-        ApiAI.shared().enqueue(request)
-        
-        /* requestMsg 전송완료 시 콜백함수 호출 */
-        request?.setMappedCompletionBlockSuccess({ (request, response) in
+        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
+        let task = URLSession.shared.dataTask(with: request as URLRequest) {
+            data, response, error in
             
-            /* 성공 시 */
-            let response = response as! AIResponse
+            print("response = \(response!)")
             
-            /* 응답 받고 responseMsg_Label에 출력 */
-            if let textResponse = response.result.fulfillment.speech {
-                print(textResponse)
-                print("success")
-                
-                /*
-                 스타벅스 가게로 들어온 상황, 이곳에서 favoriteMenuName이 nil인지 아닌지 확인
-                 favoriteMenuName != nil <-FavoriteMenuController에서 주문이 들어온 상황
-                 favoriteMenuName == nil <-CafeDetailControlelr에서 음성주문 시작
-                 */
-                
-                if (self.favoriteMenuName != nil) { //값이 들어있을때 예) 초콜렛 스무디 <-다시한번 다이얼로그챗봇 대화한다.
+            /* php server에서 echo한 내용들이 담김 */
+            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+            print("responseString = \(responseString!)")
+            
+            var dict = self.convertStringToDictionary(text: responseString as! String)
+            
+            let responseMessage = dict!["response"] as! String
+            
+            /* 1. 즐겨찾기 시*/
+            if (self.favoriteMenuName != nil) { //값이 들어있을때 예) 초콜렛 스무디 <-다시한번 다이얼로그챗봇 대화한다.
+                print(self.favoriteMenuName!)
+                self.sendMessage(self.favoriteMenuName!){
+                    responseMessage, _, _ in
                     
-                    let request = ApiAI.shared().textRequest()
-                    request?.query = self.favoriteMenuName!
-                    ApiAI.shared().enqueue(request)
-                    
-                    request?.setMappedCompletionBlockSuccess({ (request, response) in
-                        /* 성공 시 */
-                        let response = response as! AIResponse
-                        /* 응답 받고 responseMsg_Label에 출력 */
-                        //                        if let textResponse = response.result.fulfillment.{
-                        if let textResponse = response.result.fulfillment.speech {
-                            print(textResponse)
-                            print("success")
-                            self.speechAndText(textResponse)
-                            /*매장의 request.query에 대한 값을 성공적으로 받으면 StartStopAct()를 시작하도록 한다.
-                             VoiceOver 특성상 '뒤로' 버튼이 읽히므
-                             */
-                            self.StartStopAct()
-                        }
-                        /* 실패 시 (즐겨찾기)*/
-                    }, failure: { (request, error) in
-                        print("error")
-                        print(error!)
-                    })
-                }else{
-                    /* 즐겨찾기 주문이 아닌 일반 주문*/
-                    self.speechAndText(textResponse)
+                    self.speechAndText(responseMessage)
                     self.StartStopAct()
                 }
+                /* 2. 일반 주문 시 */
+            }else{
+                //유사도 분석을 위함
+                //self.categoryOfSimilarity = "메뉴"
+                
+                self.speechAndText(responseMessage)
+                self.StartStopAct()
             }
             
             
-            
-            /* 실패 시 */
-        }, failure: { (request, error) in
-            print("error")
-            print(error!)
-        }) // End of request complete call back
+        }
+        
+        //실행
+        task.resume()
+        
+        
+        
     }
     
     
@@ -752,45 +696,127 @@ class DialogFlowPopUpController: UIViewController{
         /* DialogFlowPopUpController 가 종료될 때 CafeDetailController에 있는 blurEffectView 삭제 */
         //blurEffectView?.removeFromSuperview()
         
-        
+        /* 종료 시 확실하게 하기 위해 */
         viewIsRunning = false
         inputNode?.removeTap(onBus: 0)
         
-        /* Dialogflow에 requestMsg 전송: Dialogflow의 context를 초기화 시켜줘야 함 */
-        let request = ApiAI.shared().textRequest()
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/vendor/context_deleteAll.php")! as URL)
+        request.httpMethod = "POST"
         
-        request?.query = "취소"
         
-        /* Dialogflow 전송 부분 */
-        ApiAI.shared().enqueue(request)
+        //request.httpBody = postString.data(using: String.Encoding.utf8)
         
-        /* requestMsg 전송완료 시 콜백함수 호출 */
-        request?.setMappedCompletionBlockSuccess({ (request, response) in
+        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
+        let task = URLSession.shared.dataTask(with: request as URLRequest) {
+            data, response, error in
             
-            /* 성공 시 */
-            let response = response as! AIResponse
+            print("response = \(response!)")
             
-            /* 응답 받고 responseMsg_Label에 출력 */
-            if let textResponse = response.result.fulfillment.speech {
-                print(textResponse)
-                print("success")
-                self.speechAndText(textResponse)
-                
-                /*매장의 request.query에 대한 값을 성공적으로 받으면 StartStopAct()를 시작하도록 한다.
-                 VoiceOver 특성상 '뒤로' 버튼이 읽히므
-                 */
-                self.StartStopAct()
-            }
+            print("컨텍스트 초기화")
             
-            
-            
-            /* 실패 시 */
-        }, failure: { (request, error) in
-            print("error")
-            print(error!)
-        }) // End of request complete call back
+        }
+        //실행
+        task.resume()
         
     }
     
+    
+    /* Stiring -> Dictionary */
+    func convertStringToDictionary(text: String) -> NSDictionary? {//[String:AnyObject]? {
+        if let data = text.data(using: .utf8) {
+            do {
+                /* jsonObject: String type json을 Foundation Object로 바꿔줌 */
+                /* Foundation Object: NSArray, NSDictionary, NSNumber, NSDate, NSString or NSNull 로 변환 가능 */
+                let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? NSDictionary //[String:AnyObject]
+                return json
+            } catch {
+                print("Something went wrong")
+            }
+        }
+        return nil
+    }
+    
+    
+    func sendMessage(_ message: String?, handler: @escaping(_ textResponse : String, _ intentName : String, _ parameter : NSDictionary?)-> Void){
+       
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/vendor/intent_query.php")! as URL)
+        request.httpMethod = "POST"
+        
+        let postString = "query=\(message!)"
+        
+        request.httpBody = postString.data(using: String.Encoding.utf8)
+        
+        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
+        let task = URLSession.shared.dataTask(with: request as URLRequest) {
+            data, response, error in
+            
+            print("response = \(response!)")
+            
+            /* php server에서 echo한 내용들이 담김 */
+            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+            print("responseString = \(responseString!)")
+            
+            var dict = self.convertStringToDictionary(text: responseString as! String)
+            
+            let responseMessage = dict!["response"] as! String
+            let intentName = dict!["intentName"] as! String
+            let parameters = dict!["parameters"] as? NSDictionary
+            
+            
+            print("1.\n",responseMessage)
+            print("2.\n",intentName)
+            //print("3.\n",parameters["SMOOTHIE_NAME"])
+            
+            self.checkAndDeleteContext()
+            handler(responseMessage, intentName, parameters)
+        }
+        
+        //실행
+        task.resume()
+        
+    }
+    
+    func checkAndDeleteContext(){
+       
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/vendor/context_delete.php")! as URL)
+        request.httpMethod = "POST"
+        
+        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
+        let task = URLSession.shared.dataTask(with: request as URLRequest) {
+            data, response, error in
+            
+            print("response = \(response!)")
+            
+            /* php server에서 echo한 내용들이 담김 */
+            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+            print("responseString = \(responseString!)")
+            
+        }
+        
+        //실행
+        task.resume()
+        
+    }
+    
+    
+    func getSimilarEntityHandler(_ response: NSString, _ textResponse: String, _ helpText: String){
+        
+        /* 유사한 단어가 없을 경우 */
+        if(response == ""){
+            self.speechAndText(textResponse)
+            self.checkSimilarEntityIsGet = true
+            /* 있을 경우 */
+        }else{
+            self.speechAndText("\(response)\(helpText)가 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
+            self.checkSimilarEntityIsGet = true
+            self.similarEntity = response
+            DispatchQueue.main.async{
+                self.select_Btn.isHidden = false
+            }
+            // Voiceover 포커스를 select_Btn으로 바꿈
+            UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.select_Btn)
+        }
+        
+    }
     
 }
