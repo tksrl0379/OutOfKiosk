@@ -663,12 +663,14 @@ class DialogFlowPopUpController: UIViewController{
         
         
         /* 오디오 설정: 이 코드를 넣어줘야 실제 디바이스에서 TTS가 정상적으로 작동 */
-        /* 블루투스 설정 : 음성주문이 블루투스에서도 사용 가능하도록 하게 하기*/
+        
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: .defaultToSpeaker)//.setCategory(AVAudioSession.Category.record)
             try audioSession.setMode(AVAudioSession.Mode.default)
-            try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: AVAudioSession.CategoryOptions.allowBluetoothA2DP)
+            
+        /*블루투스 설정 : 음성주문이 블루투스에서도 사용 가능하도록 하게 하기*/
+//            try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: AVAudioSession.CategoryOptions.allowBluetoothA2DP)
             
         }catch{
             print("error")
