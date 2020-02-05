@@ -117,7 +117,7 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(DetailMenuController.buttonAction(_:)))
         addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로"
         
         
         ProductTableView.delegate = self
