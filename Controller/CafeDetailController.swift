@@ -29,6 +29,9 @@ class CafeDetailController : UIViewController{
     /* DialogFlow 로 주문하기 버튼 */
     @IBOutlet weak var orderMenuByAI_Btn: UIButton!
     
+    /* 리뷰로 넘어가는 버튼 */
+    @IBOutlet weak var reviewBtn: UIButton!
+    
     /* 챗봇으로 주문할 때마다 숫자 증가*/
     @IBOutlet weak var shoppingBasket_Btn: UIButton!
     
@@ -71,27 +74,9 @@ class CafeDetailController : UIViewController{
             
             (willgetCategroyName,willgetCategroyPrice) in
             
-            /* 나중에 함수로 변환하기 => 여기서 즐겨찾기 한 목록의 이름과 비교하여 맞으면*/
-//            var willgetFavoriteTag : Array<String> = []
-//            let ad = UIApplication.shared.delegate as? AppDelegate
-            
-            /* MxN으로 목록 이름과 즐겨찾기에(ad) 저장된 이름을 비교한다.*/
-            
-            /*for i in 0..<willgetCategroyName.count{
-                for j in 0..<ad!.menuFavoriteArray.count{
-                    if willgetCategroyName[i] == ad!.menuFavoriteArray[j] {
-                        willgetFavoriteTag.append("즐겨찾기 이미 추가됨")
-                    }else{
-                        willgetFavoriteTag.append("즐겨찾기 추가")
-                    }
-                }
-            }*/
-            
-            //
-            
             rvc.willgetCategroyName = willgetCategroyName
             rvc.willgetCategroyPrice = willgetCategroyPrice
-//            rvc.willgetFavoriteTag = willgetFavoriteTag
+
             self.navigationController?.pushViewController(rvc, animated: true)
         }
         
@@ -127,7 +112,6 @@ class CafeDetailController : UIViewController{
             if count != 0 {
                 guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingBasketController") as? ShoppingBasketController else {
                     return}
-                //rvc.willGetShoppingBasket_Btn = shoppingBasket_Btn
                 
                 
                 self.navigationController?.pushViewController(rvc, animated: true)
@@ -250,46 +234,54 @@ class CafeDetailController : UIViewController{
     @IBOutlet weak var secondMenu_Btn: UIButton!
     
     
-    override func viewDidAppear(_ animated: Bool) {
-        
-        let ad = UIApplication.shared.delegate as? AppDelegate
-        shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
-        shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
-        
-        
-    }
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-
-        //let ad = UIApplication.shared.delegate as? AppDelegate
-        
-        //shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
-        
+         
         
         /* backButton 커스터마이징 */
-        let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(CafeDetailController.buttonAction(_:)))
-        addButton.tintColor = UIColor.black
+        let backBtn = UIButton(type: .custom)
+        backBtn.frame = CGRect(x: 0.0, y: 0.0, width: 24, height: 24)
+        backBtn.setImage(UIImage(named:"left_image"), for: .normal)
+        backBtn.addTarget(self, action: #selector(FavoriteMenuController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
+        
+        
+        let addButton = UIBarButtonItem(customView: backBtn)
+        let currWidth = addButton.customView?.widthAnchor.constraint(equalToConstant: 24)
+        currWidth?.isActive = true
+        let currHeight = addButton.customView?.heightAnchor.constraint(equalToConstant: 24)
+        currHeight?.isActive = true
+        
+        //addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        //self.navigationItem.leftBarButtonItem?.isAccessibilityElement = true
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
-        //self.navigationItem.leftBarButtonItem?.accessibilityTraits = .none
+        
+        ///////
+        self.orderMenuByAI_Btn.imageView?.contentMode = .scaleAspectFit
+        self.orderMenuByAI_Btn.imageEdgeInsets = UIEdgeInsets(top: 70,left: 70,bottom: 70,right: 70)
+        self.orderMenuByAI_Btn.frame = CGRect(x: -37, y: 99, width: 180, height: 90)
+        orderMenuByAI_Btn.setTitle("                음성주문", for: .normal)
+       
+        
         
         
         storeName_Label.text = "스타벅스"
         
         /* 테두리 만들기 */
-        border_View.layer.borderWidth = 0.4
+        border_View.layer.borderWidth = 0.5
         border_View.layer.borderColor = UIColor.gray.cgColor
         
-        border2_View.layer.borderWidth = 0.4
+        border2_View.layer.borderWidth = 0.5
         border2_View.layer.borderColor = UIColor.gray.cgColor
         
         /* 테두리 둥글게 만들기 */
         firstMenu_Btn.layer.cornerRadius = 5
+        firstMenu_Btn.layer.borderWidth = 0.2
+        firstMenu_Btn.layer.borderColor = UIColor.gray.cgColor
+        
         secondMenu_Btn.layer.cornerRadius = 5
+        secondMenu_Btn.layer.borderWidth = 0.2
+        secondMenu_Btn.layer.borderColor = UIColor.gray.cgColor
+        
         shoppingBasket_Btn.layer.cornerRadius = 5
         
         /* 접근성 */
@@ -329,6 +321,26 @@ class CafeDetailController : UIViewController{
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        /* navigationbar 투명 설정 */
+        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController!.navigationBar.shadowImage = UIImage()
+        //self.navigationController!.navigationBar.isTranslucent = true
+        
+        let ad = UIApplication.shared.delegate as? AppDelegate
+        shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
+        shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
+        
+        
+        
+    }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        /* navigationbar 투명 설정 */
+        self.navigationController!.navigationBar.setBackgroundImage(nil, for: .default)
+        self.navigationController!.navigationBar.shadowImage = nil
+        
+    }
     
 }

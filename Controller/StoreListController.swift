@@ -15,7 +15,7 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
     
     @IBOutlet weak var CafeTableView: UITableView!
     
-    var storeName = ["카페그리닝", "이디야커피", "스타벅스"]
+    var storeName = ["스타벅스", "역전우동"]
     
    
     /* Cell 반복 횟수 관리 */
@@ -56,7 +56,6 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
         : instantiateViewController를 통해 생성된 객체는 UIViewController타입이기 때문에 StoreDetailController 타입으로 다운캐스팅. */
         let vc = self.storyboard?.instantiateViewController(identifier: "CafeDetailController") as! CafeDetailController
         vc.receivedValueFromBeforeVC = indexPath.row
-        //print(indexPath.row)
         
         /* StoreDetailController 로 화면 전환 */
         //self.present(vc, animated: true, completion: nil) // present 방식
@@ -69,24 +68,43 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
       self.navigationController?.popViewController(animated: true)
     }
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
         /* backButton 커스터마이징 */
-        let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(StoreListController.buttonAction(_:)))
-        addButton.tintColor = UIColor.black
+        let backBtn = UIButton(type: .custom)
+        backBtn.frame = CGRect(x: 0.0, y: 0.0, width: 24, height: 24)
+        backBtn.setImage(UIImage(named:"left_image"), for: .normal)
+        backBtn.addTarget(self, action: #selector(FavoriteMenuController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
+        
+        
+        let addButton = UIBarButtonItem(customView: backBtn)
+        let currWidth = addButton.customView?.widthAnchor.constraint(equalToConstant: 24)
+        currWidth?.isActive = true
+        let currHeight = addButton.customView?.heightAnchor.constraint(equalToConstant: 24)
+        currHeight?.isActive = true
+        
+        //addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        //self.navigationItem.leftBarButtonItem?.isAccessibilityElement = true
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
-        //self.navigationItem.leftBarButtonItem?.accessibilityTraits = .none
         
         /* TableView의 대리자(delegate)는 self(StoreListController)가 됨 */
         CafeTableView.delegate = self
         CafeTableView.dataSource = self
-        self.CafeTableView.rowHeight = 93.0
+        self.CafeTableView.rowHeight = 100
         
        
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.topItem?.title = "가게"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "NanumSquare", size: 20)!]
+        self.navigationController?.navigationBar.topItem?.accessibilityLabel = "가게 선택 메뉴입니다"
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.topItem?.title = "가게"
     }
     
     

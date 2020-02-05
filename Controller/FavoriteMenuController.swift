@@ -114,8 +114,11 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
         self.navigationController?.popViewController(animated: true)
     }
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         /* Delegate 위임하지 않으면 절대로 표출되지 않는다.
          dataSource = DataSource는 데이터를 받아 뷰를 그려주는 역할
@@ -127,14 +130,40 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
         FavoriteMenuTableView.dataSource=self
         self.FavoriteMenuTableView.rowHeight = 100.0
         
-        
         /* backButton 커스터마이징 */
-        let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(FavoriteMenuController.buttonAction(_:)))
-        addButton.tintColor = UIColor.black
+        let backBtn = UIButton(type: .custom)
+        backBtn.frame = CGRect(x: 0.0, y: 0.0, width: 24, height: 24)
+        backBtn.setImage(UIImage(named:"left_image"), for: .normal)
+        backBtn.addTarget(self, action: #selector(FavoriteMenuController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
+        
+        
+        let addButton = UIBarButtonItem(customView: backBtn)
+        let currWidth = addButton.customView?.widthAnchor.constraint(equalToConstant: 24)
+        currWidth?.isActive = true
+        let currHeight = addButton.customView?.heightAnchor.constraint(equalToConstant: 24)
+        currHeight?.isActive = true
+        
+        
+        
+        //addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
         
+        
+        
     }
+
+    
+    override func viewWillAppear(_ animated: Bool) {
+        //self.navigationController?.navigationBar.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 80.0)
+        
+        self.navigationController?.navigationBar.topItem?.title = "즐겨찾기"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "NanumSquare", size: 20)!]
+        self.navigationController?.navigationBar.topItem?.accessibilityLabel = "즐겨찾기 메뉴입니다"
+        
+    }
+    
+    
     
     
     
