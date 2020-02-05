@@ -114,10 +114,23 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
         
         /* backButton 커스터마이징 */
-        let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(DetailMenuController.buttonAction(_:)))
-        addButton.tintColor = UIColor.black
+        let backBtn = UIButton(type: .custom)
+        backBtn.frame = CGRect(x: 0.0, y: 0.0, width: 24, height: 24)
+        backBtn.setImage(UIImage(named:"left_image"), for: .normal)
+        backBtn.addTarget(self, action: #selector(FavoriteMenuController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
+        
+        
+        let addButton = UIBarButtonItem(customView: backBtn)
+        let currWidth = addButton.customView?.widthAnchor.constraint(equalToConstant: 24)
+        currWidth?.isActive = true
+        let currHeight = addButton.customView?.heightAnchor.constraint(equalToConstant: 24)
+        currHeight?.isActive = true
+        
+        
+        
+        //addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
         
         
         ProductTableView.delegate = self
@@ -141,12 +154,20 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
             for favoriteMenuName in favoriteMenuArray{
                 if(productName == favoriteMenuName){
 //                    print("match!!", productName, favoriteMenuName)
-                    favoriteTag[willgetCategroyName.firstIndex(of: productName)!] = "이미 찜!"
+                    favoriteTag[willgetCategroyName.firstIndex(of: productName)!] = "즐겨찾기 됨!"
                     break
                 }
             }
         }
         
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        /* navigationbar 투명 설정 */
+        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController!.navigationBar.shadowImage = UIImage()
         
     }
     

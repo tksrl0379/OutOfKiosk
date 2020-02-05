@@ -27,6 +27,7 @@ class MainController : UIViewController{
     @IBOutlet weak var purchaseCount_Label: UILabel!
     @IBOutlet weak var grade_Label: UILabel!
     
+
     
     
     override func viewDidLoad() {
@@ -36,9 +37,16 @@ class MainController : UIViewController{
         //        self.tabBarController?.viewControllers?.remove(at: 0)
         
         /* navigationbar 투명 설정 */
-        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController!.navigationBar.shadowImage = UIImage()
-        self.navigationController!.navigationBar.isTranslucent = true
+        //self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        //self.navigationController!.navigationBar.shadowImage = UIImage()
+        //self.navigationController!.navigationBar.isTranslucent = true
+        
+        self.navigationController!.navigationBar.setBackgroundImage(nil, for: .default)
+        self.navigationController?.navigationBar.layer.shadowColor = UIColor.black.cgColor
+        self.navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 0.0, height: 0.6)
+        self.navigationController?.navigationBar.layer.shadowRadius = 4
+        self.navigationController?.navigationBar.layer.shadowOpacity = 0.3
+        self.navigationController?.navigationBar.layer.masksToBounds = false
         
         
         title_View.layer.shadowColor = UIColor.black.cgColor
@@ -86,7 +94,11 @@ class MainController : UIViewController{
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
+        
+        self.navigationController!.isNavigationBarHidden = true
+
+        
         self.getPurchaseCount(){
             responseString in
             DispatchQueue.main.async {
@@ -104,9 +116,14 @@ class MainController : UIViewController{
     }
     
     
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController!.isNavigationBarHidden = false
+    }
+    
+    
     @objc func animateProgress() {
         let cP = self.view.viewWithTag(101) as! CircularProgressView
-        cP.setProgressWithAnimation(duration: 0.7, value: self.purchaseCount)
+        cP.setProgressWithAnimation(duration: 0.4, value: self.purchaseCount)
         
     }
     
