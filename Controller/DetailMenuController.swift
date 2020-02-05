@@ -82,7 +82,7 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
             favoriteMenuArray.append(self.willgetCategroyName[indexPath.row])
             print("favorite menu : ", favoriteMenuArray,"\n") //print test
             UserDefaults.standard.set(favoriteMenuArray, forKey: "favoriteMenuArray")
-            self.favoriteTag[indexPath.row] = "이미 찜!"
+            self.favoriteTag[indexPath.row] = "즐겨찾기 됨"
             self.ProductTableView.reloadRows(at: [indexPath], with: .automatic)
             
         }

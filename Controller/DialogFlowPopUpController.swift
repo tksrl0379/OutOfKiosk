@@ -236,7 +236,6 @@ class DialogFlowPopUpController: UIViewController{
             }
         }
         
-        //        AVAudioSession.CategoryOptions.allowBluetooth
         
         /* 응답 읽기(TTS) */
         let speechUtterance = AVSpeechUtterance(string: textResponse)
@@ -529,7 +528,9 @@ class DialogFlowPopUpController: UIViewController{
                                     
                                     /* 2-2-4 일반적인 경우 */
                                 }else{
-                                    self.select_Btn.isHidden = true
+                                    DispatchQueue.main.async {
+                                        self.select_Btn.isHidden = true
+                                    }                                    
                                     self.speechAndText(textResponse)
                                     print("일반")
                                     // 질문이 반복되는지 감지하기 위해
@@ -627,14 +628,10 @@ class DialogFlowPopUpController: UIViewController{
         
         
         /* 오디오 설정: 이 코드를 넣어줘야 실제 디바이스에서 TTS가 정상적으로 작동 */
-        
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: .defaultToSpeaker)//.setCategory(AVAudioSession.Category.record)
             try audioSession.setMode(AVAudioSession.Mode.default)
-            
-        /*블루투스 설정 : 음성주문이 블루투스에서도 사용 가능하도록 하게 하기*/
-//            try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: AVAudioSession.CategoryOptions.allowBluetoothA2DP)
             
         }catch{
             print("error")

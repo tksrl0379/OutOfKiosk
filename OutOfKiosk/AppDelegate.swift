@@ -31,9 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         /*ApiAi를 사용하여, 구글 다이얼로그플로우의 토큰을 받는 과정이다. 초기설정.*/
-        let configuration = AIDefaultConfiguration()
+        /*let configuration = AIDefaultConfiguration()
         configuration.clientAccessToken = "d94411c80a7e46b7bcac2efb46698353"
-        
+        */
         
         
         return true
