@@ -14,14 +14,15 @@ import UIKit
 import Alamofire
 
 /* 가게 접속하면 뜨는 메인 화면 */
-class CafeDetailController : UIViewController{
+class StoreDetailController : UIViewController{
+    
+    /* 가게 상세 정보 관련 변수들 */
+    var storeName: String?
+    var storeMenuNameArray: Array<String> = [String](repeating: "0", count: 6)
     
     /* voiceover 접근성 전용 */
     @IBOutlet weak var menu_Label: UILabel!
-    
     @IBOutlet weak var storeName_Label: UILabel!
-    
-    var receivedValueFromBeforeVC : Int?
     
     /* php 카테고리별 메뉴 데이터를 가져와서 appDelegate에 속한지 비교 후 T/F값을 전달하는 배열.*/
     var willgetFavoriteTag : Array<String> = []
@@ -32,25 +33,31 @@ class CafeDetailController : UIViewController{
     /* 리뷰로 넘어가는 버튼 */
     @IBOutlet weak var reviewBtn: UIButton!
     
+    /* 메뉴 버튼 관련 변수들 */
+    @IBOutlet weak var firstMenu_Btn: UIButton!
+    @IBOutlet weak var secondMenu_Btn: UIButton!
+    
+    /* 경계선 UI 관련 변수들 */
+    @IBOutlet weak var border_View: UIView!
+    @IBOutlet weak var border2_View: UIView!
+    
     /* 챗봇으로 주문할 때마다 숫자 증가*/
     @IBOutlet weak var shoppingBasket_Btn: UIButton!
     
     /* DialogFlowPopUpController로 넘어감 */
     @IBAction func orderMenuByAI_Btn(_ sender: Any) {
-        /* 영민이 버젼 코드.
-         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-         let vc = storyBoard.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as! DialogFlowPopUpController
-         
-         vc.modalPresentationStyle = .pageSheet
-         self.present(vc, animated: true, completion: nil)
-         */
-        
         
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as? DialogFlowPopUpController else {
             return}
         
-        //rvc.willGetShoppingBasket_Btn = shoppingBasket_Btn
-//        rvc.
+        self.navigationController?.pushViewController(rvc, animated: true)
+    }
+    
+    
+    @IBAction func reviewMenu_Btn(_ sender: Any) {
+        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ReviewController") as? ReviewController else {
+                   return}
+               
         self.navigationController?.pushViewController(rvc, animated: true)
     }
     
@@ -62,7 +69,7 @@ class CafeDetailController : UIViewController{
      프라푸치노에 관련된 메뉴로 전환. mysql php 통신을 통해
      phpGetData() 함수를 통해 DetailMenuController 에 메뉴에 대한 value를 Array type에 담아서 전송.
      */
-    @IBAction func frapuccino_Btn(_ sender: Any) {
+    @IBAction func firstMenu_Btn(_ sender: Any) {
         
         //rvc 가 옵셔널 타입이므로 guard 구문을 통해서 옵셔널 바인딩 처리
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController") as? DetailMenuController else {
@@ -70,7 +77,7 @@ class CafeDetailController : UIViewController{
             return}
         
         /* phpGetData는 Escaping closure 사용. 따라서 phpGetData 실행 후 대괄호 안의 코드 실행 */
-        phpGetData(5){ //1은 frapuccino의 대한 카테코리 넘버.
+        phpGetData(1){ //1은 frapuccino의 대한 카테코리 넘버.
             
             (willgetCategroyName,willgetCategroyPrice) in
             
@@ -82,14 +89,15 @@ class CafeDetailController : UIViewController{
         
     }
     
-    @IBAction func smoothie_Btn(_ sender: Any) {
+    
+    @IBAction func secondMenu_Btn(_ sender: Any) {
         
         //rvc 가 옵셔널 타입이므로 guard 구문을 통해서 옵셔널 바인딩 처리
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController") as? DetailMenuController else {
             //아니면 종료
             return}
         
-        phpGetData(7){ //7은 smoothie의 대한 카테코리 넘버이다.
+        phpGetData(2){ // 6은 smoothie의 대한 카테코리 넘버이다.
             
             (willgetCategroyName,willgetCategroyPrice) in
             
@@ -227,22 +235,26 @@ class CafeDetailController : UIViewController{
       self.navigationController?.popViewController(animated: true)
     }
     
-    @IBOutlet weak var border_View: UIView!
-    @IBOutlet weak var border2_View: UIView!
     
-    @IBOutlet weak var firstMenu_Btn: UIButton!
-    @IBOutlet weak var secondMenu_Btn: UIButton!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-         
+        
+        print(self.storeMenuNameArray)
+        /* 가게 상세 정보 설정 */
+        storeName_Label.text = storeName
+        firstMenu_Btn.setTitle(self.storeMenuNameArray[0], for: .normal)
+        secondMenu_Btn.setTitle(self.storeMenuNameArray[1], for: .normal)
+        
+        
+        
         
         /* backButton 커스터마이징 */
         let backBtn = UIButton(type: .custom)
         backBtn.frame = CGRect(x: 0.0, y: 0.0, width: 24, height: 24)
         backBtn.setImage(UIImage(named:"left_image"), for: .normal)
-        backBtn.addTarget(self, action: #selector(FavoriteMenuController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
+        backBtn.addTarget(self, action: #selector(StoreDetailController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
         
         
         let addButton = UIBarButtonItem(customView: backBtn)
@@ -262,9 +274,6 @@ class CafeDetailController : UIViewController{
         orderMenuByAI_Btn.setTitle("                음성주문", for: .normal)
        
         
-        
-        
-        storeName_Label.text = "스타벅스"
         
         /* 테두리 만들기 */
         border_View.layer.borderWidth = 0.5
@@ -290,34 +299,6 @@ class CafeDetailController : UIViewController{
         
         
         
-        //let img = UIImage(named: "left")
-        
-        //orderMenuByAI_Btn.setImage(img, for: .normal)
-        //orderMenuByAI_Btn.setTitle("음성 주문", for: .normal)
-        
-        
-        //print(receivedValueFromBeforeVC)
-        //        test_Text.text = String(receivedValueFromBeforeVC!)
-        
-        
-        
-        /*ORIGINAL : DialogFlow 팝업창 띄우기
-         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-         let vc = storyBoard.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as! DialogFlowPopUpController
-         
-         /*블러 효과 주는 이펙트
-         let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.light)
-         let blurEffectView = UIVisualEffectView(effect: blurEffect)
-         blurEffectView.frame = view.bounds
-         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-         view.addSubview(blurEffectView)
-         vc.blurEffectView = blurEffectView
-         vc.view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
-         */
-         vc.modalPresentationStyle = .pageSheet
-         self.present(vc, animated: true, completion: nil)
-         
-         */
         
     }
     
@@ -329,12 +310,27 @@ class CafeDetailController : UIViewController{
         //self.navigationController!.navigationBar.isTranslucent = true
         
         let ad = UIApplication.shared.delegate as? AppDelegate
+        
+//        ad?.numOfProducts = 1
+//        ad?.menuNameArray = ["모카스무디"]
+//        ad?.menuSizeArray = ["스몰"]
+//        ad?.menuCountArray = [3]
+//        ad?.menuEachPriceArray = [5300]
+//        ad?.menuSugarContent = ["40%"]
+//        ad?.menuIsWhippedCream = ["NULL"]
+        
         shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
         shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
         
-        
-        
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        let ad = UIApplication.shared.delegate as? AppDelegate
+        
+        shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
+        shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
+    }
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         /* navigationbar 투명 설정 */

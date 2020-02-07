@@ -271,6 +271,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
          */
         let ad = UIApplication.shared.delegate as? AppDelegate
         
+        
         if let numOfProducts = ad?.numOfProducts{
             shoppingBasket_numOfProducts = numOfProducts
         }

@@ -12,9 +12,6 @@ import UIKit
 
 class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableViewDataSource{
     
-    
-    //    var willgetFavoriteMenuName = Array<String>!
-    
     //각 유저가 즐겨찾기한 목록의 item을 Array들을 여기에 넣을 것이다.
     var willgetFavoriteMenuName = [""]
     

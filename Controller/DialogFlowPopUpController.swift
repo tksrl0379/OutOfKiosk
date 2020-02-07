@@ -612,7 +612,7 @@ class DialogFlowPopUpController: UIViewController{
         let backBtn = UIButton(type: .custom)
         backBtn.frame = CGRect(x: 0.0, y: 0.0, width: 24, height: 24)
         backBtn.setImage(UIImage(named:"left_image"), for: .normal)
-        backBtn.addTarget(self, action: #selector(FavoriteMenuController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
+        backBtn.addTarget(self, action: #selector(DialogFlowPopUpController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
         
         
         let addButton = UIBarButtonItem(customView: backBtn)
