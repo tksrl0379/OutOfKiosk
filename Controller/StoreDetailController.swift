@@ -18,6 +18,7 @@ class StoreDetailController : UIViewController{
     
     /* 가게 상세 정보 관련 변수들 */
     var storeName: String?
+    var storeEnName : String?
     var storeMenuNameArray: Array<String> = [String](repeating: "0", count: 6)
     
     /* voiceover 접근성 전용 */
@@ -179,7 +180,8 @@ class StoreDetailController : UIViewController{
     func phpGetData(_ category : Int, handler: @escaping (Array<String>,Array<Int>)->Void ){
         
         let parameter: Parameters=[
-            "category":category
+            "category":category,
+            "storeName":storeEnName!
         ]
         
         let URL_GET_PRODUCT = "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/detailMenu/api/category.php"

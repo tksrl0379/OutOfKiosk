@@ -12,8 +12,15 @@ import UIKit
 
 class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableViewDataSource{
     
+    
+    //    var willgetFavoriteMenuName = Array<String>!
+    
     //각 유저가 즐겨찾기한 목록의 item을 Array들을 여기에 넣을 것이다.
     var willgetFavoriteMenuName = [""]
+    
+    
+    @IBOutlet weak var shoppingBasket_Btn: UIButton!
+    
     
     @IBOutlet weak var FavoriteMenuTableView: UITableView!
     
@@ -104,6 +111,49 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
         
     }
     
+    /* 장바구니 기능 */
+    @IBAction func shoppingList_Btn(_ sender: Any) {
+        
+        /* 주문한 정보가 몇개인지를 알아서 0개일시 주문을 먼저 하라는 메시지를 보내기 위한 기능*/
+        let ad = UIApplication.shared.delegate as? AppDelegate
+        
+        if let count = ad?.numOfProducts{
+            if count != 0 {
+                guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingBasketController") as? ShoppingBasketController else {
+                    return}
+                self.navigationController?.pushViewController(rvc, animated: true)
+            }else{
+                /* 들어갈 기능 = message alert 혹은 팝업 cotroller를 뛰운다*/
+                self.alertMessage(" ","장바구니가 비어있어요")
+            }
+            
+        }
+        
+    }
+    
+    
+    
+    /* 장바구니가 비어있을 시 경고 메시지 함수*/
+    func alertMessage(_ title: String, _ description: String){
+        
+        /* Alert는 MainThread에서 실행해야 함 */
+        DispatchQueue.main.async{
+            
+            /* Alert message 설정 */
+            let alert = UIAlertController(title: title, message: description, preferredStyle: UIAlertController.Style.alert)
+            
+            /* 버튼 설정 및 추가*/
+            let defaultAction = UIAlertAction(title: "확인", style: .destructive) { (action) in
+                
+            }
+            alert.addAction(defaultAction)
+
+            
+            /* Alert Message 띄우기 */
+            self.present(alert, animated: false, completion: nil)
+        }
+    }
+    
     
     
 
@@ -157,6 +207,17 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
         self.navigationController?.navigationBar.topItem?.title = "즐겨찾기"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "NanumSquare", size: 20)!]
         self.navigationController?.navigationBar.topItem?.accessibilityLabel = "즐겨찾기 메뉴입니다"
+        
+        let ad = UIApplication.shared.delegate as? AppDelegate
+        shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
+        shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        let ad = UIApplication.shared.delegate as? AppDelegate
+        shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
+        shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
         
     }
     

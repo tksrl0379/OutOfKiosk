@@ -56,7 +56,7 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
             responseString in
             print(responseString)
             rvc.storeName = self.storeNameArray[indexPath.row]
-            
+            rvc.storeEnName = self.storeEnNameArray[indexPath.row]
             
             guard let dict = self.convertStringToDictionary(text: responseString) else {return}
             for i in 0..<dict.count{

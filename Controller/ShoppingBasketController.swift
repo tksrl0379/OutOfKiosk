@@ -41,7 +41,11 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     
     /* 주문하기, 삭제하기 UI oultet*/
     @IBOutlet weak var orderItems_Btn: UIButton!
-//    @IBOutlet weak var deleteShoppingBasketProduct_Btn: UIButton!
+    
+    
+    
+    
+    //    @IBOutlet weak var deleteShoppingBasketProduct_Btn: UIButton!
     
     /* 주문을 하면서 CafeDetailController의 UIBtn을 초기화 해주어야한다.*/
     var willGetShoppingBasket_Btn : UIButton!
@@ -56,6 +60,8 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     var shoppingBasket_productSugarContent : Array<String>! = []//[3000,5000,4500]
     var shoppingBasket_productIsWhippedCream : Array<String>! = []//[3000,5000,4500]
     
+    var basketItemInfo : String = String() //이 곳에 제품에 대한 이름, 가격, 수량, 옵션 텍스트를 넣을것이다.
+    
     var totalPrice : Int = 0
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -67,17 +73,20 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ShoppingBasketTableView.dequeueReusableCell(withIdentifier: "ShoppingBasket", for: indexPath ) as! ShoppingBasket
         
-        cell.shoppingBasketProductName_Label.text = shoppingBasket_productName[indexPath.row]+" "+shoppingBasket_productSize[indexPath.row]
-        //cell.shoppingBasketProductSize_Label.text = shoppingBasket_productSize[indexPath.row]+"사이즈"
-        cell.shoppingBasketNumberOfProduct_Label.text =
-            String(shoppingBasket_productCount[indexPath.row])+"개"
-//        let stepper = UIStepper()
-        cell.shoppingBasketProductTotalPrice_Label.text =
-            String( shoppingBasket_productEachPrice[indexPath.row]*shoppingBasket_productCount[indexPath.row])+"원"
+        basketItemInfo = " " //다음 행의 Cell이 될 때마다 초기화를 시켜주어 재사용하게함.
         
         /* 주문하기 버튼 옆에 총액수 표현*/
-        
         totalPrice += shoppingBasket_productEachPrice[indexPath.row]*shoppingBasket_productCount[indexPath.row]
+        
+        /* BasketItemInfo_Label 에 적을 내용 한번에 담기.
+         메뉴이름은 시각장애인이 보기 편하도록 사이즈 =30, Bold Style로 함.
+         */
+        let productName = shoppingBasket_productName[indexPath.row]+" "+shoppingBasket_productSize[indexPath.row]+"\n"
+        let attrs = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 25)]
+        let attributedString = NSMutableAttributedString(string:productName, attributes:attrs as [NSAttributedString.Key : Any])
+        
+        /* 메뉴의 수량, 가격, 그리고 옵션을 보여주는 변수*/
+        var productInfo : String = String(shoppingBasket_productCount[indexPath.row])+"개"+"\t\t\t" + String(shoppingBasket_productEachPrice[indexPath.row]*shoppingBasket_productCount[indexPath.row])+"원"+"\n"
         
         orderItems_Btn.setTitle("주문하기 "+String(totalPrice)+"원", for: .normal)
         /* 접근성 */
@@ -85,28 +94,46 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         
         /* Stepper 초기값 */
         cell.shoppingBasketProductSize_Stepper.value = Double(shoppingBasket_productCount[indexPath.row])
-        
+      
         /* delete customizing*/
         cell.deleteShoppingBasket_Btn.layer.cornerRadius = 5
         
         /* option(당도 or 휘핑크림) 보여주기
-         NUll이면 hidden.
          */
         if (shoppingBasket_productSugarContent[indexPath.row] == "NULL") {
             if (shoppingBasket_productIsWhippedCream[indexPath.row] == "없이") {
-                cell.ProductSugar_Label.isHidden = true                
-                cell.ProductWhippedCream.text = "휘핑크림 추가 안함"
+                
+                productInfo += "휘핑크림 추가 안함"
             }else if(shoppingBasket_productIsWhippedCream[indexPath.row] == "올려서"){
-                cell.ProductSugar_Label.isHidden = true
-                cell.ProductWhippedCream.text = "휘핑크림 추가"
+                
+                productInfo += "휘핑크림 추가"
             }
             
         }else if (shoppingBasket_productIsWhippedCream[indexPath.row] == "NULL"){
-            cell.ProductWhippedCream.isHidden = true
-            cell.ProductSugar_Label.text = "당도 : " + String(shoppingBasket_productSugarContent[indexPath.row]) + "%"
+            
+            productInfo += "당도 : "+String(shoppingBasket_productSugarContent[indexPath.row]) + "%"
         }
         
+        /* 특정 글자 폰트 사이즈 조절.
+         폰트는 나눔스퀘어B로 기본 설정이 되었기 때문에 바꿀 필요없다.
+         */
+        let normalString = NSMutableAttributedString(string:productInfo)
+        attributedString.append(normalString)
         
+        
+        //행간 늘리는건 나중에
+         let paragraphStyle = NSMutableParagraphStyle()
+         paragraphStyle.lineSpacing = 9
+         attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attributedString.length))
+         
+        
+        /* 메뉴정보를 BasketItemInfo_Label에 저장 한다. 후에 출력 됨*/
+        cell.BasketItemInfo_Label.attributedText = attributedString
+        
+        cell.BasketItemInfo_Label.textAlignment = .center
+        
+        /* accessbilityElements를 이용하면 수량 증/감 버튼과 삭제하기 버튼을 순서로 정할 수 있다.*/
+        cell.accessibilityElements = [cell.BasketItemInfo_Label! , cell.shoppingBasketProductSize_Stepper!, cell.deleteShoppingBasket_Btn!]
         
         return cell
     }
@@ -120,15 +147,18 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         let point = sender.convert(CGPoint.zero, to: ShoppingBasketTableView)
         guard let indexPath = ShoppingBasketTableView.indexPathForRow(at: point)else{return}
         
-//        print(sender.value)
+        //        print(sender.value)
         
         let ad = UIApplication.shared.delegate as? AppDelegate
         shoppingBasket_productCount[indexPath.row] = Int(sender.value)
         ad?.menuCountArray[indexPath.row] = Int(sender.value)
         
         totalPrice = 0 //개수가 바뀔때마다 0으로 초기화
+        
+        basketItemInfo = " " //ItemInfo_label 초기화
+        
         ShoppingBasketTableView.reloadData()
-                
+        
     }
     
     
@@ -156,7 +186,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         
         let ad = UIApplication.shared.delegate as? AppDelegate
         ad?.numOfProducts -= 1
-//        self.willGetShoppingBasket_Btn.setTitle("장바구니 : " + String(ad!.numOfProducts) + " 개", for: .normal)
+        //        self.willGetShoppingBasket_Btn.setTitle("장바구니 : " + String(ad!.numOfProducts) + " 개", for: .normal)
         ad?.menuNameArray.remove(at: Int(indexPath.row))
         ad?.menuSizeArray.remove(at: Int(indexPath.row))
         ad?.menuCountArray.remove(at: Int(indexPath.row))
@@ -185,15 +215,15 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         let date = DateFormatter()
         date.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let currentDate = date.string(from: now)
-//        print(currentDate, type(of: currentDate))
+        //        print(currentDate, type(of: currentDate))
         
-            
+        
         
         for i in 0...shoppingBasket_numOfProducts-1 {
             /*if let userId = UserDefaults.standard.string(forKey: "id"){
-                
-                    print("My ID : ", userId , "type : ", type(of: userId))
-            }*/
+             
+             print("My ID : ", userId , "type : ", type(of: userId))
+             }*/
             
             let userId = UserDefaults.standard.string(forKey: "id")!
             
@@ -240,17 +270,19 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     }
     
     @objc func buttonAction(_ sender: UIBarButtonItem) {
-      self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
+        
+        
         /* UI : 버튼의 각을 줄인다*/
         orderItems_Btn.layer.cornerRadius = 5
-//        deleteShoppingBasketProduct_Btn
-//        deleteShoppingBasketProduct_Btn.layer.cornerRadius = 5
+        //        deleteShoppingBasketProduct_Btn
+        //        deleteShoppingBasketProduct_Btn.layer.cornerRadius = 5
         
         
         ShoppingBasketTableView.delegate=self
@@ -263,14 +295,11 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         self.navigationItem.leftBarButtonItem = addButton
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
         
-        
-        
-        
+                        
         /*
          Appdelegate를 사용하여, 챗봇을 통해 주문한 정보를 AppDelegate에서 불러오는 작업. 이후 각 Array에 넣어준다.
          */
         let ad = UIApplication.shared.delegate as? AppDelegate
-        
         
         if let numOfProducts = ad?.numOfProducts{
             shoppingBasket_numOfProducts = numOfProducts

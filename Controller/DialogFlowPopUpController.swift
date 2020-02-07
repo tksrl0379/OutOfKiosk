@@ -82,6 +82,21 @@ class DialogFlowPopUpController: UIViewController{
     private var sugar: String?
     private var whippedcream: String?
     
+    /* VoiceOver와 TTS 혼선 제어 변수들
+     popUp_Label : 맨 처음 보이스 오버 포커싱이 뒤로가기로 가지 않기위해 만든 라벨
+     이 라벨을 이용하여, 후에 유사도함수 이후 다시 뒤로가기로 포커싱가지 않기위해
+     이 라벨에 포커싱을 잡아줄 것임.
+     
+     popUpFlag : 유사도 확인용 플래그
+     유사도 질문에 대한 답으로 selectBtn을 누를 시, 보이스오버 기능 특성 상 읽을 수 있는 라벨에 자동으로 포커싱이 가기때문에
+     popUpMSG로 포커싱이 가는 시나리오에선 speechAndText에서 sleep을 1.5초를 지연시켜 TTS와 보이스오버의 중복이 없게 만든다.
+     */
+    
+    @IBOutlet weak var popUp_Label: UILabel!
+    
+    var popUpFlag : Bool = false
+    
+    
     /* Btn 관련 변수
      1. receivedMsg_Label: 챗봇을 통하여 답장을 받는 label(라벨)
      2. requestMsg_Label: 사용자의 목소리를 텍스트하여 보여지는 TextView
@@ -107,12 +122,20 @@ class DialogFlowPopUpController: UIViewController{
     private var audioEngine = AVAudioEngine()
     private var inputNode: AVAudioInputNode?
     
+    
+    
     @IBAction func select_Btn(_ sender: Any) {
         
         self.similarEntityIsOn = true
-        
         self.select_Btn.isHidden = true
+
+        /* 포커싱을 다시 popUp_Label로 보내주며 보이스오버가 읽을 때 자연스럽게 이어지기 위해
+         유사도 체크가 됨을 확인했다는 표시로 "확인"이라고 text를 바꿈*/
         
+        self.popUp_Label.text = "확인"
+        UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.popUp_Label)
+        popUpFlag = true
+                
     }
     /* 녹음 시작, 중단 버튼 시 이벤트 처리 */
     func StartStopAct() {
@@ -214,14 +237,19 @@ class DialogFlowPopUpController: UIViewController{
         }
         //실행
         task.resume()
+        
+        
     }
-    
-    
-    
     
     
     /* 응답 출력 및 읽기(TTS) */
     func speechAndText(_ textResponse: String) {
+        
+        /* selectBtn이 클릭되었을 경우, 보이스오버 혼선기능을 막기위해 2초 이후(보이스오버가 "확인"메시지를 읽는데까지 걸리는 시간) 함수기능 수행*/
+        if (popUpFlag == true){
+            sleep(2)
+            popUpFlag = false
+        }
         
         DispatchQueue.main.async {
             /* Dialogflow로부터 받은 응답 출력 */
@@ -369,9 +397,6 @@ class DialogFlowPopUpController: UIViewController{
                             self.sendMessage(request){
                                 textResponse, intentName, parameter in
                                 
-                                
-                                
-                                
                                 // 2-1. Dialogflow의 파라미터 값 받기
                                 let parameter_name = intentName + "_NAME"
                                 if let name = parameter?[parameter_name]{
@@ -451,7 +476,7 @@ class DialogFlowPopUpController: UIViewController{
                                         self.befResponse = textResponse
                                     }
                                     
-                                 // 2-2-2 장바구니에 담은 경우
+                                    // 2-2-2 장바구니에 담은 경우
                                 }else if(textResponse.contains("담았습니다.")){
                                     // Db - php 서버로부터 가격정보 받은 후 장바구니(ShoppingListViewController)로 전송하고,
                                     self.getPriceInfo(){
@@ -530,7 +555,7 @@ class DialogFlowPopUpController: UIViewController{
                                 }else{
                                     DispatchQueue.main.async {
                                         self.select_Btn.isHidden = true
-                                    }                                    
+                                    }
                                     self.speechAndText(textResponse)
                                     print("일반")
                                     // 질문이 반복되는지 감지하기 위해
@@ -602,6 +627,7 @@ class DialogFlowPopUpController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         /* ViewController가 작동중임을 표시*/
         viewIsRunning = true
         
@@ -612,7 +638,7 @@ class DialogFlowPopUpController: UIViewController{
         let backBtn = UIButton(type: .custom)
         backBtn.frame = CGRect(x: 0.0, y: 0.0, width: 24, height: 24)
         backBtn.setImage(UIImage(named:"left_image"), for: .normal)
-        backBtn.addTarget(self, action: #selector(DialogFlowPopUpController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
+        backBtn.addTarget(self, action: #selector(FavoriteMenuController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
         
         
         let addButton = UIBarButtonItem(customView: backBtn)
@@ -624,6 +650,7 @@ class DialogFlowPopUpController: UIViewController{
         //addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        
         
         
         /* Lottie animation 설정 */
@@ -694,7 +721,8 @@ class DialogFlowPopUpController: UIViewController{
         //실행
         task.resume()
         
-        
+        /* 실행과 동시에 보이스오버가 포커싱이 뒤로가기로 가지않기 위*/
+        UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.popUp_Label)
         
     }
     
@@ -755,7 +783,7 @@ class DialogFlowPopUpController: UIViewController{
     
     
     func sendMessage(_ message: String?, handler: @escaping(_ textResponse : String, _ intentName : String, _ parameter : NSDictionary?)-> Void){
-       
+        
         let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/vendor/intent_query.php")! as URL)
         request.httpMethod = "POST"
         
@@ -794,7 +822,7 @@ class DialogFlowPopUpController: UIViewController{
     }
     
     func checkAndDeleteContext(){
-       
+        
         let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/vendor/context_delete.php")! as URL)
         request.httpMethod = "POST"
         
@@ -827,6 +855,7 @@ class DialogFlowPopUpController: UIViewController{
             self.speechAndText("\(response)\(helpText)가 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
             self.checkSimilarEntityIsGet = true
             self.similarEntity = response
+            
             DispatchQueue.main.async{
                 self.select_Btn.isHidden = false
             }
