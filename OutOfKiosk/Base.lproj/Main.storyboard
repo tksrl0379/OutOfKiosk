@@ -549,6 +549,41 @@
             </objects>
             <point key="canvasLocation" x="3484" y="777.66116941529242"/>
         </scene>
+        <!--Review Controller-->
+        <scene sceneID="fMP-dT-Udo">
+            <objects>
+                <viewController storyboardIdentifier="ReviewController" id="Mln-mK-312" customClass="ReviewController" customModule="OutOfKiosk" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="K8d-Op-nlO">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="EMS-kV-rfd">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="103" id="flb-gI-tkV">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="103"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="flb-gI-tkV" id="sPd-yu-hlS">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="103"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="lfH-bm-rjf"/>
+                    </view>
+                    <connections>
+                        <outlet property="reviewTableView" destination="EMS-kV-rfd" id="zO8-Bl-P34"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bro-9D-9ib" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4208.8000000000002" y="92.203898050974516"/>
+        </scene>
         <!--Store List Controller-->
         <scene sceneID="BWA-GH-ZUb">
             <objects>
@@ -583,9 +618,17 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uJt-P1-Ee6">
+                                                    <rect key="frame" x="278" y="40" width="75" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="NanumSquareB" family="NanumSquare" pointSize="18"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="storeCategory_Label" destination="uJt-P1-Ee6" id="a5Q-sc-8Tq"/>
                                             <outlet property="storeName_Label" destination="CeW-AJ-zGJ" id="H42-yg-0Il"/>
                                         </connections>
                                     </tableViewCell>
@@ -612,10 +655,10 @@
             </objects>
             <point key="canvasLocation" x="1253.5999999999999" y="92.203898050974516"/>
         </scene>
-        <!--Cafe Detail Controller-->
+        <!--Store Detail Controller-->
         <scene sceneID="XPq-qL-wMZ">
             <objects>
-                <viewController storyboardIdentifier="CafeDetailController" id="6xr-Jj-VDY" customClass="CafeDetailController" customModule="OutOfKiosk" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="StoreDetailController" id="6xr-Jj-VDY" customClass="StoreDetailController" customModule="OutOfKiosk" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="99A-pz-754">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -632,11 +675,11 @@
                                             <accessibilityTraits key="traits" none="YES"/>
                                         </accessibility>
                                         <fontDescription key="fontDescription" name="NanumSquareB" family="NanumSquare" pointSize="20"/>
-                                        <state key="normal" title="스무디">
+                                        <state key="normal" title="두번째">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="smoothie_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="bfG-XA-hsK"/>
+                                            <action selector="secondMenu_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="bfG-XA-hsK"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ah-qg-zRI">
@@ -647,11 +690,11 @@
                                             <accessibilityTraits key="traits" none="YES"/>
                                         </accessibility>
                                         <fontDescription key="fontDescription" name="NanumSquareB" family="NanumSquare" pointSize="20"/>
-                                        <state key="normal" title="프라푸치노">
+                                        <state key="normal" title="첫번째">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="frapuccino_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="NYq-MA-Gfg"/>
+                                            <action selector="firstMenu_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="NYq-MA-Gfg"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -723,6 +766,9 @@
                                 <state key="normal" title=" 리뷰하기" image="review">
                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </state>
+                                <connections>
+                                    <action selector="reviewMenu_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="35q-pC-MWA"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>

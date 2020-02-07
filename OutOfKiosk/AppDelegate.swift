@@ -24,6 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var menuSugarContent : Array<String> = []
     var menuIsWhippedCream : Array<String> = []
     
+    
+    
     /* 즐겨찾기된 menu를 저장하는 배열.*/
 //    var menuFavoriteArray: Array<String> = []
     
