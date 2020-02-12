@@ -10,19 +10,37 @@ import UIKit
 
 class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataSource{
     
+    var storeEnName : String?
+    var reviewUserId: Array<String>? = []
+    var reviewContents: Array<String>? = []
+    var reviewTime: Array<String>? = []
+    
     @IBOutlet weak var reviewTableView: UITableView!
     
     
-    
+    @IBAction func reviewWriteButton(_ sender: Any) {
+        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ReviewWriteController") as? ReviewWriteController else { return }
+        
+        rvc.storeEnName = self.storeEnName
+        self.navigationController?.pushViewController(rvc, animated: true)
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return reviewUserId!.count
 //        return willgetCategroyName.count
     }
     
+
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//         재사용할 수 있는 cell을 ProductTableView에 넣는다는 뜻. UITableViewCell을 반환하기 때문에 Storelist로 다운캐스팅
+//         재사용할 수 있는 cell을 ProductTableView에 넣는다는 뜻. UITableViewCell을 반환하기 때문에 Reviewlist로 다운캐스팅
+        
         let cell = reviewTableView.dequeueReusableCell(withIdentifier: "ReviewList", for: indexPath ) as! ReviewList
+        
+        cell.reviewUserId_Label.text = reviewUserId![indexPath.row] + "님"
+        cell.reviewContents_Label.text = reviewContents![indexPath.row]
+        cell.reviewTime_Label.text = reviewTime![indexPath.row]
+        
         
         
 
@@ -57,7 +75,7 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
         
         reviewTableView.delegate = self
         reviewTableView.dataSource = self
-        self.reviewTableView.rowHeight = 100.0
+        self.reviewTableView.rowHeight = 174.0
         
     }
     

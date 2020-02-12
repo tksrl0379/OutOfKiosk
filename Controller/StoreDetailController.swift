@@ -56,10 +56,64 @@ class StoreDetailController : UIViewController{
     
     
     @IBAction func reviewMenu_Btn(_ sender: Any) {
+        var reviewUserId: Array<String>? = []
+        var reviewContents: Array<String>? = []
+        var reviewTime: Array<String>? = []
+        
+        
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ReviewController") as? ReviewController else {
                    return}
-               
-        self.navigationController?.pushViewController(rvc, animated: true)
+        rvc.storeEnName = self.storeEnName
+        phpGetReviewInfo(storeEnName!){
+            dict in
+            
+            for i in 1...dict.count{
+                let dict = dict[String(i)] as! NSDictionary
+                reviewUserId?.append(dict["userId"] as! String)
+                reviewContents?.append(dict["contents"] as! String)
+                reviewTime?.append(dict["time"] as! String)
+                
+            }
+        
+            rvc.reviewUserId = reviewUserId!
+            rvc.reviewContents = reviewContents!
+            rvc.reviewTime = reviewTime!
+            
+            DispatchQueue.main.async {
+                self.navigationController?.pushViewController(rvc, animated: true)
+            }
+        }
+        
+    }
+    
+    
+    func phpGetReviewInfo(_ storeEnName : String, handler: @escaping (_ dict : NSDictionary)->Void){
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/getReviewInfo.php")! as URL)
+        request.httpMethod = "POST"
+        
+        let postString = "storeEnName=\(storeEnName)"
+        
+        
+        request.httpBody = postString.data(using: String.Encoding.utf8)
+        
+        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
+        let task = URLSession.shared.dataTask(with: request as URLRequest) {
+            data, response, error in
+            
+            print("response = \(response!)")
+            
+            /* php server에서 echo한 내용들이 담김 */
+            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+            print("responseString = \(responseString!)")
+            
+            
+            guard let dict = self.convertStringToDictionary(text: responseString as! String) else {return}
+            
+            handler(dict)
+        }
+        
+        //실행
+        task.resume()
     }
     
     

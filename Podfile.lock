@@ -1,48 +1,24 @@
 PODS:
   - Alamofire (4.9.1)
-  - ApiAI (0.7.2):
-    - ApiAI/AudioFileConverter (= 0.7.2)
-    - ApiAI/Core (= 0.7.2)
-    - ApiAI/Events (= 0.7.2)
-    - ApiAI/ResponseMapping (= 0.7.2)
-    - ApiAI/UIKit (= 0.7.2)
-    - ApiAI/UserEntities (= 0.7.2)
-    - ApiAI/VoiceFileRequest (= 0.7.2)
-    - ApiAI/VoiceRequest (= 0.7.2)
-  - ApiAI/AudioFileConverter (0.7.2):
-    - ApiAI/Core
-  - ApiAI/Core (0.7.2)
-  - ApiAI/Events (0.7.2):
-    - ApiAI/Core
-  - ApiAI/ResponseMapping (0.7.2):
-    - ApiAI/Core
-  - ApiAI/UIKit (0.7.2):
-    - ApiAI/Core
-    - ApiAI/VoiceRequest
-  - ApiAI/UserEntities (0.7.2):
-    - ApiAI/Core
-  - ApiAI/VoiceFileRequest (0.7.2):
-    - ApiAI/Core
-  - ApiAI/VoiceRequest (0.7.2):
-    - ApiAI/Core
+  - FloatRatingView (4.0)
   - lottie-ios (3.1.5)
 
 DEPENDENCIES:
   - Alamofire (~> 4.3)
-  - ApiAI
+  - FloatRatingView (~> 4)
   - lottie-ios
 
 SPEC REPOS:
   trunk:
     - Alamofire
-    - ApiAI
+    - FloatRatingView
     - lottie-ios
 
 SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
-  ApiAI: d4b49d3736f33ce6f3ef66dc33c0e0fccb23579e
+  FloatRatingView: bb6bdddfbeec51b1d387b4bd50abc27b4dfccd48
   lottie-ios: 32bf84389337d86fbc8b12266e88452e0abf1dee
 
-PODFILE CHECKSUM: 1803ec811097e85c8faf914a8b0205928bd07629
+PODFILE CHECKSUM: c465de2e848762b0100afbfce62f6cf9c90af188
 
 COCOAPODS: 1.8.4

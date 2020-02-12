@@ -20,6 +20,8 @@
 		33259F5A23BB017400D44CB0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5823BB017400D44CB0 /* Main.storyboard */; };
 		33259F5C23BB017500D44CB0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5B23BB017500D44CB0 /* Assets.xcassets */; };
 		33259F5F23BB017500D44CB0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5D23BB017500D44CB0 /* LaunchScreen.storyboard */; };
+		335EAC9A23F3E66000071770 /* FloatRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335EAC9923F3E66000071770 /* FloatRatingView.swift */; };
+		335EAC9C23F3E72100071770 /* ReviewWriteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335EAC9B23F3E72100071770 /* ReviewWriteController.swift */; };
 		3386079223BF0D89003208AD /* DialogFlowPopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */; };
 		33D04E0423CEFA0E002FB5AE /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 33D04E0123CEFA0E002FB5AE /* loading.json */; };
 		33E1027A23EBA08900A2EB26 /* ReviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E1027923EBA08900A2EB26 /* ReviewController.swift */; };
@@ -52,6 +54,8 @@
 		33259F5B23BB017500D44CB0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		33259F5E23BB017500D44CB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33259F6023BB017500D44CB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		335EAC9923F3E66000071770 /* FloatRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatRatingView.swift; sourceTree = "<group>"; };
+		335EAC9B23F3E72100071770 /* ReviewWriteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewWriteController.swift; sourceTree = "<group>"; };
 		3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogFlowPopUpController.swift; sourceTree = "<group>"; };
 		33D04E0123CEFA0E002FB5AE /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		33E1027923EBA08900A2EB26 /* ReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewController.swift; sourceTree = "<group>"; };
@@ -89,6 +93,7 @@
 				3308429123BDE67700FCF4C0 /* StoreDetailController.swift */,
 				3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */,
 				33E1027923EBA08900A2EB26 /* ReviewController.swift */,
+				335EAC9B23F3E72100071770 /* ReviewWriteController.swift */,
 				FA0C2FC423C3192900598506 /* DetailMenuController.swift */,
 				FAC52D7423CD887200ADDD34 /* ShoppingBasketController.swift */,
 			);
@@ -138,6 +143,7 @@
 				33259F5D23BB017500D44CB0 /* LaunchScreen.storyboard */,
 				33259F6023BB017500D44CB0 /* Info.plist */,
 				33FEF51323E017ED00FF3D65 /* CircularProgressView.swift */,
+				335EAC9923F3E66000071770 /* FloatRatingView.swift */,
 			);
 			path = OutOfKiosk;
 			sourceTree = "<group>";
@@ -288,11 +294,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				33E1027A23EBA08900A2EB26 /* ReviewController.swift in Sources */,
+				335EAC9A23F3E66000071770 /* FloatRatingView.swift in Sources */,
 				3308428B23BD7F7300FCF4C0 /* SettingController.swift in Sources */,
 				3308428D23BD81B600FCF4C0 /* FavoriteMenuController.swift in Sources */,
 				3308428723BD72DF00FCF4C0 /* MainController.swift in Sources */,
 				FAC52D7723CD88C200ADDD34 /* ShoppingBasket.swift in Sources */,
 				FA0C2FC523C3192900598506 /* DetailMenuController.swift in Sources */,
+				335EAC9C23F3E72100071770 /* ReviewWriteController.swift in Sources */,
 				3308429023BDA18400FCF4C0 /* StoreList.swift in Sources */,
 				33259F5323BB017400D44CB0 /* AppDelegate.swift in Sources */,
 				3308428523BD72D400FCF4C0 /* LoginController.swift in Sources */,

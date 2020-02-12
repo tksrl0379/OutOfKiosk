@@ -39,11 +39,11 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         /* 재사용할 수 있는 cell을 ProductTableView에 넣는다는 뜻. UITableViewCell을 반환하기 때문에 Storelist로 다운캐스팅 */
         let cell = ProductTableView.dequeueReusableCell(withIdentifier: "ProductList", for: indexPath ) as! ProductList
-        
         cell.productName_Label.text = willgetCategroyName[indexPath.row]
         cell.productPrice_Label.text = String(willgetCategroyPrice[indexPath.row]) + "원"
         cell.productFavorite_Label.text = favoriteTag[indexPath.row]
         cell.addFavoriteItem_Btn.layer.cornerRadius = 5
+        
 
         return cell
     }
