@@ -13,10 +13,12 @@ class ReviewWriteController : UIViewController{
     var storeEnName: String?
     @IBOutlet weak var floatRatingView: FloatRatingView!
     @IBOutlet weak var reviewContents_TextField: UITextField!
+    @IBOutlet weak var reviewWrite_Btn: UIButton!
     
     @IBAction func ReviewWrite_Btn(_ sender: Any) {
+        let userId = UserDefaults.standard.string(forKey: "id")!
         guard let contents = self.reviewContents_TextField.text else {return}
-        phpSendReview(self.storeEnName!, self.floatRatingView.rating, contents){
+        phpSendReview(self.storeEnName!, userId, self.floatRatingView.rating, contents){
             response in
             print(response)
             
@@ -30,11 +32,11 @@ class ReviewWriteController : UIViewController{
     }
     
     
-    func phpSendReview(_ storeEnName : String, _ rating: Double, _ contents: String, handler: @escaping (_ response : String)->Void){
+    func phpSendReview(_ storeEnName : String, _ userId: String, _ rating: Double, _ contents: String, handler: @escaping (_ response : String)->Void){
         let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/sendReviewInfo.php")! as URL)
         request.httpMethod = "POST"
         
-        let postString = "storeEnName=\(storeEnName)&rating=\(rating)&contents=\(contents)"
+        let postString = "storeEnName=\(storeEnName)&userId=\(userId)&rating=\(rating)&contents=\(contents)"
         
         
         request.httpBody = postString.data(using: String.Encoding.utf8)
@@ -58,9 +60,36 @@ class ReviewWriteController : UIViewController{
         //실행
         task.resume()
     }
+    
+    @objc func buttonAction(_ sender: UIBarButtonItem) {
+      self.navigationController?.popViewController(animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        /* backButton 커스터마이징 */
+        let backBtn = UIButton(type: .custom)
+        backBtn.frame = CGRect(x: 0.0, y: 0.0, width: 24, height: 24)
+        backBtn.setImage(UIImage(named:"left_image"), for: .normal)
+        backBtn.addTarget(self, action: #selector(ReviewController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
+        
+        let addButton = UIBarButtonItem(customView: backBtn)
+        let currWidth = addButton.customView?.widthAnchor.constraint(equalToConstant: 24)
+        currWidth?.isActive = true
+        let currHeight = addButton.customView?.heightAnchor.constraint(equalToConstant: 24)
+        currHeight?.isActive = true
+        
+        self.navigationItem.leftBarButtonItem = addButton
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        
+        /* 테두리 둥글게 만들기 */
+        reviewWrite_Btn.layer.cornerRadius = 5
+        reviewWrite_Btn.layer.borderWidth = 0.2
+        reviewWrite_Btn.layer.borderColor = UIColor.gray.cgColor
+        
+        
+        // 별표 평점
         // Reset float rating view's background color
         floatRatingView.backgroundColor = UIColor.clear
 
@@ -70,10 +99,14 @@ class ReviewWriteController : UIViewController{
         floatRatingView.contentMode = UIView.ContentMode.scaleAspectFit
         floatRatingView.type = .halfRatings
         
-        
+        floatRatingView.editable = true
     }
     
-    
+    override func viewWillAppear(_ animated: Bool) {
+        /* navigationbar 투명 설정 */
+        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController!.navigationBar.shadowImage = UIImage()
+    }
     
 }
 

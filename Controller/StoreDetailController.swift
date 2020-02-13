@@ -56,33 +56,37 @@ class StoreDetailController : UIViewController{
     
     
     @IBAction func reviewMenu_Btn(_ sender: Any) {
-        var reviewUserId: Array<String>? = []
-        var reviewContents: Array<String>? = []
-        var reviewTime: Array<String>? = []
+//        var reviewUserId: Array<String>? = []
+//        var reviewContents: Array<String>? = []
+//        var reviewTime: Array<String>? = []
+//        var reviewRating: Array<Double>? = []
         
         
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ReviewController") as? ReviewController else {
                    return}
         rvc.storeEnName = self.storeEnName
-        phpGetReviewInfo(storeEnName!){
-            dict in
-            
-            for i in 1...dict.count{
-                let dict = dict[String(i)] as! NSDictionary
-                reviewUserId?.append(dict["userId"] as! String)
-                reviewContents?.append(dict["contents"] as! String)
-                reviewTime?.append(dict["time"] as! String)
-                
-            }
         
-            rvc.reviewUserId = reviewUserId!
-            rvc.reviewContents = reviewContents!
-            rvc.reviewTime = reviewTime!
+//        phpGetReviewInfo(storeEnName!){
+//            dict in
+//
+//            for i in 1...dict.count{
+//                let dict = dict[String(i)] as! NSDictionary
+//                reviewUserId?.append(dict["userId"] as! String)
+//                reviewContents?.append(dict["contents"] as! String)
+//                reviewTime?.append(dict["time"] as! String)
+//                reviewRating?.append(dict["rating"] as! Double)
+//
+//            }
+//
+//            rvc.reviewUserId = reviewUserId!
+//            rvc.reviewContents = reviewContents!
+//            rvc.reviewTime = reviewTime!
+//            rvc.reviewRating = reviewRating!
             
             DispatchQueue.main.async {
                 self.navigationController?.pushViewController(rvc, animated: true)
             }
-        }
+        //}
         
     }
     

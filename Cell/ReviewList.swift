@@ -15,5 +15,8 @@ class ReviewList : UITableViewCell {
     
     @IBOutlet weak var reviewTime_Label: UILabel!
     @IBOutlet weak var reviewContents_Label: UILabel!
+    @IBOutlet weak var floatRatingView: FloatRatingView!
+    
+    
 }
 
