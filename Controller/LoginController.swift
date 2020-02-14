@@ -34,15 +34,18 @@
 
 
 import UIKit
+//import CoreLocation
 
 
 /* 로그인, 회원가입 기능: php, mysql server와 통신하여 로그인, 회원가입 구현 */
-class LoginController: UIViewController, UITextFieldDelegate{
+class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationManagerDelegate{
     
     @IBOutlet weak var id_Textfield: UITextField!
     @IBOutlet weak var pwd_Textfield: UITextField!
     @IBOutlet weak var autoLogIn_Switch: UISwitch!
     @IBOutlet weak var login_Btn: UIButton!
+    
+//    var locationManager: CLLocationManager! //responsible for requesting location permission from users
     
     func alertMessage(_ title: String, _ description: String){
         
@@ -182,6 +185,12 @@ class LoginController: UIViewController, UITextFieldDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //         비콘 권한 설정하기
+//        locationManager = CLLocationManager()   // locationManager 초기화.
+//        locationManager.delegate = self // locationManager 초기화.
+//        locationManager.requestAlwaysAuthorization()    // 위치 권한 받아옴.
+//        locationManager.allowsBackgroundLocationUpdates
         
         autoLogIn_Switch(self)
         

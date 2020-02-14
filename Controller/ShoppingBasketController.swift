@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import CoreLocation
 
 /*
  장바구니 뷰
@@ -31,17 +32,17 @@ import Alamofire
  3.삭제버튼생성
  
  */
-class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableViewDataSource{
-    
+class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate{
     
     //    @IBOutlet weak var ProductName_Label: UILabel!
     
-    @IBOutlet weak var ShoppingBasketTableView: UITableView!
-    
+    @IBOutlet weak var ShoppingBasketTableView: UITableView!    
     
     /* 주문하기, 삭제하기 UI oultet*/
     @IBOutlet weak var orderItems_Btn: UIButton!
     
+    /* 비콘으로 주문하기 UI outlet*/
+    @IBOutlet weak var orderItemByBeacon: UIButton!
     
     
     
@@ -63,6 +64,16 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     var basketItemInfo : String = String() //이 곳에 제품에 대한 이름, 가격, 수량, 옵션 텍스트를 넣을것이다.
     
     var totalPrice : Int = 0
+    
+    /* beacon variables
+     1.locationManager : responsible for requesting location permission from users
+     2.beaconConfrimFlag : 비콘버튼을 누르면 True가 되고 그 이후 비콘이 탐지가 되면 자동으로 전송한다.
+     3.taksld : background에서도 orderItem()이 실행할 수 있도록 하게 하는 변수
+     */
+    var locationManager: CLLocationManager! //
+    var beaconConfirmFlag : Bool = false //
+//    var taskld : UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -204,8 +215,8 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         
     }
     
-    
-    @IBAction func orderItems_Btn(_ sender: Any) {
+    /* 온라인 주문 및 비콘주문 시 필요한 함수*/
+    func orderItem(){
         
         /* AppDelegate에 저장된 모든 정보를 Dynamic하게 보내야하므로
          저장된 장바구니의 아이템 개수만큼 for loop를 돌려서 php통신을 이용하여 DB로 보낸다.
@@ -268,16 +279,98 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         ad?.menuIsWhippedCream = []
         
     }
+    @IBAction func orderItems_Btn(_ sender: Any) {
+        orderItem()
+    }
+    
+    @IBAction func orderItemByBeacon(_ sender: Any) {
+        /* 현재 장바구니 정보를 비콘이 탐지되면 바로 쏘아지게 하는것이다.*/
+        self.beaconConfirmFlag = true
+        print(self.beaconConfirmFlag)
+    }
+    
+    
     
     @objc func buttonAction(_ sender: UIBarButtonItem) {
         self.navigationController?.popViewController(animated: true)
     }
     
+    
+    /* 비콘 관련 메소드 */
+    /* 권환이 확인되었는지를 체크한다. 최초에 체크가 안되면 디버그난다.*/
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedAlways {
+            
+            /*background에서도 허용하기*/
+            locationManager.startUpdatingLocation()
+            locationManager.startMonitoringSignificantLocationChanges()
+            locationManager.allowsBackgroundLocationUpdates = true
+            
+            if CLLocationManager.isMonitoringAvailable(for: CLBeaconRegion.self) { /* Monitoring은 Background에서도 실행가능하게 권한을 줌*/
+                
+                if CLLocationManager.isRangingAvailable() {
+                    startScanning()
+                }
+            }
+        }
+    }
+    
+    func startScanning() {
+        
+        /* 후에는 감지된 UUID를 UserDefaults에 저장하여 쓸 수 있게 하고싶다.
+         현재 비콘정보
+         MiniBecon_00353
+         UUID : fda50693-a4e2-4fb1-afcf-c6eb07647825
+         Major : 10001
+         Minor : 19641
+         */
+        let uuid = UUID(uuidString: "fda50693-a4e2-4fb1-afcf-c6eb07647825")! //UUID를 입력해야한다.
+        //let beaconRegion = CLBeaconRegion(proximityUUID: uuid, major: 10001, minor: 19641, identifier: "MyBeacon")//The major and minor values of the beacons are ignored.
+        let beaconRegion = CLBeaconRegion(uuid: uuid, major: 10001, minor: 19641, identifier: "MyBeacon")
+        
+        locationManager.startMonitoring(for: beaconRegion)
+        locationManager.startRangingBeacons(in: beaconRegion)
+        
+    }
+    
+    /* 상시 비콘을 탐색하는 프로토콜*/
+    func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
+        if beacons.count > 0 {
+                        
+            print("found # of \(beacons.count) beacons")
+
+            /* 비콘이 탐지가 되고 비콘전송을 누를시에 주문 전송이 되게 한다.*/
+            /* 이슈 -> Background에서 감지가 되지만 계속 이 함수를 여러번 스택하고
+             후에 foreground로 갔을 때 바로 쌓여저 있는 orderItem을 한꺼번에 쏜다.
+             */
+            if(self.beaconConfirmFlag == true){
+                orderItem()
+                self.beaconConfirmFlag = false //orderItem()을 보내면 다시 Flag를 false로 만들어서 비콘이 탐지가 되어도 더 이상 하지 못하도록 바꾼다.
+            }
+            //updateDistance(beacons[0].proximity)
+        } else {
+            print("Not found!")
+            //updateDistance(.unknown)
+        }
+    }
+    
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
+        /* 비콘 권한 설정하기 */
+        locationManager = CLLocationManager()   // locationManager 초기화.
+        locationManager.delegate = self // locationManager 초기화.
+        locationManager.requestAlwaysAuthorization()    // 위치 권한 받아옴.
         
+        locationManager.startUpdatingLocation()                 // 위치 업데이트 시작
+        locationManager.allowsBackgroundLocationUpdates = true  // 백그라운드에서도 위치를 체크할 것인지에 대한 여부. 필요없으면 false로 처리하자.
+        locationManager.pausesLocationUpdatesAutomatically = false  // 이걸 써줘야 백그라운드에서 멈추지 않고 돈다
+        
+        
+
+//        locationManager.allowsBackgroundLocationUpdates = true
         
         /* UI : 버튼의 각을 줄인다*/
         orderItems_Btn.layer.cornerRadius = 5
@@ -332,6 +425,8 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
             
             shoppingBasket_productIsWhippedCream = menuIsWhippedCream
         }
+        
+      
         
         
     }

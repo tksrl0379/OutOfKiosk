@@ -24,7 +24,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var menuSugarContent : Array<String> = []
     var menuIsWhippedCream : Array<String> = []
     
+    /*TEST*/
     
+//    var numOfProducts : Int = 1
+//    var menuNameArray: Array<String> = ["초콜렛스무디"]
+//    var menuSizeArray: Array<String> = ["스몰"]
+//    var menuCountArray: Array<Int> = [1]
+//    var menuEachPriceArray: Array<Int> = [5000]
+//    var menuSugarContent : Array<String> = ["30"]
+//    var menuIsWhippedCream : Array<String> = ["NULL"]
     
     /* 즐겨찾기된 menu를 저장하는 배열.*/
 //    var menuFavoriteArray: Array<String> = []
@@ -55,6 +63,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        print("background entered")
+    }
 
 }
 

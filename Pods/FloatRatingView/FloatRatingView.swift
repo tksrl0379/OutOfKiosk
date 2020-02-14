@@ -63,7 +63,6 @@ open class FloatRatingView: UIView {
             // Update current rating if needed
             if rating < Double(minRating) {
                 rating = Double(minRating)
-//                print("test??")
                 refresh()
             }
         }
@@ -283,10 +282,6 @@ open class FloatRatingView: UIView {
             return
         }
         updateLocation(touch)
-        
-//        print("Touched!!!")
-//        print(self.rating)
-//        self.rating += 0.5
     }
 
     override open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -299,11 +294,6 @@ open class FloatRatingView: UIView {
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Update delegate
         delegate?.floatRatingView?(self, didUpdate: rating)
-        print("Touched!!!")
-        
-        self.rating += 0.5
-        print(self.rating)
-        
     }
     
     override open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
