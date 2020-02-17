@@ -23,31 +23,12 @@ class MainController : UIViewController{
     @IBOutlet weak var favorite_Btn: UIButton!
     
     
-    //@IBOutlet weak var id_Label: UILabel!
     @IBOutlet weak var purchaseCount_Label: UILabel!
     @IBOutlet weak var grade_Label: UILabel!
     
     
     
-    
-    
-    
-    func addShadow(btn : UIButton){
-        btn.layer.shadowColor = UIColor.black.cgColor
-        btn.layer.shadowOpacity = 0.1
-        btn.layer.shadowOffset = CGSize(width: 5, height: 5)
-        btn.layer.shadowRadius = 0.5
-        
-        btn.layer.cornerRadius = 1
-    }
-    
-    
-    
-    
-    
-    
-    
-    /* 카페 버튼 */
+    /* 가게 선택 버튼 */
     @IBAction func storeSelect_Btn(_ sender: Any) {
 
         var storeNameArray: Array<String>?  = []
@@ -100,6 +81,7 @@ class MainController : UIViewController{
         
     }
     
+    
     /* 즐겨찾기가 비어있을 시 경고 메시지 함수*/
     func alertMessage(_ title: String, _ description: String){
         
@@ -121,20 +103,16 @@ class MainController : UIViewController{
         }
     }
     
-    /* Stiring -> Dictionary */
-    func convertStringToDictionary(text: String) -> NSDictionary? {//[String:AnyObject]? {
-        if let data = text.data(using: .utf8) {
-            do {
-                /* jsonObject: String type json을 Foundation Object로 바꿔줌 */
-                /* Foundation Object: NSArray, NSDictionary, NSNumber, NSDate, NSString or NSNull 로 변환 가능 */
-                let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? NSDictionary //[String:AnyObject]
-                return json
-            } catch {
-                print("Something went wrong")
-            }
-        }
-        return nil
+    /* 버튼 그림자 넣기 */
+    func addShadow(btn : UIButton){
+        btn.layer.shadowColor = UIColor.black.cgColor
+        btn.layer.shadowOpacity = 0.1
+        btn.layer.shadowOffset = CGSize(width: 5, height: 5)
+        btn.layer.shadowRadius = 0.5
+        
+        btn.layer.cornerRadius = 1
     }
+    
     
     /*
      phpGetFavoriteData는 Alamofire.request의 Return값을 전달해 주어야 한다. 그런데 Alamofire.request는 비동기 함수이므로
@@ -180,7 +158,7 @@ class MainController : UIViewController{
                         
                         /* 한개 이상의 즐겨찾기 메뉴가 추가되었을 경우 배열로 변환하여 return 한다.*/
                     }else{
-                        let dict = self.convertStringToDictionary(text: jsonData!)! //as NSDictionary
+                        let dict = CustomConvert().convertStringToDictionary(text: jsonData!)! //as NSDictionary
                         //
                         for i in 0..<dict.count{
                             let productdata = dict.allValues[i] as! NSArray
@@ -250,7 +228,7 @@ class MainController : UIViewController{
             print("responseString = \(responseString!)")
             
             
-            let dict = self.convertStringToDictionary(text: responseString as! String)
+            let dict = CustomConvert().convertStringToDictionary(text: responseString as! String)
             
             handler(dict!)
         }

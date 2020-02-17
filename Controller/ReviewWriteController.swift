@@ -51,9 +51,6 @@ class ReviewWriteController : UIViewController{
             var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
             print("responseString = \(responseString!)")
             
-            
-            //guard let dict = self.convertStringToDictionary(text: responseString as! String) else {return}
-            
             handler("전송성공")
         }
         

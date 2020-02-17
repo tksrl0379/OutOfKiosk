@@ -140,7 +140,7 @@ class StoreDetailController : UIViewController{
             
             (willgetCategroyName,willgetCategroyPrice) in
             
-            rvc.willgetCategroyName = willgetCategroyName
+            rvc.willgetCategoryName = willgetCategroyName
             rvc.willgetCategroyPrice = willgetCategroyPrice
 
             self.navigationController?.pushViewController(rvc, animated: true)
@@ -160,7 +160,7 @@ class StoreDetailController : UIViewController{
             
             (willgetCategroyName,willgetCategroyPrice) in
             
-            rvc.willgetCategroyName = willgetCategroyName
+            rvc.willgetCategoryName = willgetCategroyName
             rvc.willgetCategroyPrice = willgetCategroyPrice
             self.navigationController?.pushViewController(rvc, animated: true)
         }
@@ -265,7 +265,8 @@ class StoreDetailController : UIViewController{
                     /* response는 DataResponse<String> 이므로 response.result.value 을 이용해 String type으로 받음 */
                     let jsonData = response.result.value
                     
-                    let dict = self.convertStringToDictionary(text: jsonData!)! //as NSDictionary
+                    let dict = CustomConvert().convertStringToDictionary(text: jsonData!)!
+                    //let dict = self.convertStringToDictionary(text: jsonData!)! //as NSDictionary
                     
                     for i in 0..<dict.count{
                         let productdata = dict.allValues[i] as! NSArray

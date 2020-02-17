@@ -34,7 +34,6 @@
 
 
 import UIKit
-//import CoreLocation
 
 
 /* 로그인, 회원가입 기능: php, mysql server와 통신하여 로그인, 회원가입 구현 */
@@ -45,72 +44,13 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
     @IBOutlet weak var autoLogIn_Switch: UISwitch!
     @IBOutlet weak var login_Btn: UIButton!
     
-//    var locationManager: CLLocationManager! //responsible for requesting location permission from users
-    
-    func alertMessage(_ title: String, _ description: String){
-        
-        /* Alert는 MainThread에서 실행해야 함 */
-        DispatchQueue.main.async{
-            
-            /* Alert message 설정 */
-            let alert = UIAlertController(title: title, message: description, preferredStyle: UIAlertController.Style.alert)
-            
-            /* 버튼 설정 및 추가*/
-            let defaultAction = UIAlertAction(title: "OK", style: .destructive) { (action) in
-                
-            }
-            alert.addAction(defaultAction)
-
-            
-            /* Alert Message 띄우기 */
-            self.present(alert, animated: false, completion: nil)
-        }
-    }
-    
-    /* php 서버를 통해 mysql 서버와 통신하는 함수 */
-    func phpCommunication(_ mode: String){
-        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/app_login.php")! as URL)
-        request.httpMethod = "POST"
-        
-        let postString = "mode=\(mode)&id=\(id_Textfield.text!)&pwd=\(pwd_Textfield.text!)"
-        
-        request.httpBody = postString.data(using: String.Encoding.utf8)
-        
-        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
-        let task = URLSession.shared.dataTask(with: request as URLRequest) {
-            data, response, error in
-            
-            print("response = \(response!)")
-            
-            /* php server에서 echo한 내용들이 담김 */
-            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-            print("responseString = \(responseString!)")
-            
-            /* php서버와 통신 시 NSString에 생기는 개행 제거 */
-            responseString = responseString?.trimmingCharacters(in: .newlines) as NSString?
-            
-            
-            /* Alert Message 띄우는 부분 */
-            /* 회원가입 성공 시 */
-            if(responseString == "signup success"){
-                
-                self.alertMessage("회원가입 성공", "환영합니다")
-                
-            /* 회원가입 실패 시 */
-            }else if(responseString == "signup fail"){
-                
-                self.alertMessage("회원가입 실패", "이미 존재하는 아이디입니다")
-                
-            /* 로그인 실패 시 */
-            }else if(responseString == "login fail"){
-                
-                self.alertMessage("로그인 실패", "아이디 및 비밀번호를 확인해주세요")
-                
-            }
-            
+    @IBAction func login_Btn(_ sender: Any) {
+        //phpCommunication("login")
+        CustomHttpRequest().phpCommunication(url: "app_login.php", postString: "mode=login&id=\(id_Textfield.text!)&pwd=\(pwd_Textfield.text!)"){
+            responseString in
             
             /* 로그인 성공 시 화면 전환 */
-            if (responseString! == "login success") {
+            if (responseString == "login success") {
                 DispatchQueue.main.async{
                     if(self.autoLogIn_Switch.isOn){
                         UserDefaults.standard.set(self.id_Textfield.text!, forKey: "id")
@@ -123,48 +63,41 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
                     }
                 }
                 
-                
-                /* 화면 전환은 main 쓰레드에서만 가능하므로 main 쓰레드에서 돌아가도록 설정 */
+                // 화면 전환
                 DispatchQueue.main.async{
                     if let controller = self.storyboard?.instantiateViewController(withIdentifier: "Main_NavigationController"){
                         controller.modalTransitionStyle = .coverVertical
                         self.present(controller, animated: true, completion: nil)
                     }
                 }
-            }
+            /* 로그인 실패 시 */
+            }else if(responseString == "login fail"){
+                 self.alertMessage("로그인 실패", "아이디 및 비밀번호를 확인해주세요")
+             }
+            
+            
+            
         }
-        //실행
-        task.resume()
-    }
-    
-    @IBAction func login_Btn(_ sender: Any) {
-        phpCommunication("login")
     }
     
     
     @IBAction func signUp_Btn(_ sender: Any) {
-        phpCommunication("signup")
+//        phpCommunication("signup")
+        CustomHttpRequest().phpCommunication(url: "app_login.php", postString: "mode=signup&id=\(id_Textfield.text!)&pwd=\(pwd_Textfield.text!)"){
+            responseString in
+            
+            /* Alert Message 띄우는 부분 */
+            /* 회원가입 성공 시 */
+            if(responseString == "signup success"){
+                self.alertMessage("회원가입 성공", "환영합니다")
+                
+            /* 회원가입 실패 시 */
+            }else if(responseString == "signup fail"){
+                self.alertMessage("회원가입 실패", "이미 존재하는 아이디입니다")
+            }
+            
+        }
     }
-    
-    
-    @objc func keyboardWillShow(_ sender: Notification) {
-         self.view.frame.origin.y = -150 // Move view 150 points upward
-    }
-    
-    @objc func keyboardWillHide(_ sender: Notification) {
-
-        self.view.frame.origin.y = 0 // Move view to original position
-    }
-
-    /* UITextFieldDelegate 함수 오버라이딩 : return을 누르면 수행할 작업 기재 */
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            // textField의 상태를 포기 -> 키보드 내려감
-            textField.resignFirstResponder()
-
-            return true
-    }
-    
-    
     
     @IBAction func autoLogIn_Switch(_ sender: Any) {
         if autoLogIn_Switch.isOn{
@@ -181,30 +114,62 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
             self.autoLogIn_Switch.accessibilityLabel = "자동 로그인 기능이 꺼졌습니다"
         }
     }
+    
+    
+    func alertMessage(_ title: String, _ description: String){
+        
+        /* Alert는 MainThread에서 실행해야 함 */
+        DispatchQueue.main.async{
+            
+            /* Alert message 설정 */
+            let alert = UIAlertController(title: title, message: description, preferredStyle: UIAlertController.Style.alert)
+            
+            /* 버튼 설정 및 추가*/
+            let defaultAction = UIAlertAction(title: "OK", style: .destructive) { (action) in
+            }
+            alert.addAction(defaultAction)
 
+            
+            /* Alert Message 띄우기 */
+            self.present(alert, animated: false, completion: nil)
+        }
+    }
+    
+    
+    
+    /* UITextFieldDelegate 함수 오버라이딩 : return을 누르면 수행할 작업 기재 */
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            // textField의 상태를 포기 -> 키보드 내려감
+            textField.resignFirstResponder()
+
+            return true
+    }
+    
+    @objc func keyboardWillShow(_ sender: Notification) {
+         self.view.frame.origin.y = -150 // Move view 150 points upward
+    }
+    
+    @objc func keyboardWillHide(_ sender: Notification) {
+
+        self.view.frame.origin.y = 0 // Move view to original position
+    }
+
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //         비콘 권한 설정하기
-//        locationManager = CLLocationManager()   // locationManager 초기화.
-//        locationManager.delegate = self // locationManager 초기화.
-//        locationManager.requestAlwaysAuthorization()    // 위치 권한 받아옴.
-//        locationManager.allowsBackgroundLocationUpdates
-        
-        autoLogIn_Switch(self)
         
         /* textfield 선택 시 키보드 크기만큼 view를 올리기 위함 */
         id_Textfield.delegate = self
         pwd_Textfield.delegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-
-
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         
-        /* 자동 로그인 기능 */
+        /* 자동 로그인 */
+        autoLogIn_Switch(self)
+        
         if let userId = UserDefaults.standard.string(forKey: "id"){
             //print(userId)
             self.id_Textfield.text = userId
@@ -213,9 +178,6 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
             login_Btn(self)
         }
         
-        
-        
-
     }
 }
 

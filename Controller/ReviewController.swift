@@ -160,7 +160,7 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
             print("responseString = \(responseString!)")
             
             
-            guard let dict = self.convertStringToDictionary(text: responseString as! String) else {return}
+            guard let dict = CustomConvert().convertStringToDictionary(text: responseString as! String) else {return}
             
             handler(dict)
         }
@@ -169,20 +169,6 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
         task.resume()
     }
     
-    /* Stiring -> Dictionary */
-    func convertStringToDictionary(text: String) -> NSDictionary? {//[String:AnyObject]? {
-        if let data = text.data(using: .utf8) {
-            do {
-                /* jsonObject: String type json을 Foundation Object로 바꿔줌 */
-                /* Foundation Object: NSArray, NSDictionary, NSNumber, NSDate, NSString or NSNull 로 변환 가능 */
-                let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? NSDictionary //[String:AnyObject]
-                return json
-            } catch {
-                print("Something went wrong")
-            }
-        }
-        return nil
-    }
     
 }
 

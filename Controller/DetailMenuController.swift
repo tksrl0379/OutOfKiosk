@@ -25,21 +25,21 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
      willgetCategroyPrice = PHP통신으로 받은 메뉴의 가격(스몰기준) 변수이다.
      favoriteTag = 메뉴가 즐겨찾기가 되었는지를 CafeDetailController에서 비교하여 Label에 표시할 변수이다..
      */
-    var willgetCategroyName : Array<String>!
+    var willgetCategoryName : Array<String>!
     var willgetCategroyPrice : Array<Int>!
     var favoriteTag : Array<String> = []
-        
+    
     
     @IBOutlet weak var ProductTableView: UITableView!
         
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return willgetCategroyName.count
+        return willgetCategoryName.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         /* 재사용할 수 있는 cell을 ProductTableView에 넣는다는 뜻. UITableViewCell을 반환하기 때문에 Storelist로 다운캐스팅 */
         let cell = ProductTableView.dequeueReusableCell(withIdentifier: "ProductList", for: indexPath ) as! ProductList
-        cell.productName_Label.text = willgetCategroyName[indexPath.row]
+        cell.productName_Label.text = willgetCategoryName[indexPath.row]
         cell.productPrice_Label.text = String(willgetCategroyPrice[indexPath.row]) + "원"
         cell.productFavorite_Label.text = favoriteTag[indexPath.row]
         cell.addFavoriteItem_Btn.layer.cornerRadius = 5
@@ -74,12 +74,20 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         var favoriteMenuArray = defaults.stringArray(forKey: "favoriteMenuArray") ?? [String]()
         
         /* 이미 추가된 메뉴가 있을경우 중복 추가를 방지 하기위해 만들어 놓은 if stmt*/
-        if (favoriteMenuArray.contains(self.willgetCategroyName[indexPath.row])){
+        if (favoriteMenuArray.contains(self.willgetCategoryName[indexPath.row])){
             print("Already contained")
+            
+            favoriteMenuArray.removeAll{ $0 == self.willgetCategoryName[indexPath.row]}
+            self.favoriteTag[indexPath.row] = " "
+            UserDefaults.standard.removeObject(forKey: "favoriteMenuArray")
+            UserDefaults.standard.set(favoriteMenuArray, forKey: "favoriteMenuArray")
+            self.ProductTableView.reloadRows(at: [indexPath], with: .automatic)
+
+            
         }else{
             
             UserDefaults.standard.removeObject(forKey: "favoriteMenuArray")
-            favoriteMenuArray.append(self.willgetCategroyName[indexPath.row])
+            favoriteMenuArray.append(self.willgetCategoryName[indexPath.row])
             print("favorite menu : ", favoriteMenuArray,"\n") //print test
             UserDefaults.standard.set(favoriteMenuArray, forKey: "favoriteMenuArray")
             self.favoriteTag[indexPath.row] = "즐겨찾기 됨"
@@ -148,13 +156,13 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         /* 일단 ""문자로 초기화를 시킨다. 그 이후, UserDefaults에 저장되어 있는 즐겨찾기 이름이 있다면
             favoriteTag를 "이미 찜!" 으로 변경한다.
          */
-        for productName in willgetCategroyName{
+        for productName in willgetCategoryName{
             /* 이곳에서 UserDefault에 있는 문자와 비교하여 실제로 존재하면 favoriteTag의 값을 바꾼다.*/
             favoriteTag.append("")
             for favoriteMenuName in favoriteMenuArray{
                 if(productName == favoriteMenuName){
 //                    print("match!!", productName, favoriteMenuName)
-                    favoriteTag[willgetCategroyName.firstIndex(of: productName)!] = "즐겨찾기 됨!"
+                    favoriteTag[willgetCategoryName.firstIndex(of: productName)!] = "즐겨찾기 됨!"
                     break
                 }
             }

@@ -693,7 +693,7 @@ class DialogFlowPopUpController: UIViewController{
             var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
             print("responseString = \(responseString!)")
             
-            var dict = self.convertStringToDictionary(text: responseString as! String)
+            var dict = CustomConvert().convertStringToDictionary(text: responseString as! String)
             
             let responseMessage = dict!["response"] as! String
             
@@ -766,20 +766,6 @@ class DialogFlowPopUpController: UIViewController{
     }
     
     
-    /* Stiring -> Dictionary */
-    func convertStringToDictionary(text: String) -> NSDictionary? {//[String:AnyObject]? {
-        if let data = text.data(using: .utf8) {
-            do {
-                /* jsonObject: String type json을 Foundation Object로 바꿔줌 */
-                /* Foundation Object: NSArray, NSDictionary, NSNumber, NSDate, NSString or NSNull 로 변환 가능 */
-                let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? NSDictionary //[String:AnyObject]
-                return json
-            } catch {
-                print("Something went wrong")
-            }
-        }
-        return nil
-    }
     
     
     func sendMessage(_ message: String?, handler: @escaping(_ textResponse : String, _ intentName : String, _ parameter : NSDictionary?)-> Void){
@@ -801,7 +787,7 @@ class DialogFlowPopUpController: UIViewController{
             var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
             print("responseString = \(responseString!)")
             
-            var dict = self.convertStringToDictionary(text: responseString as! String)
+            var dict = CustomConvert().convertStringToDictionary(text: responseString as! String)
             
             let responseMessage = dict!["response"] as! String
             let intentName = dict!["intentName"] as! String

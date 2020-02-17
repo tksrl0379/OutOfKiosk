@@ -58,7 +58,7 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
             rvc.storeName = self.storeNameArray[indexPath.row]
             rvc.storeEnName = self.storeEnNameArray[indexPath.row]
             
-            guard let dict = self.convertStringToDictionary(text: responseString) else {return}
+            guard let dict = CustomConvert().convertStringToDictionary(text: responseString) else {return}
             for i in 0..<dict.count{
                 //self.storeMenuArray.append(Array(dict)[i].value as! String)
                 
@@ -77,21 +77,6 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
             
         }
                 
-    }
-    
-    /* Stiring -> Dictionary */
-    func convertStringToDictionary(text: String) -> NSDictionary? {//[String:AnyObject]? {
-        if let data = text.data(using: .utf8) {
-            do {
-                /* jsonObject: String type json을 Foundation Object로 바꿔줌 */
-                /* Foundation Object: NSArray, NSDictionary, NSNumber, NSDate, NSString or NSNull 로 변환 가능 */
-                let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? NSDictionary //[String:AnyObject]
-                return json
-            } catch {
-                print("Something went wrong")
-            }
-        }
-        return nil
     }
     
     
@@ -114,8 +99,6 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
             var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
             print("responseString = \(responseString!)")
             
-            
-            //let dict = self.convertStringToDictionary(text: responseString as! String)
             
             handler(responseString as! String)
         }
