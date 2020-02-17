@@ -282,26 +282,36 @@ open class FloatRatingView: UIView {
         guard let touch = touches.first else {
             return
         }
-        updateLocation(touch)
+        if(!UIAccessibility.isVoiceOverRunning){
+            updateLocation(touch)
+        }
         
-//        print("Touched!!!")
-//        print(self.rating)
-//        self.rating += 0.5
+        
     }
 
     override open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else {
             return
         }
-        updateLocation(touch)
+        if(!UIAccessibility.isVoiceOverRunning){
+            updateLocation(touch)
+        }
+        
+        
     }
     
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Update delegate
         delegate?.floatRatingView?(self, didUpdate: rating)
         print("Touched!!!")
+        if(UIAccessibility.isVoiceOverRunning){
+            if(self.rating == 5.0){
+                self.rating = 0
+            }
+            
+            self.rating += 0.5
+        }
         
-        self.rating += 0.5
         print(self.rating)
         
     }

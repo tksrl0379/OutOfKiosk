@@ -45,6 +45,7 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
     @IBOutlet weak var login_Btn: UIButton!
     
     @IBAction func login_Btn(_ sender: Any) {
+        
         //phpCommunication("login")
         CustomHttpRequest().phpCommunication(url: "app_login.php", postString: "mode=login&id=\(id_Textfield.text!)&pwd=\(pwd_Textfield.text!)"){
             responseString in
@@ -155,9 +156,44 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
     }
 
     
+    func kakaoLogin(_ sender: Any) {
+        //이전 카카오톡 세션 열려있으면 닫기
+        guard let session = KOSession.shared() else {
+            return
+        }
+        if session.isOpen() {
+            session.close()
+        }
+        session.open(completionHandler: { (error) -> Void in
+            if error == nil {
+                if session.isOpen() {
+                    //accessToken
+                    print(session.token?.accessToken)
+                } else {
+                    print("Login failed")
+                }
+            } else {
+                print("Login error : \(String(describing: error))")
+            }
+            if !session.isOpen() {
+                if let error = error as NSError? {
+                    switch error.code {
+                    case Int(KOErrorCancelled.rawValue):
+                        break
+                    default:
+                        //간편 로그인 취소
+                        print("error : \(error.description)")
+                    }
+                }
+            }
+        })
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        kakaoLogin(self)
         
         /* textfield 선택 시 키보드 크기만큼 view를 올리기 위함 */
         id_Textfield.delegate = self
