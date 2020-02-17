@@ -16,23 +16,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     /*ORIGINAL*/
     
-    var numOfProducts : Int = 0
-    var menuNameArray: Array<String> = []
-    var menuSizeArray: Array<String> = []
-    var menuCountArray: Array<Int> = []
-    var menuEachPriceArray: Array<Int> = []
-    var menuSugarContent : Array<String> = []
-    var menuIsWhippedCream : Array<String> = []
+//    var numOfProducts : Int = 0
+//    var menuNameArray: Array<String> = []
+//    var menuSizeArray: Array<String> = []
+//    var menuCountArray: Array<Int> = []
+//    var menuEachPriceArray: Array<Int> = []
+//    var menuSugarContent : Array<String> = []
+//    var menuIsWhippedCream : Array<String> = []
     
     /*TEST*/
     
-//    var numOfProducts : Int = 1
-//    var menuNameArray: Array<String> = ["초콜렛스무디"]
-//    var menuSizeArray: Array<String> = ["스몰"]
-//    var menuCountArray: Array<Int> = [1]
-//    var menuEachPriceArray: Array<Int> = [5000]
-//    var menuSugarContent : Array<String> = ["30"]
-//    var menuIsWhippedCream : Array<String> = ["NULL"]
+    var numOfProducts : Int = 1
+    var menuNameArray: Array<String> = ["초콜렛스무디"]
+    var menuSizeArray: Array<String> = ["스몰"]
+    var menuCountArray: Array<Int> = [1]
+    var menuEachPriceArray: Array<Int> = [5000]
+    var menuSugarContent : Array<String> = ["30"]
+    var menuIsWhippedCream : Array<String> = ["NULL"]
     
     /* 즐겨찾기된 menu를 저장하는 배열.*/
 //    var menuFavoriteArray: Array<String> = []

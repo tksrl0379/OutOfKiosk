@@ -103,6 +103,11 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         /* 접근성 */
         orderItems_Btn.accessibilityLabel = "주문하기 버튼. \(totalPrice)원 입니다"
         
+        orderItemByBeacon.setTitle("비콘주문 "+String(totalPrice)+"원", for: .normal)
+        /* 접근성 */
+        orderItemByBeacon.accessibilityLabel = "비콘주문 . \(totalPrice)원 입니다"
+        
+        
         /* Stepper 초기값 */
         cell.shoppingBasketProductSize_Stepper.value = Double(shoppingBasket_productCount[indexPath.row])
       
@@ -258,6 +263,8 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
                     response in
                     print("응답",response)
                     
+                    self.alertMessage("주문 성공", "주문한 메뉴가 나올 때까지 기다려 주세요.")
+                    
             }
         }
         
@@ -285,7 +292,14 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     
     @IBAction func orderItemByBeacon(_ sender: Any) {
         /* 현재 장바구니 정보를 비콘이 탐지되면 바로 쏘아지게 하는것이다.*/
-        self.beaconConfirmFlag = true
+        self.beaconConfirmFlag = !(self.beaconConfirmFlag)
+        
+        if(self.beaconConfirmFlag == true){
+            orderItemByBeacon.setTitle("비콘주문 취소하기", for: .normal)
+        }else{
+            orderItemByBeacon.setTitle("비콘주문 "+String(totalPrice)+"원", for: .normal)
+        }
+        
         print(self.beaconConfirmFlag)
     }
     
@@ -345,7 +359,17 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
              */
             if(self.beaconConfirmFlag == true){
                 orderItem()
-                self.beaconConfirmFlag = false //orderItem()을 보내면 다시 Flag를 false로 만들어서 비콘이 탐지가 되어도 더 이상 하지 못하도록 바꾼다.
+                //self.beaconConfirmFlag = false //orderItem()을 보내면 다시 Flag를 false로 만들어서 비콘이 탐지가 되어도 더 이상 하지 못하도록 바꾼다.
+                
+                /* 주문이 완료되면 비콘 탐지를 종료한다.*/
+                let uuid = UUID(uuidString: "fda50693-a4e2-4fb1-afcf-c6eb07647825")! //UUID를 입력해야한다.
+                let beaconRegion = CLBeaconRegion(uuid: uuid, major: 10001, minor: 19641, identifier: "MyBeacon")
+                                
+                locationManager.stopUpdatingLocation()
+                locationManager.stopMonitoringSignificantLocationChanges()
+                locationManager.allowsBackgroundLocationUpdates = false
+                locationManager.stopMonitoring(for: beaconRegion)
+                locationManager.stopRangingBeacons(in: beaconRegion)
             }
             //updateDistance(beacons[0].proximity)
         } else {
@@ -354,6 +378,25 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         }
     }
     
+    
+    func alertMessage(_ title: String, _ description: String){
+        
+        /* Alert는 MainThread에서 실행해야 함 */
+        DispatchQueue.main.async{
+            
+            /* Alert message 설정 */
+            let alert = UIAlertController(title: title, message: description, preferredStyle: UIAlertController.Style.alert)
+            
+            /* 버튼 설정 및 추가*/
+            let defaultAction = UIAlertAction(title: "확인", style: .destructive) { (action) in
+            }
+            alert.addAction(defaultAction)
+
+            
+            /* Alert Message 띄우기 */
+            self.present(alert, animated: false, completion: nil)
+        }
+    }
     
     override func viewDidLoad() {
         
