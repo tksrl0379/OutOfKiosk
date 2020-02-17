@@ -155,8 +155,7 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
         self.view.frame.origin.y = 0 // Move view to original position
     }
 
-    
-    func kakaoLogin(_ sender: Any) {
+    @IBAction func kakaoLogin(_ sender: Any) {
         //이전 카카오톡 세션 열려있으면 닫기
         guard let session = KOSession.shared() else {
             return
@@ -168,7 +167,21 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
             if error == nil {
                 if session.isOpen() {
                     //accessToken
-                    print(session.token?.accessToken)
+                    print("111111111")
+                    print("토큰:", session.token?.accessToken)
+                    KOSessionTask.userMeTask(completion: { (error, user) in
+                      print("에러:", error)
+                      print("유저:", user)
+                        guard let user = user,
+                            let nickname = user.nickname else { return }
+                      
+                        print("정보:", user, nickname)
+                      //let mainVC = MainViewController()
+                      //mainVC.emailLabel.text = email
+                      //mainVC.nicnameLabel.text = nickname
+                      
+                      //self.present(mainVC, animated: false, completion: nil)
+                    })
                 } else {
                     print("Login failed")
                 }
@@ -187,13 +200,15 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
                 }
             }
         })
+        
     }
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        kakaoLogin(self)
+        //kakaoLogin(self)
         
         /* textfield 선택 시 키보드 크기만큼 view를 올리기 위함 */
         id_Textfield.delegate = self
