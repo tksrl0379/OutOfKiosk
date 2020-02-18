@@ -101,12 +101,42 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
     }
     
     @IBAction func autoLogIn_Switch(_ sender: Any) {
+        /* 자동 로그인 ON */
         if autoLogIn_Switch.isOn{
-            self.login_Btn.setTitle("자동 로그인", for: .normal)
+            //self.login_Btn.setTitle("자동 로그인", for: .normal)
             
             self.autoLogIn_Switch.accessibilityLabel = "자동 로그인 기능이 켜졌습니다"
             self.autoLogIn_Switch.accessibilityValue = nil
-           
+            
+            /* KaKao 간편 로그인 */
+            guard let isOpened = KOSession.shared()?.isOpen() else {
+                return
+            }
+            
+            // 간편 로그인되있는 경우
+            if isOpened {
+                // 화면 전환
+                DispatchQueue.main.async{
+                    if let controller = self.storyboard?.instantiateViewController(withIdentifier: "Main_NavigationController"){
+                        controller.modalTransitionStyle = .coverVertical
+                        self.present(controller, animated: true, completion: nil)
+                    }
+                }
+            // 간편 로그인이 아닌 경우(어플 자체 회원가입)
+            }else if let userId = UserDefaults.standard.string(forKey: "id"){
+                
+                self.id_Textfield.text = userId
+                self.pwd_Textfield.text = UserDefaults.standard.string(forKey: "pwd")!
+                
+                login_Btn(self)
+                
+            // 아무런 로그인도 되있지 않은 초기 상태
+            }else{
+                
+            }
+            
+            
+        /* 자동 로그인 OFF*/
         }else{
             self.login_Btn.setTitle("로그인", for: .normal)
             UserDefaults.standard.set(nil, forKey: "id")
@@ -163,24 +193,39 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
         if session.isOpen() {
             session.close()
         }
+        
         session.open(completionHandler: { (error) -> Void in
             if error == nil {
                 if session.isOpen() {
                     //accessToken
-                    print("111111111")
                     print("토큰:", session.token?.accessToken)
                     KOSessionTask.userMeTask(completion: { (error, user) in
                       print("에러:", error)
                       print("유저:", user)
-                        guard let user = user,
-                            let nickname = user.nickname else { return }
-                      
-                        print("정보:", user, nickname)
-                      //let mainVC = MainViewController()
-                      //mainVC.emailLabel.text = email
-                      //mainVC.nicnameLabel.text = nickname
-                      
-                      //self.present(mainVC, animated: false, completion: nil)
+                        
+                        guard let nickname = user?.account?.profile?.nickname else {return}
+                        guard let profileImageUrl = user?.account?.profile?.profileImageURL else {return}
+                        print("닉네임:", nickname)
+                        print("프로필 사진 주소:", profileImageUrl)
+                        UserDefaults.standard.set(profileImageUrl.absoluteString, forKey: "profileImageUrl")
+                        print(UserDefaults.standard.string(forKey: "profileImageUrl"))
+                        
+                        
+                        CustomHttpRequest().phpCommunication(url: "app_login.php", postString: "mode=signup&id=\(nickname)&pwd=nil"){
+                            _ in
+                            
+                            UserDefaults.standard.set(nickname, forKey: "id")
+                            
+                            DispatchQueue.main.async{
+                                if let controller = self.storyboard?.instantiateViewController(withIdentifier: "Main_NavigationController"){
+                                    controller.modalTransitionStyle = .coverVertical
+                                    self.present(controller, animated: true, completion: nil)
+                                }
+                            }
+                        }
+                        
+                        
+                        
                     })
                 } else {
                     print("Login failed")
@@ -209,6 +254,8 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
         super.viewDidLoad()
         
         //kakaoLogin(self)
+        /* 자동로그인 버튼 숨기기 */
+        autoLogIn_Switch.isHidden = true
         
         /* textfield 선택 시 키보드 크기만큼 view를 올리기 위함 */
         id_Textfield.delegate = self
@@ -221,13 +268,7 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
         /* 자동 로그인 */
         autoLogIn_Switch(self)
         
-        if let userId = UserDefaults.standard.string(forKey: "id"){
-            //print(userId)
-            self.id_Textfield.text = userId
-            self.pwd_Textfield.text = UserDefaults.standard.string(forKey: "pwd")!
-            
-            login_Btn(self)
-        }
+        
         
     }
 }

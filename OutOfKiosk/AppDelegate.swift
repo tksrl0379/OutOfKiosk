@@ -14,11 +14,6 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    /* 카카오 로그인 */
-    var window: UIWindow?
-    var deviceToken: Data? = nil
-    
-    
     
     /*ORIGINAL*/
     
@@ -44,15 +39,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    var menuFavoriteArray: Array<String> = []
     
     
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-//        window = UIWindow(frame: UIScreen.main.bounds)
-//
-//        let loginVC = LoginViewController()
-//
-//        window?.rootViewController = loginVC
-//        window?.makeKeyAndVisible()
-//
         
         return true
     }
@@ -90,10 +79,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
-
     func applicationDidEnterBackground(_ application: UIApplication) {
+        KOSession.handleDidEnterBackground()
         print("background entered")
     }
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        KOSession.handleDidBecomeActive()
+    }
+    
 
 }
-

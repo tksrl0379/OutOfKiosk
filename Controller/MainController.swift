@@ -11,8 +11,10 @@ import Alamofire
 
 class MainController : UIViewController{
     
+    /* 사용자 정보 변수 */
     private var userId: String?
     private var purchaseCount: Float = 0
+    
     
     @IBOutlet weak var title_View: UIView!
     @IBOutlet weak var sub_View: UIView!
@@ -24,8 +26,10 @@ class MainController : UIViewController{
     
     
     @IBOutlet weak var purchaseCount_Label: UILabel!
-    @IBOutlet weak var grade_Label: UILabel!
+    //@IBOutlet weak var grade_Label: UILabel!
     
+    @IBOutlet weak var userProfileImage_View: UIImageView!
+    @IBOutlet weak var userName_Label: UILabel!
     
     
     /* 가게 선택 버튼 */
@@ -37,8 +41,10 @@ class MainController : UIViewController{
         
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "StoreListController") as? StoreListController else { return }
         
-        self.phpGetStoreInfo(){
-            dict in
+        CustomHttpRequest().phpCommunication(url: "getStoreInfo.php", postString: ""){
+            responseString in
+            
+            let dict = CustomConvert().convertStringToDictionary(text: responseString)!
             
             for i in 0..<dict.count{
                 storeNameArray?.append(Array(dict)[i].key as! String)
@@ -56,6 +62,7 @@ class MainController : UIViewController{
             DispatchQueue.main.async {
                 self.navigationController?.pushViewController(rvc, animated: true)
             }
+            
             
         }
         
@@ -77,8 +84,6 @@ class MainController : UIViewController{
             self.alertMessage("오류","즐겨찾기 메뉴가 없어요.")
         }
         
-        
-        
     }
     
     
@@ -97,20 +102,18 @@ class MainController : UIViewController{
             }
             alert.addAction(defaultAction)
             
-            
             /* Alert Message 띄우기 */
             self.present(alert, animated: false, completion: nil)
         }
     }
     
     /* 버튼 그림자 넣기 */
-    func addShadow(btn : UIButton){
-        btn.layer.shadowColor = UIColor.black.cgColor
-        btn.layer.shadowOpacity = 0.1
-        btn.layer.shadowOffset = CGSize(width: 5, height: 5)
-        btn.layer.shadowRadius = 0.5
-        
-        btn.layer.cornerRadius = 1
+    func addShadow(view : UIView){
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.3
+        view.layer.shadowOffset = .zero
+        view.layer.shadowRadius = 4
+        view.layer.cornerRadius = 5
     }
     
     
@@ -179,69 +182,11 @@ class MainController : UIViewController{
         }
     }
     
-    func getPurchaseCount(handler: @escaping (_ responseStrng : NSString?) -> Void){
-        /* php 통신 */
-        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/getUserInfo.php")! as URL)
-        request.httpMethod = "POST"
-        
-        //        let postString = "name=\(self.name!)&size=\(self.size!)&count=\(self.count!)"
-        let postString = "id=\(self.userId!)"
-        print(self.userId!)
-        request.httpBody = postString.data(using: String.Encoding.utf8)
-        
-        
-        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
-        let task = URLSession.shared.dataTask(with: request as URLRequest) {
-            data, response, error in
-            
-            print("response = \(response!)")
-            
-            /* php server에서 echo한 내용들이 담김 */
-            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-            
-            /* php서버와 통신 시 NSString에 생기는 개행 제거 */
-            responseString = responseString?.trimmingCharacters(in: .newlines) as NSString?
-            
-            print("responseString = \(responseString!)")
-            
-            /* UI 변경은 메인쓰레드에서만 가능 */
-            
-            //self.speechAndText(textResponse + " 총 \(responseString!)원입니다. 주문하시겠습니까 ?")
-            handler(responseString)
-            
-        }
-        task.resume()
-    }
-    
-    func phpGetStoreInfo(handler: @escaping (_ storeInfoDic : NSDictionary)->Void){
-        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/getStoreInfo.php")! as URL)
-        request.httpMethod = "POST"
-        
-        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
-        let task = URLSession.shared.dataTask(with: request as URLRequest) {
-            data, response, error in
-            
-            print("response = \(response!)")
-            
-            /* php server에서 echo한 내용들이 담김 */
-            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-            print("responseString = \(responseString!)")
-            
-            
-            let dict = CustomConvert().convertStringToDictionary(text: responseString as! String)
-            
-            handler(dict!)
-        }
-        
-        //실행
-        task.resume()
-    }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        /* 그림자 넣기, 둥글게 만들기 */
         self.navigationController!.navigationBar.setBackgroundImage(nil, for: .default)
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.black.cgColor
         self.navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 0.0, height: 0.6)
@@ -249,49 +194,38 @@ class MainController : UIViewController{
         self.navigationController?.navigationBar.layer.shadowOpacity = 0.3
         self.navigationController?.navigationBar.layer.masksToBounds = false
         
-        
-        title_View.layer.shadowColor = UIColor.black.cgColor
-        title_View.layer.shadowOpacity = 0.3
-        title_View.layer.shadowOffset = .zero
-        title_View.layer.shadowRadius = 4
-        title_View.layer.cornerRadius = 5
-        
-        sub_View.layer.shadowColor = UIColor.black.cgColor
-        sub_View.layer.shadowOpacity = 0.3
-        sub_View.layer.shadowOffset = .zero
-        sub_View.layer.shadowRadius = 4
-        sub_View.layer.cornerRadius = 5
-        
-        sub2_View.layer.shadowColor = UIColor.black.cgColor
-        sub2_View.layer.shadowOpacity = 0.3
-        sub2_View.layer.shadowOffset = .zero
-        sub2_View.layer.shadowRadius = 4
-        sub2_View.layer.cornerRadius = 5
+        addShadow(view: title_View)
+        addShadow(view: sub_View)
+        addShadow(view: sub2_View)
         
         storeSelect_Btn.layer.cornerRadius = 5
-        
         favorite_Btn.layer.cornerRadius = 5
         
-        
+        /* 원형 애니메이션 */
         let cp = CircularProgressView(frame: CGRect(x: 35.5, y: 16.5, width: 120.0, height: 120.0))
         cp.trackColor = UIColor(red: 188.0/255.0, green: 188.0/255.0, blue: 188.0/255.0, alpha: 0.3)
         cp.progressColor = UIColor.systemYellow
         cp.tag = 101
         self.sub2_View.addSubview(cp)
-        //cp.center = self.progressBar_view.center
-        
-        //CircularProgress.trackColor = UIColor.white
-        //CircularProgress.progressColor = UIColor.purple
-        //CircularProgress.setProgressWithAnimation(duration: 1.0, value: 0.3)
         
         
+        
+        /* 사용자 프로필 이미지 */
+        if let imageUrl = UserDefaults.standard.string(forKey: "profileImageUrl"){
+            let url = URL(string: imageUrl)
+            do {
+                  let data = try Data(contentsOf: url!)
+                self.userProfileImage_View.image = UIImage(data: data)
+             }catch let err {
+                  print("Error : \(err.localizedDescription)")
+             }
+        }
+        
+        
+        /* 사용자 아이디 */
         userId = UserDefaults.standard.string(forKey: "id")!
-        
+        self.userName_Label.text = userId
         //id_Label.text = userId! + " 님은"
-        
-        
-        
-        
         
     }
     
@@ -299,17 +233,17 @@ class MainController : UIViewController{
         
         self.navigationController!.isNavigationBarHidden = true
         
-        
-        self.getPurchaseCount(){
+        CustomHttpRequest().phpCommunication(url: "getUserInfo.php", postString: "id=\(self.userId!)"){
             responseString in
+            
             DispatchQueue.main.async {
-                self.purchaseCount_Label.text = (responseString! as String) as String + " / 25"
-                self.purchaseCount = Float(responseString! as String)! / 25.0
+                self.purchaseCount_Label.text = (responseString) as String + " / 25"
+                self.purchaseCount = Float(responseString)! / 25.0
                 
-                self.grade_Label.text = "Bronze"
-                self.grade_Label.accessibilityLabel = "현재 브론즈 단계이시며 실버 단계까지 주문 \(25 - Int(responseString! as String)!)번 남았습니다"
+                //self.grade_Label.text = "Bronze"
+                //self.grade_Label.accessibilityLabel = "현재 브론즈 단계이시며 실버 단계까지 주문 \(25 - Int(responseString! as String)!)번 남았습니다"
                 
-                
+                /* 구매 횟수 애니메이션 바 갱신 */
                 self.perform(#selector(self.animateProgress), with: nil, afterDelay: 1.0)
                 
             }
