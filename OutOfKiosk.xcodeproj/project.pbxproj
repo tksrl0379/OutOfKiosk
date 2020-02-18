@@ -36,6 +36,8 @@
 		FA1E58AF23C41A79002215BB /* ProductList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1E58AE23C41A79002215BB /* ProductList.swift */; };
 		FAC52D7523CD887200ADDD34 /* ShoppingBasketController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC52D7423CD887200ADDD34 /* ShoppingBasketController.swift */; };
 		FAC52D7723CD88C200ADDD34 /* ShoppingBasket.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC52D7623CD88C200ADDD34 /* ShoppingBasket.swift */; };
+		FAE1803B23FBD47B000D1C27 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE1803A23FBD47B000D1C27 /* UserNotifications.framework */; };
+		FAE1803D23FBD481000D1C27 /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE1803C23FBD481000D1C27 /* PushKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +75,9 @@
 		FA1E58AE23C41A79002215BB /* ProductList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductList.swift; sourceTree = "<group>"; };
 		FAC52D7423CD887200ADDD34 /* ShoppingBasketController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingBasketController.swift; sourceTree = "<group>"; };
 		FAC52D7623CD88C200ADDD34 /* ShoppingBasket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingBasket.swift; sourceTree = "<group>"; };
+		FAE1803923FBD46E000D1C27 /* OutOfKiosk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OutOfKiosk.entitlements; sourceTree = "<group>"; };
+		FAE1803A23FBD47B000D1C27 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		FAE1803C23FBD481000D1C27 /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +86,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				561A199013A68AC2CAB7E557 /* Pods_OutOfKiosk.framework in Frameworks */,
+				FAE1803D23FBD481000D1C27 /* PushKit.framework in Frameworks */,
 				337FFD1C23FA7A41006136A5 /* KakaoOpenSDK.framework in Frameworks */,
+				FAE1803B23FBD47B000D1C27 /* UserNotifications.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +152,7 @@
 		33259F5123BB017400D44CB0 /* OutOfKiosk */ = {
 			isa = PBXGroup;
 			children = (
+				FAE1803923FBD46E000D1C27 /* OutOfKiosk.entitlements */,
 				33259F5223BB017400D44CB0 /* AppDelegate.swift */,
 				33259F5423BB017400D44CB0 /* SceneDelegate.swift */,
 				33259F5823BB017400D44CB0 /* Main.storyboard */,
@@ -185,6 +193,8 @@
 		7D0FB79258CACD51825396F5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FAE1803C23FBD481000D1C27 /* PushKit.framework */,
+				FAE1803A23FBD47B000D1C27 /* UserNotifications.framework */,
 				337FFD1B23FA7A41006136A5 /* KakaoOpenSDK.framework */,
 				2E77C96B32E43C00A091B8A7 /* Pods_OutOfKiosk.framework */,
 			);
@@ -483,6 +493,7 @@
 			baseConfigurationReference = 109C79DE6BF10C453A241743 /* Pods-OutOfKiosk.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = OutOfKiosk/OutOfKiosk.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S52PAXB444;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -527,6 +538,7 @@
 			baseConfigurationReference = F5097F4775439F8A0528E7C8 /* Pods-OutOfKiosk.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = OutOfKiosk/OutOfKiosk.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S52PAXB444;
 				FRAMEWORK_SEARCH_PATHS = (
