@@ -20,6 +20,8 @@
 		33259F5A23BB017400D44CB0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5823BB017400D44CB0 /* Main.storyboard */; };
 		33259F5C23BB017500D44CB0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5B23BB017500D44CB0 /* Assets.xcassets */; };
 		33259F5F23BB017500D44CB0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33259F5D23BB017500D44CB0 /* LaunchScreen.storyboard */; };
+		3356009123FCF98700E9CB43 /* NanumSquareRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3356008F23FCF96800E9CB43 /* NanumSquareRegular.ttf */; };
+		3356009223FCF98B00E9CB43 /* NanumSquareLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3356009023FCF97D00E9CB43 /* NanumSquareLight.ttf */; };
 		335EAC9A23F3E66000071770 /* FloatRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335EAC9923F3E66000071770 /* FloatRatingView.swift */; };
 		335EAC9C23F3E72100071770 /* ReviewWriteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335EAC9B23F3E72100071770 /* ReviewWriteController.swift */; };
 		337FFD1423FA3B5B006136A5 /* CustomConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337FFD1323FA3B5B006136A5 /* CustomConvert.swift */; };
@@ -58,6 +60,8 @@
 		33259F5B23BB017500D44CB0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		33259F5E23BB017500D44CB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33259F6023BB017500D44CB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3356008F23FCF96800E9CB43 /* NanumSquareRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareRegular.ttf; sourceTree = "<group>"; };
+		3356009023FCF97D00E9CB43 /* NanumSquareLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareLight.ttf; sourceTree = "<group>"; };
 		335EAC9923F3E66000071770 /* FloatRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatRatingView.swift; sourceTree = "<group>"; };
 		335EAC9B23F3E72100071770 /* ReviewWriteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewWriteController.swift; sourceTree = "<group>"; };
 		337FFD1323FA3B5B006136A5 /* CustomConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomConvert.swift; sourceTree = "<group>"; };
@@ -184,6 +188,8 @@
 		33F48FC323CDE8DE0037CC7B /* File */ = {
 			isa = PBXGroup;
 			children = (
+				3356009023FCF97D00E9CB43 /* NanumSquareLight.ttf */,
+				3356008F23FCF96800E9CB43 /* NanumSquareRegular.ttf */,
 				33D04E0123CEFA0E002FB5AE /* loading.json */,
 				330E8F1923CE99AF00D21053 /* NanumSquareBold.ttf */,
 			);
@@ -271,7 +277,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				33259F5F23BB017500D44CB0 /* LaunchScreen.storyboard in Resources */,
+				3356009223FCF98B00E9CB43 /* NanumSquareLight.ttf in Resources */,
 				33259F5C23BB017500D44CB0 /* Assets.xcassets in Resources */,
+				3356009123FCF98700E9CB43 /* NanumSquareRegular.ttf in Resources */,
 				33259F5A23BB017400D44CB0 /* Main.storyboard in Resources */,
 				33D04E0423CEFA0E002FB5AE /* loading.json in Resources */,
 				330E8F1A23CE99AF00D21053 /* NanumSquareBold.ttf in Resources */,

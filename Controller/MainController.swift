@@ -17,6 +17,7 @@ class MainController : UIViewController{
     
     
     @IBOutlet weak var title_View: UIView!
+    //@IBOutlet weak var title_View: UIView!
     @IBOutlet weak var sub_View: UIView!
     @IBOutlet weak var sub2_View: UIView!
     @IBOutlet weak var progressBar_view: UIView!
@@ -25,11 +26,25 @@ class MainController : UIViewController{
     @IBOutlet weak var favorite_Btn: UIButton!
     
     
-    @IBOutlet weak var purchaseCount_Label: UILabel!
+    //@IBOutlet weak var purchaseCount_Label: UILabel!
     //@IBOutlet weak var grade_Label: UILabel!
     
     @IBOutlet weak var userProfileImage_View: UIImageView!
-    @IBOutlet weak var userName_Label: UILabel!
+    //@IBOutlet weak var userName_Label: UILabel!
+    @IBOutlet weak var welcomeMessage_Label: UILabel!
+    @IBOutlet weak var profileSetting_Btn: UIButton!
+    
+    @IBOutlet weak var progress_View: UIView!
+    @IBOutlet weak var progressComment_Label: UILabel!
+    
+    @IBAction func profileSetting_Btn(_ sender: Any) {
+            guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "SettingController") as? SettingController else {return}
+        
+        
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(rvc, animated: true)
+        }
+    }
     
     
     /* 가게 선택 버튼 */
@@ -110,10 +125,10 @@ class MainController : UIViewController{
     /* 버튼 그림자 넣기 */
     func addShadow(view : UIView){
         view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 0.3
+        view.layer.shadowOpacity = 0.1
         view.layer.shadowOffset = .zero
-        view.layer.shadowRadius = 4
-        view.layer.cornerRadius = 5
+        view.layer.shadowRadius = 10
+        
     }
     
     
@@ -182,6 +197,15 @@ class MainController : UIViewController{
         }
     }
     
+    func makeCircularShape(view: UIView){
+        view.layer.cornerRadius = view.frame.height/2
+        view.layer.masksToBounds = false
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.clear.cgColor
+        view.clipsToBounds = true
+        view.contentMode = .scaleAspectFill
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -198,13 +222,23 @@ class MainController : UIViewController{
         addShadow(view: sub_View)
         addShadow(view: sub2_View)
         
-        storeSelect_Btn.layer.cornerRadius = 5
-        favorite_Btn.layer.cornerRadius = 5
+        title_View.layer.cornerRadius = 25
+        sub_View.layer.cornerRadius = 40
+        sub2_View.layer.cornerRadius = sub2_View.frame.height/2
+        
+        makeCircularShape(view: progress_View)
+        
+        makeCircularShape(view: userProfileImage_View)
+        
+        storeSelect_Btn.layer.cornerRadius = 40
+        favorite_Btn.layer.cornerRadius = 40
+        
+        
         
         /* 원형 애니메이션 */
-        let cp = CircularProgressView(frame: CGRect(x: 35.5, y: 16.5, width: 120.0, height: 120.0))
-        cp.trackColor = UIColor(red: 188.0/255.0, green: 188.0/255.0, blue: 188.0/255.0, alpha: 0.3)
-        cp.progressColor = UIColor.systemYellow
+        let cp = CircularProgressView(frame: CGRect(x: 31, y: 14.0, width: 119.5, height: 119.5))
+        cp.trackColor = UIColor(red: 230.0/255.0, green: 188.0/255.0, blue: 188.0/255.0, alpha: 0.3)
+        cp.progressColor = UIColor.systemOrange
         cp.tag = 101
         self.sub2_View.addSubview(cp)
         
@@ -224,7 +258,9 @@ class MainController : UIViewController{
         
         /* 사용자 아이디 */
         userId = UserDefaults.standard.string(forKey: "id")!
-        self.userName_Label.text = userId
+        
+        //self.userName_Label.text = userId
+        self.welcomeMessage_Label.text = "\(userId!)님"
         //id_Label.text = userId! + " 님은"
         
     }
@@ -233,21 +269,30 @@ class MainController : UIViewController{
         
         self.navigationController!.isNavigationBarHidden = true
         
-        CustomHttpRequest().phpCommunication(url: "getUserInfo.php", postString: "id=\(self.userId!)"){
-            responseString in
+//        CustomHttpRequest().phpCommunication(url: "getUserInfo.php", postString: "id=\(self.userId!)"){
+//            responseString in
+//
+//            DispatchQueue.main.async {
+//                //self.purchaseCount_Label.text = (responseString) as String + " / 25"
+//                self.purchaseCount = Float(responseString)! / 25.0
+//
+//                //self.grade_Label.text = "Bronze"
+//                //self.grade_Label.accessibilityLabel = "현재 브론즈 단계이시며 실버 단계까지 주문 \(25 - Int(responseString! as String)!)번 남았습니다"/* 구매 횟수 애니메이션 바 갱신 */
+//                self.perform(#selector(self.animateProgress), with: nil, afterDelay: 1.0)
+//
+//
+//
+//            }
+//        }
+        /* 구매 횟수 애니메이션 바 갱신 */
+        self.perform(#selector(self.animateProgress), with: nil, afterDelay: 1.0)
+        progressComment_Label.alpha = 0
+        UIView.animate(withDuration: 1.5) {
+            self.progressComment_Label.alpha = 1.0
             
-            DispatchQueue.main.async {
-                self.purchaseCount_Label.text = (responseString) as String + " / 25"
-                self.purchaseCount = Float(responseString)! / 25.0
-                
-                //self.grade_Label.text = "Bronze"
-                //self.grade_Label.accessibilityLabel = "현재 브론즈 단계이시며 실버 단계까지 주문 \(25 - Int(responseString! as String)!)번 남았습니다"
-                
-                /* 구매 횟수 애니메이션 바 갱신 */
-                self.perform(#selector(self.animateProgress), with: nil, afterDelay: 1.0)
-                
-            }
         }
+        
+        
     }
     
     
@@ -258,7 +303,7 @@ class MainController : UIViewController{
     
     @objc func animateProgress() {
         let cP = self.view.viewWithTag(101) as! CircularProgressView
-        cP.setProgressWithAnimation(duration: 0.4, value: self.purchaseCount)
+        cP.setProgressWithAnimation(duration: 0.4, value: 0.25)
         
     }
     

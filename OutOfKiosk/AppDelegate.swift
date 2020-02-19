@@ -44,6 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        Thread.sleep(forTimeInterval: 2.0)
+        
         /* 최초에 사용자로부터 pushNotification의 권환을 받기 위한 코드*/
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.badge, .alert, .sound]) {
