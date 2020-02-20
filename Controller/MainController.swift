@@ -35,7 +35,13 @@ class MainController : UIViewController{
     @IBOutlet weak var profileSetting_Btn: UIButton!
     
     @IBOutlet weak var progress_View: UIView!
+    
+    @IBOutlet weak var progressTitle_Label: UILabel!
     @IBOutlet weak var progressComment_Label: UILabel!
+    @IBOutlet weak var progressComment2_Label: UILabel!
+    
+    @IBOutlet weak var progressImage_ImageView: UIImageView!
+    
     
     @IBAction func profileSetting_Btn(_ sender: Any) {
             guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "SettingController") as? SettingController else {return}
@@ -224,10 +230,9 @@ class MainController : UIViewController{
         
         title_View.layer.cornerRadius = 25
         sub_View.layer.cornerRadius = 40
-        sub2_View.layer.cornerRadius = sub2_View.frame.height/2
+        sub2_View.layer.cornerRadius = 40
         
         makeCircularShape(view: progress_View)
-        
         makeCircularShape(view: userProfileImage_View)
         
         storeSelect_Btn.layer.cornerRadius = 40
@@ -238,7 +243,7 @@ class MainController : UIViewController{
         /* 원형 애니메이션 */
         let cp = CircularProgressView(frame: CGRect(x: 31, y: 14.0, width: 119.5, height: 119.5))
         cp.trackColor = UIColor(red: 230.0/255.0, green: 188.0/255.0, blue: 188.0/255.0, alpha: 0.3)
-        cp.progressColor = UIColor.systemOrange
+        cp.progressColor = UIColor.black
         cp.tag = 101
         self.sub2_View.addSubview(cp)
         
@@ -286,10 +291,18 @@ class MainController : UIViewController{
 //        }
         /* 구매 횟수 애니메이션 바 갱신 */
         self.perform(#selector(self.animateProgress), with: nil, afterDelay: 1.0)
+        
+        progressComment2_Label.alpha = 0
         progressComment_Label.alpha = 0
+        progressImage_ImageView.alpha = 0
         UIView.animate(withDuration: 1.5) {
             self.progressComment_Label.alpha = 1.0
-            
+        }
+        UIView.animate(withDuration: 1.5) {
+            self.progressComment2_Label.alpha = 1.0
+        }
+        UIView.animate(withDuration: 1.5) {
+            self.progressImage_ImageView.alpha = 1.0
         }
         
         
