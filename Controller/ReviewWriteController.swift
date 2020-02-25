@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ReviewWriteController : UIViewController{
+class ReviewWriteController : UIViewController, UITextFieldDelegate{
     
     var storeEnName: String?
     @IBOutlet weak var floatRatingView: FloatRatingView!
@@ -63,15 +63,28 @@ class ReviewWriteController : UIViewController{
     }
     
     
-//    override func accessibilityIncrement() {
-//        <#code#>
-//    }
-//    override func accessibilityDecrement() {
-//        <#code#>
-//    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            // textField의 상태를 포기 -> 키보드 내려감
+            textField.resignFirstResponder()
+            return true
+    }
+    @objc func keyboardWillShow(_ sender: Notification) {
+        self.view.frame.origin.y = -150 // Move view 150 points upward
+    }
+    
+    @objc func keyboardWillHide(_ sender: Notification) {
+        
+        self.view.frame.origin.y = 0 // Move view to original position
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        /* 아이폰 키보드 올라가고 내려가기 설정*/
+        reviewContents_TextField.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+
         
         /* backButton 커스터마이징 */
         let backBtn = UIButton(type: .custom)
