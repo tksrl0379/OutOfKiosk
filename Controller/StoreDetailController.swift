@@ -274,13 +274,13 @@ class StoreDetailController : UIViewController{
         
         let ad = UIApplication.shared.delegate as? AppDelegate
         
-//        ad?.numOfProducts = 1
-//        ad?.menuNameArray = ["모카스무디"]
-//        ad?.menuSizeArray = ["스몰"]
-//        ad?.menuCountArray = [3]
-//        ad?.menuEachPriceArray = [5300]
-//        ad?.menuSugarContent = ["40%"]
-//        ad?.menuIsWhippedCream = ["NULL"]
+        ad?.numOfProducts = 1
+        ad?.menuNameArray = ["모카스무디"]
+        ad?.menuSizeArray = ["스몰"]
+        ad?.menuCountArray = [3]
+        ad?.menuEachPriceArray = [5300]
+        ad?.menuSugarContent = ["40%"]
+        ad?.menuIsWhippedCream = ["NULL"]
         
         shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
         shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."

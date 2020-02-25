@@ -74,7 +74,6 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
      */
     var locationManager: CLLocationManager! //
     var beaconConfirmFlag : Bool = false //
-//    var taskld : UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -420,6 +419,24 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         
         super.viewDidLoad()
         
+        /* backButton 커스터마이징 */
+        let backBtn = UIButton(type: .custom)
+        backBtn.frame = CGRect(x: 0.0, y: 0.0, width: 24, height: 24)
+        backBtn.setImage(UIImage(named:"left_image"), for: .normal)
+        backBtn.addTarget(self, action: #selector(DetailMenuController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
+        
+        
+        let addButton = UIBarButtonItem(customView: backBtn)
+        let currWidth = addButton.customView?.widthAnchor.constraint(equalToConstant: 24)
+        currWidth?.isActive = true
+        let currHeight = addButton.customView?.heightAnchor.constraint(equalToConstant: 24)
+        currHeight?.isActive = true
+        
+        
+        //addButton.tintColor = UIColor.black
+        self.navigationItem.leftBarButtonItem = addButton
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        
         /* 비콘 권한 설정하기 */
         locationManager = CLLocationManager()   // locationManager 초기화.
         locationManager.delegate = self // locationManager 초기화.
@@ -430,24 +447,16 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         locationManager.pausesLocationUpdatesAutomatically = false  // 이걸 써줘야 백그라운드에서 멈추지 않고 돈다
         
         
-
-//        locationManager.allowsBackgroundLocationUpdates = true
-        
         /* UI : 버튼의 각을 줄인다*/
         orderItems_Btn.layer.cornerRadius = 5
-        //        deleteShoppingBasketProduct_Btn
-        //        deleteShoppingBasketProduct_Btn.layer.cornerRadius = 5
+   
         
         
         ShoppingBasketTableView.delegate=self
         ShoppingBasketTableView.dataSource=self
         self.ShoppingBasketTableView.rowHeight = 200.0
         
-        /* backButton 커스터마이징 */
-        let addButton = UIBarButtonItem(image:UIImage(named:"left"), style:.plain, target:self, action:#selector(ShoppingBasketController.buttonAction(_:)))
-        addButton.tintColor = UIColor.black
-        self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        
         
                         
         /*
@@ -488,7 +497,12 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         }
         
       
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+       /* navigationbar 투명 설정 */
+       self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
+       self.navigationController!.navigationBar.shadowImage = UIImage()
         
     }
     

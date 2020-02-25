@@ -373,6 +373,11 @@
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="deleteFavoriteMenu_Btn" destination="VaS-IK-hr0" id="12Z-CQ-caT"/>
+                                            <outlet property="favoriteMenuName_Label" destination="AGk-gR-VL5" id="bOs-0M-PHy"/>
+                                            <outlet property="orderFavoriteMenu_Btn" destination="aYG-ah-Ti5" id="4ge-q9-cj6"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
