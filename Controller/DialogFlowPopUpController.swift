@@ -8,25 +8,11 @@
 
 /* 30초간 아무 말도 안하면 음성인식 기능 종료됨.*/
 
-
-
-/*
- 고칠 것들.
- 
- 1. 아주 가~끔 음성인식이 안먹을 때가 있는데 여러번 반복해서 테스트해서 원인 알아내기
- -> usleep쪽일 것으로 추측되는데 이런 방식 말고 thread block / wait 방법 찾아보기
- --> 세마포어를 이용하여 STT중에는 cpu 점유유을 10%대까지 낮추는데 성공했으나 TTS 중에는 아직 방법 찾는 중. 추후 고칠 예정.
- 
- 
- */
-
-
 import AVFoundation
 import Speech
 import UIKit
 import Alamofire
 import Lottie
-
 
 
 class DialogFlowPopUpController: UIViewController{
@@ -41,8 +27,6 @@ class DialogFlowPopUpController: UIViewController{
     var similarEntity: NSString?
     // 4. 사용자가 유사한 단어를 사용하기 위해 선택한 경우
     var similarEntityIsOn: Bool = false
-    
-    //var categoryOfSimilarity: String?
     
     
     /* STT 동기화를 위한 세마포어 선언: STT가 끝나면 wait로 블록시키고, TTS가 끝나면 signal 전송하여 다시 STT 시작. CPU점유율을 낮추는 역할도 함  */
@@ -59,20 +43,14 @@ class DialogFlowPopUpController: UIViewController{
     @IBOutlet weak var animationView: UIView!
     var animation: AnimationView?
     
-    /* 뒷배경 blur 처리위한 함수 */
-    //var blurEffectView: UIView?
     
     /* ViewController 종료를 알리는 변수 */
     private var viewIsRunning : Bool = true
     
-    /* startRecording()의 콜백함수들 종료 여부 체크 변수 (STT / TTS 타이밍을 맞추기 위한 변수들)  */
-    //var checkMain :Bool = false
-    //private var checkSttFinish : Bool = true
-    //private var checkSendCompleteToAI :Bool = true
+    /* startRecording()의 콜백함수들 종료 여부 체크 변수 (STT / TTS 타이밍을 맞추기 위한 변수) */
     private var checkResponseFromAI :Bool = true
-    //private var checkGetPriceFromDB : Bool = true
     
-    // checkSimilarEntityIsGet은 1. 유사한 단어 정보를 DB로부터 받고 -> 2. TTS를 수행하고 나서 3. startStopAct()의 쓰레드의 if문으로 들어가 STT(startRecording)를 수행하기 위한 변수. 이 변수가 없으면 DB로부터 아직 유사 단어 추천을 받지 못했는데 STT가 시작된다. (STT-> DB순서가 되버리기 때문에 이 순서를 맞춰주기 위함)
+    /* checkSimilarEntityIsGet: 1. 유사한 단어 정보를 DB로부터 받고 -> 2. TTS를 수행하고 나서 3. startStopAct()의 쓰레드의 if문으로 들어가 STT(startRecording)를 수행하기 위한 변수. 이 변수가 없으면 DB로부터 아직 유사 단어 추천을 받지 못했는데 STT가 시작된다. (STT-> DB순서가 되버리기 때문에 이 순서를 맞춰주기 위함) */
     var checkSimilarEntityIsGet: Bool = true
     
     /* Dialogflow parameter 변수 */
@@ -82,20 +60,20 @@ class DialogFlowPopUpController: UIViewController{
     private var sugar: String?
     private var whippedcream: String?
     
-    var storeName : String?
+    /* 가게 한글 이름 */
+    var storeKorName : String?
     
     /* VoiceOver와 TTS 혼선 제어 변수들
-     popUp_Label : 맨 처음 보이스 오버 포커싱이 뒤로가기로 가지 않기위해 만든 라벨
+     1. popUp_Label : 맨 처음 보이스 오버 포커싱이 뒤로가기로 가지 않기위해 만든 라벨
      이 라벨을 이용하여, 후에 유사도함수 이후 다시 뒤로가기로 포커싱가지 않기위해
      이 라벨에 포커싱을 잡아줄 것임.
      
-     popUpFlag : 유사도 확인용 플래그
+     2. popUpFlag : 유사도 확인용 플래그
      유사도 질문에 대한 답으로 selectBtn을 누를 시, 보이스오버 기능 특성 상 읽을 수 있는 라벨에 자동으로 포커싱이 가기때문에
      popUpMSG로 포커싱이 가는 시나리오에선 speechAndText에서 sleep을 1.5초를 지연시켜 TTS와 보이스오버의 중복이 없게 만든다.
      */
     
     @IBOutlet weak var popUp_Label: UILabel!
-    
     var popUpFlag : Bool = false
     
     
@@ -106,7 +84,6 @@ class DialogFlowPopUpController: UIViewController{
      */
     @IBOutlet weak var receivedMsg_Label: UILabel!
     @IBOutlet weak var requestMsg_Label: UITextView!
-    //@IBOutlet weak var recording_Btn: UIButton!
     
     /* TTS 관련 변수 */
     let speechSynthesizer = AVSpeechSynthesizer()
@@ -139,6 +116,7 @@ class DialogFlowPopUpController: UIViewController{
         popUpFlag = true
                 
     }
+    
     /* 녹음 시작, 중단 버튼 시 이벤트 처리 */
     func StartStopAct() {
         
@@ -175,44 +153,6 @@ class DialogFlowPopUpController: UIViewController{
         
     }
     
-    
-    
-    
-    
-    /* 가격 정보 출력 */
-    /* php - mysql 서버로부터 가격 정보 가져와서 가격 출력 후 receivedMsg_Label에 Dialogflow message 출력 및 TTS */
-    func getPriceInfo(handler: @escaping (_ responseStrng : NSString?) -> Void){
-        /* php 통신 */
-        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/price.php")! as URL)
-        request.httpMethod = "POST"
-        
-        let postString = "name=\(self.name!)&size=\(self.size!)&count=\(self.count!)";
-        print(self.size!)
-        request.httpBody = postString.data(using: String.Encoding.utf8)
-        
-        
-        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
-        let task = URLSession.shared.dataTask(with: request as URLRequest) {
-            data, response, error in
-            
-            print("response = \(response!)")
-            
-            /* php server에서 echo한 내용들이 담김 */
-            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-            
-            /* php서버와 통신 시 NSString에 생기는 개행 제거 */
-            responseString = responseString?.trimmingCharacters(in: .newlines) as NSString?
-            
-            print("responseString = \(responseString!)")
-            
-            /* UI 변경은 메인쓰레드에서만 가능 */
-            
-            //self.speechAndText(textResponse + " 총 \(responseString!)원입니다. 주문하시겠습니까 ?")
-            handler(responseString)
-            
-        }
-        task.resume()
-    }
     
     
     /* Dialogflow가 이해하지 못한 단어와 가장 유사도가 높은 Entity를 DB로부터 추천받음 */
@@ -483,29 +423,20 @@ class DialogFlowPopUpController: UIViewController{
                                     
                                     // 2-2-2 장바구니에 담은 경우
                                 }else if(textResponse.contains("담았습니다.")){
+                                    
                                     // Db - php 서버로부터 가격정보 받은 후 장바구니(ShoppingListViewController)로 전송하고,
                                     CustomHttpRequest().phpCommunication(url: "price.php", postString: "name=\(self.name!)&size=\(self.size!)&count=\(self.count!)"){
                                         price in
                                         
                                         
-                                        //print("가격", price)
+                                        print("가격", price)
                                         
-                                        
-                                        /*
-                                         AppDelegate.swift를 이용하기.
-                                         모든 View에서 참조 가능하며 앱을 종료하지않는한 지속된다.
-                                         혹시 모를 뒤로가기버튼으로 인해 CafeDetailController를 나가더래도
-                                         AppDelegeate에 저장될 것이다. Main쓰레드에서만 가능하므로
-                                         DispatchQueue를 이용한다.
-                                         */
                                         DispatchQueue.main.async {
                                             
                                             let ad = UIApplication.shared.delegate as? AppDelegate
                                             
                                             /* 주문이 완료됨에 따라 장바구니 옆에 현재 몇개의 아이템이 있는지 알려준다.*/
                                             ad?.numOfProducts += 1
-                                            
-                                            //self.willGetShoppingBasket_Btn.setTitle("장바구니 : " + String(ad!.numOfProducts) + " 개", for: .normal)
                                             
                                             if let name = self.name{
                                                 ad?.menuNameArray.append(name)
@@ -519,7 +450,7 @@ class DialogFlowPopUpController: UIViewController{
                                             if let price = price as? NSString{
                                                 ad?.menuEachPriceArray.append(Int(price.intValue))
                                             }
-                                            
+
                                             if self.sugar == nil{
                                                 ad?.menuSugarContent.append("NULL")
                                             }else{
@@ -527,6 +458,7 @@ class DialogFlowPopUpController: UIViewController{
                                                     ad?.menuSugarContent.append(sugar)
                                                 }
                                             }
+                                            
                                             if self.whippedcream == nil{
                                                 ad?.menuIsWhippedCream.append("NULL")
                                             }else{
@@ -534,9 +466,11 @@ class DialogFlowPopUpController: UIViewController{
                                                     ad?.menuIsWhippedCream.append(whippedcream)
                                                 }
                                             }
-                                            ad?.menuStoreName = self.storeName!
-                                            print("가게이름:", self.storeName!)
-                                            /* 가게 체크? */
+                                            
+                                            ad?.menuStoreName = self.storeKorName!
+                                            print("가게이름:", self.storeKorName!)
+                                            
+                                            /* 가게 체크?: 추후에 넣기 */
                                             
                                             
                                         }
@@ -588,7 +522,6 @@ class DialogFlowPopUpController: UIViewController{
             }
             
             print("\(recordingCount), \(befRecordingCount), \(monitorCount)")
-            
             
             
         } // End of 2. inputNode.installTap
@@ -648,14 +581,12 @@ class DialogFlowPopUpController: UIViewController{
         backBtn.setImage(UIImage(named:"left_image"), for: .normal)
         backBtn.addTarget(self, action: #selector(FavoriteMenuController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
         
-        
         let addButton = UIBarButtonItem(customView: backBtn)
         let currWidth = addButton.customView?.widthAnchor.constraint(equalToConstant: 24)
-        currWidth?.isActive = true
         let currHeight = addButton.customView?.heightAnchor.constraint(equalToConstant: 24)
+        currWidth?.isActive = true
         currHeight?.isActive = true
         
-        //addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
         
@@ -670,7 +601,6 @@ class DialogFlowPopUpController: UIViewController{
         animation!.contentMode = .top
         animation!.loopMode = .loop
         animationView.addSubview(animation!)
-        //self.animation!.play()
         
         
         /* 오디오 설정: 이 코드를 넣어줘야 실제 디바이스에서 TTS가 정상적으로 작동 */
@@ -687,7 +617,7 @@ class DialogFlowPopUpController: UIViewController{
         let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/vendor/intent_query.php")! as URL)
         request.httpMethod = "POST"
         
-        let postString = "query=스타벅스"
+        let postString = "query=\(self.storeKorName!)"
         
         request.httpBody = postString.data(using: String.Encoding.utf8)
         
@@ -729,7 +659,7 @@ class DialogFlowPopUpController: UIViewController{
         //실행
         task.resume()
         
-        /* 실행과 동시에 보이스오버가 포커싱이 뒤로가기로 가지않기 위*/
+        /* 실행과 동시에 보이스오버가 포커싱이 뒤로가기로 가지않기 위함 */
         UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.popUp_Label)
         
     }

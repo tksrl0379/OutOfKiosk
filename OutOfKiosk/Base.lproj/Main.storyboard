@@ -223,8 +223,8 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="모카스무디 외 1개" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YtW-od-ie5">
-                                        <rect key="frame" x="169" y="92" width="135" height="20"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="모카스무디" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YtW-od-ie5">
+                                        <rect key="frame" x="169" y="92" width="82" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="18"/>
                                         <nil key="textColor"/>
@@ -237,8 +237,8 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rMJ-Wl-sqX">
-                                        <rect key="frame" x="169" y="108" width="64" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="외 1개" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rMJ-Wl-sqX">
+                                        <rect key="frame" x="169" y="114" width="64" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="18"/>
                                         <nil key="textColor"/>
@@ -309,7 +309,7 @@
                         <outlet property="sub_View" destination="bge-ce-DgV" id="8pt-a2-yqt"/>
                         <outlet property="title_View" destination="GHb-p7-v6z" id="y4N-1u-mPN"/>
                         <outlet property="userProfileImage_View" destination="Ctl-iW-nwa" id="ehU-Tn-E9T"/>
-                        <outlet property="welcomeMessage_Label" destination="yUy-gi-MV6" id="Am6-zA-CZs"/>
+                        <outlet property="userProfileName_Label" destination="yUy-gi-MV6" id="Am6-zA-CZs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7ES-pq-w9C" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -628,8 +628,8 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="storeCategory_Label" destination="uJt-P1-Ee6" id="a5Q-sc-8Tq"/>
                                             <outlet property="storeName_Label" destination="CeW-AJ-zGJ" id="H42-yg-0Il"/>
+                                            <outlet property="storeType_Label" destination="uJt-P1-Ee6" id="a5Q-sc-8Tq"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -777,11 +777,11 @@
                     <connections>
                         <outlet property="border2_View" destination="TVw-t7-ojP" id="AXt-r4-AC0"/>
                         <outlet property="border_View" destination="3aR-aO-Qrl" id="Mgl-aK-oQ7"/>
-                        <outlet property="firstMenu_Btn" destination="8ah-qg-zRI" id="hVO-1L-2Mg"/>
+                        <outlet property="firstCategory_Btn" destination="8ah-qg-zRI" id="hVO-1L-2Mg"/>
                         <outlet property="menu_Label" destination="0hk-dZ-7UP" id="2OM-8B-1dj"/>
                         <outlet property="orderMenuByAI_Btn" destination="hpp-lh-Xcn" id="V9f-jn-quY"/>
                         <outlet property="reviewBtn" destination="oVs-g6-Ram" id="dC0-Y5-ncE"/>
-                        <outlet property="secondMenu_Btn" destination="cvl-PS-Toi" id="LJT-TT-W3T"/>
+                        <outlet property="secondCategory_Btn" destination="cvl-PS-Toi" id="LJT-TT-W3T"/>
                         <outlet property="shoppingBasket_Btn" destination="F0E-de-uea" id="Ekj-Nf-o7e"/>
                         <outlet property="storeName_Label" destination="p4i-qn-XWl" id="v1N-wg-8GZ"/>
                     </connections>

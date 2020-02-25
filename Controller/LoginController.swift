@@ -83,7 +83,7 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
     
     
     @IBAction func signUp_Btn(_ sender: Any) {
-//        phpCommunication("signup")
+        
         CustomHttpRequest().phpCommunication(url: "app_login.php", postString: "mode=signup&id=\(id_Textfield.text!)&pwd=\(pwd_Textfield.text!)"){
             responseString in
             
@@ -101,6 +101,7 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
     }
     
     @IBAction func autoLogIn_Switch(_ sender: Any) {
+        
         /* 자동 로그인 ON */
         if autoLogIn_Switch.isOn{
             //self.login_Btn.setTitle("자동 로그인", for: .normal)
@@ -113,7 +114,7 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
                 return
             }
             
-            // 간편 로그인되있는 경우
+            // 카카오 간편 로그인되있는 경우
             if isOpened {
                 // 화면 전환
                 DispatchQueue.main.async{
@@ -122,7 +123,7 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
                         self.present(controller, animated: true, completion: nil)
                     }
                 }
-            // 간편 로그인이 아닌 경우(어플 자체 회원가입)
+            // 일반 로그인이 되있는 경우 (어플 자체 회원가입한 계정으로 로그인)
             }else if let userId = UserDefaults.standard.string(forKey: "id"){
                 
                 self.id_Textfield.text = userId
@@ -147,43 +148,7 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
     }
     
     
-    func alertMessage(_ title: String, _ description: String){
-        
-        /* Alert는 MainThread에서 실행해야 함 */
-        DispatchQueue.main.async{
-            
-            /* Alert message 설정 */
-            let alert = UIAlertController(title: title, message: description, preferredStyle: UIAlertController.Style.alert)
-            
-            /* 버튼 설정 및 추가*/
-            let defaultAction = UIAlertAction(title: "OK", style: .destructive) { (action) in
-            }
-            alert.addAction(defaultAction)
-
-            
-            /* Alert Message 띄우기 */
-            self.present(alert, animated: false, completion: nil)
-        }
-    }
     
-    
-    
-    /* UITextFieldDelegate 함수 오버라이딩 : return을 누르면 수행할 작업 기재 */
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            // textField의 상태를 포기 -> 키보드 내려감
-            textField.resignFirstResponder()
-
-            return true
-    }
-    
-    @objc func keyboardWillShow(_ sender: Notification) {
-         self.view.frame.origin.y = -150 // Move view 150 points upward
-    }
-    
-    @objc func keyboardWillHide(_ sender: Notification) {
-
-        self.view.frame.origin.y = 0 // Move view to original position
-    }
 
     @IBAction func kakaoLogin(_ sender: Any) {
         //이전 카카오톡 세션 열려있으면 닫기
@@ -224,8 +189,6 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
                             }
                         }
                         
-                        
-                        
                     })
                 } else {
                     print("Login failed")
@@ -248,6 +211,43 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
         
     }
     
+    func alertMessage(_ title: String, _ description: String){
+        
+        /* Alert는 MainThread에서 실행해야 함 */
+        DispatchQueue.main.async{
+            
+            /* Alert message 설정 */
+            let alert = UIAlertController(title: title, message: description, preferredStyle: UIAlertController.Style.alert)
+            
+            /* 버튼 설정 및 추가*/
+            let defaultAction = UIAlertAction(title: "OK", style: .destructive) { (action) in
+            }
+            alert.addAction(defaultAction)
+
+            /* Alert Message 띄우기 */
+            self.present(alert, animated: false, completion: nil)
+        }
+    }
+    
+    
+    
+    /* 아이디 입력 시 화면이 올라가도록 */
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            // textField의 상태를 포기 -> 키보드 내려감
+            textField.resignFirstResponder()
+
+            return true
+    }
+    
+    @objc func keyboardWillShow(_ sender: Notification) {
+         self.view.frame.origin.y = -150 // Move view 150 points upward
+    }
+    
+    @objc func keyboardWillHide(_ sender: Notification) {
+
+        self.view.frame.origin.y = 0 // Move view to original position
+    }
+    
     
     
     override func viewDidLoad() {
@@ -265,10 +265,8 @@ class LoginController: UIViewController, UITextFieldDelegate{//}, CLLocationMana
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         
-        /* 자동 로그인 */
+        /* 자동 로그인: 항상 ON 되있음 */
         autoLogIn_Switch(self)
-        
-        
         
     }
 }

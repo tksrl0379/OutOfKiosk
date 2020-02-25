@@ -16,19 +16,15 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
     @IBOutlet weak var CafeTableView: UITableView!
     
     /* cell에 띄울 가게 상세 정보 관련 변수 */
-    var storeNameArray : Array<String> = []
-    var storeCategoryArray : Array<String> = []
+    var storeKorNameArray : Array<String> = []
+    var storeTypeArray : Array<String> = []
     var storeEnNameArray : Array<String> = []
-    
-    var storeMenuArray : Array<String> = [String](repeating: "0", count: 6)
-    
     
     
     /* Cell 반복 횟수 관리 */
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        return storeNameArray.count
-
+        return storeKorNameArray.count
     }
     
     /* Cell 편집 */
@@ -37,9 +33,9 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
         /* 재사용할 수 있는 cell을 CafeTableView에 넣는다는 뜻. UITableViewCell을 반환하기 때문에 Storelist로 다운캐스팅 */
         let cell = CafeTableView.dequeueReusableCell(withIdentifier: "StoreList", for: indexPath ) as! StoreList
         
-        /* StoreList 클래스(Cell Class)에 등록한 프로퍼티 이용 가능 */
-        cell.storeName_Label.text = storeNameArray[indexPath.row]
-        cell.storeCategory_Label.text = storeCategoryArray[indexPath.row]
+        /* StoreList 클래스(Cell Class)에 등록한 프로퍼티 이용 가능: 가게 이름(name), 가게 종류(type) 명시 */
+        cell.storeName_Label.text = storeKorNameArray[indexPath.row]
+        cell.storeType_Label.text = storeTypeArray[indexPath.row]
         
         return cell
     }
@@ -51,17 +47,15 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
         : instantiateViewController를 통해 생성된 객체는 UIViewController타입이기 때문에 StoreDetailController 타입으로 다운캐스팅. */
         let rvc = self.storyboard?.instantiateViewController(identifier: "StoreDetailController") as! StoreDetailController
         
-        rvc.storeName = self.storeNameArray[indexPath.row]
+        /* 해당 가게의 한글이름, 영어이름을 넘겨줌 */
+        rvc.storeKorName = self.storeKorNameArray[indexPath.row]
         rvc.storeEnName = self.storeEnNameArray[indexPath.row]
         
-
         DispatchQueue.main.async {
             /* StoreDetailController 로 화면 전환 */
             self.navigationController?.pushViewController(rvc, animated: true) // navigation controller 방식
         }
         
-
-                
     }
     
     
@@ -87,22 +81,21 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
         let currHeight = addButton.customView?.heightAnchor.constraint(equalToConstant: 24)
         currHeight?.isActive = true
         
-        //addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        
         
         /* TableView의 대리자(delegate)는 self(StoreListController)가 됨 */
         CafeTableView.delegate = self
         CafeTableView.dataSource = self
         self.CafeTableView.rowHeight = 100
         
-       
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
-        storeNameArray.removeAll()
-        storeCategoryArray.removeAll()
+        storeKorNameArray.removeAll()
+        storeTypeArray.removeAll()
         storeEnNameArray.removeAll()
         
         CustomHttpRequest().phpCommunication(url: "getStoreInfo.php", postString: ""){
@@ -111,10 +104,10 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
             let dict = CustomConvert().convertStringToDictionary(text: responseString)!
             
             for i in 0..<dict.count{
-                self.storeNameArray.append(Array(dict)[i].key as! String)
+                self.storeKorNameArray.append(Array(dict)[i].key as! String)
                 
                 let sub_info = Array(dict)[i].value as! NSDictionary
-                self.storeCategoryArray.append(sub_info["category"] as! String)
+                self.storeTypeArray.append(sub_info["category"] as! String)
                 self.storeEnNameArray.append(sub_info["en_name"] as! String)
                 
             }
@@ -123,10 +116,7 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
                 self.CafeTableView.reloadData()
             }
             
-            
-            
         }
-        
         
         self.navigationController?.navigationBar.topItem?.title = "가게"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "NanumSquare", size: 20)!]
@@ -135,10 +125,6 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
     
     override func viewDidAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.topItem?.title = "가게"
-        
-        
     }
-    
-    
     
 }

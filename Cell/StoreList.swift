@@ -12,6 +12,6 @@ class StoreList : UITableViewCell {
 
     
     @IBOutlet weak var storeName_Label: UILabel!
-    @IBOutlet weak var storeCategory_Label: UILabel!
+    @IBOutlet weak var storeType_Label: UILabel!
     
 }
