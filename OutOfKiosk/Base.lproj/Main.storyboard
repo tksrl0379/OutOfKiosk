@@ -237,6 +237,13 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rMJ-Wl-sqX">
+                                        <rect key="frame" x="169" y="108" width="64" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="18"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </view>
@@ -292,6 +299,7 @@
                         <outlet property="profileSetting_Btn" destination="nzZ-d3-CPs" id="Npl-8N-I0F"/>
                         <outlet property="progressBar_view" destination="v4h-tH-D19" id="L2v-Jl-PI1"/>
                         <outlet property="progressComment2_Label" destination="YtW-od-ie5" id="JqV-Nk-zjV"/>
+                        <outlet property="progressComment3_Label" destination="rMJ-Wl-sqX" id="VWT-As-TnO"/>
                         <outlet property="progressComment_Label" destination="NW6-tb-6oG" id="YsO-oU-lhm"/>
                         <outlet property="progressImage_ImageView" destination="R2C-uW-TAN" id="TU3-NL-vh3"/>
                         <outlet property="progressTitle_Label" destination="hP5-gR-BdQ" id="152-mK-gBR"/>
@@ -365,11 +373,6 @@
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="deleteFavoriteMenu_Btn" destination="VaS-IK-hr0" id="mC0-dh-KU9"/>
-                                            <outlet property="favoriteMenuName_Label" destination="AGk-gR-VL5" id="wuH-Ih-MAN"/>
-                                            <outlet property="orderFavoriteMenu_Btn" destination="aYG-ah-Ti5" id="IxU-de-pNU"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>

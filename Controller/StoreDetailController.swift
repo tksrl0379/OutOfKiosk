@@ -54,6 +54,7 @@ class StoreDetailController : UIViewController{
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as? DialogFlowPopUpController else {
             return}
         
+        rvc.storeName = self.storeName
             
         
         self.navigationController?.pushViewController(rvc, animated: true)
@@ -78,39 +79,6 @@ class StoreDetailController : UIViewController{
         //}
         
     }
-    
-    
-    func phpGetReviewInfo(_ storeEnName : String, handler: @escaping (_ dict : NSDictionary)->Void){
-        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/getReviewInfo.php")! as URL)
-        request.httpMethod = "POST"
-        
-        let postString = "storeEnName=\(storeEnName)"
-        
-        
-        request.httpBody = postString.data(using: String.Encoding.utf8)
-        
-        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
-        let task = URLSession.shared.dataTask(with: request as URLRequest) {
-            data, response, error in
-            
-            print("response = \(response!)")
-            
-            /* php server에서 echo한 내용들이 담김 */
-            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-            print("responseString = \(responseString!)")
-            
-            
-            guard let dict = CustomConvert().convertStringToDictionary(text: responseString as! String) else {return}
-            
-            handler(dict)
-        }
-        
-        //실행
-        task.resume()
-    }
-    
-    
-    
     
     
     /*
@@ -199,67 +167,6 @@ class StoreDetailController : UIViewController{
     }
     
     
-    
-    /*
-     phpGetData는 Alamofire.request의 Return값을 전달해 주어야 한다. 그런데 Alamofire.request는 비동기 함수이므로
-     함수의 절차적인 실행이 보장되지 않는다. 따라서 Alamfire.request의 수행이 완료 된 후 화면전환이 되도록 Escaping Closure를
-     사용한다.(@escaping)
-     */
-    func phpGetData(_ category : Int, handler: @escaping (Array<String>,Array<Int>)->Void ){
-        
-        let parameter: Parameters=[
-            "category":category,
-            "storeName":storeEnName!
-        ]
-        
-        let URL_GET_PRODUCT = "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/detailMenu/api/category.php"
-        
-        Alamofire.request(URL_GET_PRODUCT, method: .post, parameters: parameter, encoding: URLEncoding.default, headers: nil).responseString{
-            response in
-            
-            print("response: \(response)")
-            
-            switch response.result{
-                
-            case .success:
-                
-                if response.result.value != nil {
-                    
-                    /*
-                     각각의 타입형에 맞게 배열을 선언하며 dict.allValue[i]를 사용하여 인덱스의 맞는 value값을 뽑는다.
-                     데이터는 각각의 배열에 저장되어 DetailMenuController로 전송.
-                     */
-                    var willgetCategroyName : Array<String> = []
-                    var willgetCategroyPrice : Array<Int> = []
-                    
-                    /* response는 DataResponse<String> 이므로 response.result.value 을 이용해 String type으로 받음 */
-                    let jsonData = response.result.value
-                    
-                    let dict = CustomConvert().convertStringToDictionary(text: jsonData!)!
-                    //let dict = self.convertStringToDictionary(text: jsonData!)! //as NSDictionary
-                    
-                    for i in 0..<dict.count{
-                        let productdata = dict.allValues[i] as! NSArray
-                        
-                        let name = productdata[0] as! String
-                        let price = productdata[1] as! Int
-                        
-                        
-                        // 서버로부터 스몰 사이즈 메뉴 정보만 받아옴. ( ex) 모카 프라푸치노 스몰, 모카 스무디 스몰 )
-                        willgetCategroyName.append(name.components(separatedBy: "스몰")[0])
-                        willgetCategroyPrice.append(price)
-                    }
-                    /* 두 개의 배열을 handler 클로저 매개변수를 통해 탈출시킨다. */
-                    
-                    handler(willgetCategroyName,willgetCategroyPrice)
-                }
-                
-            default :
-                fatalError("received non-dictionary JSON response")
-            }
-            
-        }
-    }
     
     
     @objc func buttonAction(_ sender: UIBarButtonItem) {

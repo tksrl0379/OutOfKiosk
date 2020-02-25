@@ -484,11 +484,11 @@ class DialogFlowPopUpController: UIViewController{
                                     // 2-2-2 장바구니에 담은 경우
                                 }else if(textResponse.contains("담았습니다.")){
                                     // Db - php 서버로부터 가격정보 받은 후 장바구니(ShoppingListViewController)로 전송하고,
-                                    self.getPriceInfo(){
+                                    CustomHttpRequest().phpCommunication(url: "price.php", postString: "name=\(self.name!)&size=\(self.size!)&count=\(self.count!)"){
                                         price in
                                         
                                         
-                                        print("가격", price)
+                                        //print("가격", price)
                                         
                                         
                                         /*
@@ -516,7 +516,7 @@ class DialogFlowPopUpController: UIViewController{
                                             if let count = self.count{
                                                 ad?.menuCountArray.append(count)
                                             }
-                                            if let price = price{
+                                            if let price = price as? NSString{
                                                 ad?.menuEachPriceArray.append(Int(price.intValue))
                                             }
                                             

@@ -50,7 +50,7 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
 
         /** Note: With the exception of contentMode, type and delegate,
          all properties can be set directly in Interface Builder **/
-        cell.floatRatingView.delegate = self
+        //cell.floatRatingView.delegate = self
         cell.floatRatingView.contentMode = UIView.ContentMode.scaleAspectFit
         cell.floatRatingView.type = .halfRatings
         cell.floatRatingView.editable = false
