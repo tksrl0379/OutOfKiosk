@@ -366,9 +366,9 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="deleteFavoriteProduct_Btn" destination="VaS-IK-hr0" id="N4s-sP-AUS"/>
-                                            <outlet property="favoriteProductName_Label" destination="AGk-gR-VL5" id="cVm-Qs-Zdg"/>
-                                            <outlet property="orderFavoriteProduct_Btn" destination="aYG-ah-Ti5" id="kyd-Ji-xhV"/>
+                                            <outlet property="deleteFavoriteMenu_Btn" destination="VaS-IK-hr0" id="mC0-dh-KU9"/>
+                                            <outlet property="favoriteMenuName_Label" destination="AGk-gR-VL5" id="wuH-Ih-MAN"/>
+                                            <outlet property="orderFavoriteMenu_Btn" destination="aYG-ah-Ti5" id="IxU-de-pNU"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -395,6 +395,7 @@
                     </view>
                     <connections>
                         <outlet property="FavoriteMenuTableView" destination="V7J-5M-PMg" id="eZ4-Xs-Ng2"/>
+                        <outlet property="favoriteMenuTableView" destination="V7J-5M-PMg" id="hfR-tP-nG6"/>
                         <outlet property="shoppingBasket_Btn" destination="rtt-MX-Hao" id="nOS-aV-FJf"/>
                     </connections>
                 </viewController>

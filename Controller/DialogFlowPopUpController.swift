@@ -82,6 +82,8 @@ class DialogFlowPopUpController: UIViewController{
     private var sugar: String?
     private var whippedcream: String?
     
+    var storeName : String?
+    
     /* VoiceOver와 TTS 혼선 제어 변수들
      popUp_Label : 맨 처음 보이스 오버 포커싱이 뒤로가기로 가지 않기위해 만든 라벨
      이 라벨을 이용하여, 후에 유사도함수 이후 다시 뒤로가기로 포커싱가지 않기위해
@@ -469,11 +471,14 @@ class DialogFlowPopUpController: UIViewController{
                                         }
                                         
                                     }else{ // 유사도 추천이 없는 질문의 경우
-                                        self.select_Btn.isHidden = true
-                                        self.speechAndText(textResponse)
-                                        print("일반")
-                                        // 질문이 반복되는지 감지하기 위해
-                                        self.befResponse = textResponse
+                                        DispatchQueue.main.async {
+                                            self.select_Btn.isHidden = true
+                                            self.speechAndText(textResponse)
+                                            print("일반")
+                                            // 질문이 반복되는지 감지하기 위해
+                                            self.befResponse = textResponse
+                                        }
+                                        
                                     }
                                     
                                     // 2-2-2 장바구니에 담은 경우
@@ -529,6 +534,9 @@ class DialogFlowPopUpController: UIViewController{
                                                     ad?.menuIsWhippedCream.append(whippedcream)
                                                 }
                                             }
+                                            ad?.menuStoreName = self.storeName!
+                                            print("가게이름:", self.storeName!)
+                                            /* 가게 체크? */
                                             
                                             
                                         }

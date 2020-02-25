@@ -51,63 +51,18 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
         : instantiateViewController를 통해 생성된 객체는 UIViewController타입이기 때문에 StoreDetailController 타입으로 다운캐스팅. */
         let rvc = self.storyboard?.instantiateViewController(identifier: "StoreDetailController") as! StoreDetailController
         
+        rvc.storeName = self.storeNameArray[indexPath.row]
+        rvc.storeEnName = self.storeEnNameArray[indexPath.row]
         
-        phpGetStoreDetailInfo(storeEnNameArray[indexPath.row]){
-            responseString in
-            print(responseString)
-            rvc.storeName = self.storeNameArray[indexPath.row]
-            rvc.storeEnName = self.storeEnNameArray[indexPath.row]
-            
-            guard let dict = CustomConvert().convertStringToDictionary(text: responseString) else {return}
-            for i in 0..<dict.count{
-                //self.storeMenuArray.append(Array(dict)[i].value as! String)
-                
-                //print(Int(Array(dict)[i].key as! String)!)
-                //print()
-                self.storeMenuArray[Int(Array(dict)[i].key as! String)! - 1] = Array(dict)[i].value as! String
-                rvc.storeMenuNameArray = self.storeMenuArray
-                
-            }
-            print(self.storeMenuArray)
-            
-            DispatchQueue.main.async {
-                /* StoreDetailController 로 화면 전환 */
-                self.navigationController?.pushViewController(rvc, animated: true) // navigation controller 방식
-            }
-            
-        }
-                
-    }
-    
-    
-    func phpGetStoreDetailInfo(_ storeName : String, handler: @escaping (_ responseString : String )->Void){
-        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/getStoreDetailInfo.php")! as URL)
-        request.httpMethod = "POST"
-        
-        let postString = "store_name=\(storeName)"
-        
-        
-        request.httpBody = postString.data(using: String.Encoding.utf8)
-        
-        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
-        let task = URLSession.shared.dataTask(with: request as URLRequest) {
-            data, response, error in
-            
-            print("response = \(response!)")
-            
-            /* php server에서 echo한 내용들이 담김 */
-            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-            print("responseString = \(responseString!)")
-            
-            
-            handler(responseString as! String)
+
+        DispatchQueue.main.async {
+            /* StoreDetailController 로 화면 전환 */
+            self.navigationController?.pushViewController(rvc, animated: true) // navigation controller 방식
         }
         
-        //실행
-        task.resume()
+
+                
     }
-    
-    
     
     
     @objc func buttonAction(_ sender: UIBarButtonItem) {
@@ -118,7 +73,6 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         /* backButton 커스터마이징 */
         let backBtn = UIButton(type: .custom)
@@ -146,6 +100,34 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        storeNameArray.removeAll()
+        storeCategoryArray.removeAll()
+        storeEnNameArray.removeAll()
+        
+        CustomHttpRequest().phpCommunication(url: "getStoreInfo.php", postString: ""){
+            responseString in
+            
+            let dict = CustomConvert().convertStringToDictionary(text: responseString)!
+            
+            for i in 0..<dict.count{
+                self.storeNameArray.append(Array(dict)[i].key as! String)
+                
+                let sub_info = Array(dict)[i].value as! NSDictionary
+                self.storeCategoryArray.append(sub_info["category"] as! String)
+                self.storeEnNameArray.append(sub_info["en_name"] as! String)
+                
+            }
+            
+            DispatchQueue.main.async {
+                self.CafeTableView.reloadData()
+            }
+            
+            
+            
+        }
+        
+        
         self.navigationController?.navigationBar.topItem?.title = "가게"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "NanumSquare", size: 20)!]
         self.navigationController?.navigationBar.topItem?.accessibilityLabel = "가게 선택 메뉴입니다"

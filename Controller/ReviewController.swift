@@ -40,11 +40,11 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
         
         let cell = reviewTableView.dequeueReusableCell(withIdentifier: "ReviewList", for: indexPath ) as! ReviewList
         
-        cell.reviewUserId_Label.text = reviewUserId![indexPath.row] + "님"
+        //cell.reviewUserId_Label.text = reviewUserId![indexPath.row] + "님"
         cell.reviewContents_Label.text = reviewContents![indexPath.row]
-        cell.reviewTime_Label.text = reviewTime![indexPath.row]
+        //cell.reviewTime_Label.text = reviewTime![indexPath.row]
         
-        /// 별점
+        // 별점
         // Reset float rating view's background color
         cell.floatRatingView.backgroundColor = UIColor.clear
 

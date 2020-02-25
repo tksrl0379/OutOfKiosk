@@ -10,11 +10,12 @@ import UIKit
 
 class FavoriteList : UITableViewCell {
    
-    @IBOutlet weak var favoriteProductName_Label: UILabel!
+    @IBOutlet weak var favoriteMenuName_Label: UILabel!
     
-    @IBOutlet weak var orderFavoriteProduct_Btn: UIButton!
-    @IBOutlet weak var deleteFavoriteProduct_Btn: UIButton!
     
-  
+    @IBOutlet weak var orderFavoriteMenu_Btn: UIButton!
+
+    @IBOutlet weak var deleteFavoriteMenu_Btn: UIButton!
+    
     
 }

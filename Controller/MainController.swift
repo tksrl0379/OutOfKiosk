@@ -39,12 +39,13 @@ class MainController : UIViewController{
     @IBOutlet weak var progressTitle_Label: UILabel!
     @IBOutlet weak var progressComment_Label: UILabel!
     @IBOutlet weak var progressComment2_Label: UILabel!
+    @IBOutlet weak var progressComment3_Label: UILabel!
     
     @IBOutlet weak var progressImage_ImageView: UIImageView!
     
     
     @IBAction func profileSetting_Btn(_ sender: Any) {
-            guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "SettingController") as? SettingController else {return}
+        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "SettingController") as? SettingController else {return}
         
         
         DispatchQueue.main.async {
@@ -56,35 +57,10 @@ class MainController : UIViewController{
     /* 가게 선택 버튼 */
     @IBAction func storeSelect_Btn(_ sender: Any) {
 
-        var storeNameArray: Array<String>?  = []
-        var storeCategoryArray: Array<String>? = []
-        var storeEnNameArray: Array<String>? = []
-        
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "StoreListController") as? StoreListController else { return }
         
-        CustomHttpRequest().phpCommunication(url: "getStoreInfo.php", postString: ""){
-            responseString in
-            
-            let dict = CustomConvert().convertStringToDictionary(text: responseString)!
-            
-            for i in 0..<dict.count{
-                storeNameArray?.append(Array(dict)[i].key as! String)
-                
-                let sub_info = Array(dict)[i].value as! NSDictionary
-                storeCategoryArray?.append(sub_info["category"] as! String)
-                storeEnNameArray?.append(sub_info["en_name"] as! String)
-                
-            }
-            
-            rvc.storeNameArray = storeNameArray!
-            rvc.storeCategoryArray = storeCategoryArray!
-            rvc.storeEnNameArray = storeEnNameArray!
-            
-            DispatchQueue.main.async {
-                self.navigationController?.pushViewController(rvc, animated: true)
-            }
-            
-            
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(rvc, animated: true)
         }
         
     }
@@ -94,11 +70,14 @@ class MainController : UIViewController{
         
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteMenuController") as? FavoriteMenuController else {return}
         
+        var favoriteMenuInfoDict = UserDefaults.standard.object(forKey: "favoriteMenuInfoDict") as? [String:String]
+
         
-        let defaults = UserDefaults.standard
-        let favoriteMenuArray = defaults.stringArray(forKey: "favoriteMenuArray") ?? [String]()
-        if favoriteMenuArray.count != 0 {
-            rvc.willgetFavoriteMenuName = favoriteMenuArray
+        if favoriteMenuInfoDict!.count != 0 {
+            
+//            rvc.willgetFavoriteMenuName = favoriteMenuArray
+//            rvc.willgetFavoriteStoreName = favoriteStoreNameArray
+            
             self.navigationController?.pushViewController(rvc, animated: true)
             
         }else{
@@ -128,6 +107,7 @@ class MainController : UIViewController{
         }
     }
     
+    
     /* 버튼 그림자 넣기 */
     func addShadow(view : UIView){
         view.layer.shadowColor = UIColor.black.cgColor
@@ -135,72 +115,6 @@ class MainController : UIViewController{
         view.layer.shadowOffset = .zero
         view.layer.shadowRadius = 10
         
-    }
-    
-    
-    /*
-     phpGetFavoriteData는 Alamofire.request의 Return값을 전달해 주어야 한다. 그런데 Alamofire.request는 비동기 함수이므로
-     함수의 절차적인 실행이 보장되지 않는다. 따라서 Alamfire.request의 수행이 완료 된 후 화면전환이 되도록 Escaping Closure를
-     사용한다.(@escaping)
-     즐겨찾기(favoriteMenus) 테이블에 있는 메뉴들을 해당 사용자에 맞게 갖고 온다.
-     */
-    func phpGetFavoriteData(handler: @escaping (Array<String>)->Void ){
-        let userID = UserDefaults.standard.string(forKey: "id")!
-        
-        let parameter: Parameters=[
-            "userID":userID
-        ]
-        
-        let URL_GET_FAVORITE = "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/favoriteMenu/api/getFavoriteMenu.php"
-        
-        Alamofire.request(URL_GET_FAVORITE, method: .post, parameters: parameter, encoding: URLEncoding.default, headers: nil).responseString{
-            response in
-            
-            print("\n\n\n\nsponse is: \(response)")
-            
-            switch response.result{
-                
-            case .success:
-                
-                if response.result.value != nil {
-                    
-                    /*
-                     각각의 타입형에 맞게 배열을 선언하며 dict.allValue[i]를 사용하여 인덱스의 맞는 value값을 뽑는다.
-                     데이터는 각각의 배열에 저장되어 DetailMenuController로 전송.
-                     */
-                    var willgetFavoriteMenuName : Array<String> = []
-                    
-                    let jsonData = response.result.value
-                    
-                    
-                    /* php 통신으로 가져온 데이터가 empty일 경우(즉, 즐겨찾기에 추가된 메뉴가 없을 경우)
-                     -> 빈 배열을 전달하여, 즐겨찾기가 없다는 것을 알림메세지로 알려주게 함.
-                     */
-                    if jsonData == "[]"{
-                        
-                        handler(willgetFavoriteMenuName)
-                        
-                        /* 한개 이상의 즐겨찾기 메뉴가 추가되었을 경우 배열로 변환하여 return 한다.*/
-                    }else{
-                        let dict = CustomConvert().convertStringToDictionary(text: jsonData!)! //as NSDictionary
-                        //
-                        for i in 0..<dict.count{
-                            let productdata = dict.allValues[i] as! NSArray
-                            //
-                            let menuName = productdata[0] as! String
-                            willgetFavoriteMenuName.append(menuName)
-                            
-                        }
-                        
-                        handler(willgetFavoriteMenuName)
-                    }
-                }
-                
-            default :
-                fatalError("received non-dictionary JSON response")
-            }
-            
-        }
     }
     
     func makeCircularShape(view: UIView){
@@ -212,9 +126,31 @@ class MainController : UIViewController{
         view.contentMode = .scaleAspectFill
     }
     
+    @objc func willEnterForeground() {
+        print("willEnterForeground!!!!")
+        if let pushMSG = UserDefaults.standard.string(forKey: "pushMSG"){
+            //            print("메인뷰에서 pushMSG : ", pushMSG)
+            progressTitle_Label.text = pushMSG
+        }
+        //        print(UserDefaults.standard.string(forKey: "pushMSG"))
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        /* 가장 최초에만 pushMSG를 nil로 한다.*/
+        UserDefaults.standard.set(nil, forKey: "pushMSG")
+        
+        /*ForeGround 옵져버*/
+        //NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        
+        
+        /*백그라운드 옵져버?*/
+        /*NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+         */
+        
+        
         
         /* 그림자 넣기, 둥글게 만들기 */
         self.navigationController!.navigationBar.setBackgroundImage(nil, for: .default)
@@ -253,11 +189,11 @@ class MainController : UIViewController{
         if let imageUrl = UserDefaults.standard.string(forKey: "profileImageUrl"){
             let url = URL(string: imageUrl)
             do {
-                  let data = try Data(contentsOf: url!)
+                let data = try Data(contentsOf: url!)
                 self.userProfileImage_View.image = UIImage(data: data)
-             }catch let err {
-                  print("Error : \(err.localizedDescription)")
-             }
+            }catch let err {
+                print("Error : \(err.localizedDescription)")
+            }
         }
         
         
@@ -271,24 +207,24 @@ class MainController : UIViewController{
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        print("11111111111111111111111111")
         self.navigationController!.isNavigationBarHidden = true
         
-//        CustomHttpRequest().phpCommunication(url: "getUserInfo.php", postString: "id=\(self.userId!)"){
-//            responseString in
-//
-//            DispatchQueue.main.async {
-//                //self.purchaseCount_Label.text = (responseString) as String + " / 25"
-//                self.purchaseCount = Float(responseString)! / 25.0
-//
-//                //self.grade_Label.text = "Bronze"
-//                //self.grade_Label.accessibilityLabel = "현재 브론즈 단계이시며 실버 단계까지 주문 \(25 - Int(responseString! as String)!)번 남았습니다"/* 구매 횟수 애니메이션 바 갱신 */
-//                self.perform(#selector(self.animateProgress), with: nil, afterDelay: 1.0)
-//
-//
-//
-//            }
-//        }
+        //        CustomHttpRequest().phpCommunication(url: "getUserInfo.php", postString: "id=\(self.userId!)"){
+        //            responseString in
+        //
+        //            DispatchQueue.main.async {
+        //                //self.purchaseCount_Label.text = (responseString) as String + " / 25"
+        //                self.purchaseCount = Float(responseString)! / 25.0
+        //
+        //                //self.grade_Label.text = "Bronze"
+        //                //self.grade_Label.accessibilityLabel = "현재 브론즈 단계이시며 실버 단계까지 주문 \(25 - Int(responseString! as String)!)번 남았습니다"/* 구매 횟수 애니메이션 바 갱신 */
+        //                self.perform(#selector(self.animateProgress), with: nil, afterDelay: 1.0)
+        //
+        //
+        //
+        //            }
+        //        }
         /* 구매 횟수 애니메이션 바 갱신 */
         self.perform(#selector(self.animateProgress), with: nil, afterDelay: 1.0)
         
@@ -306,11 +242,64 @@ class MainController : UIViewController{
         }
         
         
+        if let storeName = UserDefaults.standard.string(forKey: "mainProgressStoreName"){
+            progressComment_Label.text = storeName
+        }
+        if let menuName = UserDefaults.standard.string(forKey: "mainProgressMenuName"){
+            progressComment2_Label.text = menuName
+        }
+        if let numberOfMenu = UserDefaults.standard.string(forKey: "mainProgressMenuCount") {
+            print(numberOfMenu)
+            if (Int(numberOfMenu) == 1) {
+                progressComment3_Label.text = ""
+            }else{
+                /* 이 부분이 오류가 된다.*/
+                progressComment3_Label.text = "외 \(Int(numberOfMenu)! - 1) "
+            }
+        }
+        
+        /* progressBar_view 변경란
+         Push Notification을 받을 시, 주문 확인 중에서 메뉴 완성으로 바꾸기
+         
+         질문 -> 초기화를 언제하나?
+         
+         */
+//        if let pushMSG = UserDefaults.standard.string(forKey: "pushMSG"){
+//            //            print("메인뷰에서 pushMSG : ", pushMSG)
+//            if  (pushMSG == "주문이 접수되었습니다.") {
+//                progressTitle_Label.text = "메뉴 준비 중"
+//            }
+//            else if (pushMSG == "주문하신 메뉴가 나왔습니다.") {
+//                progressTitle_Label.text = "메뉴 완성"
+//            }
+//        }
+        
+        /*AppDelegate에서 받은 정보를 관찰하는 옵져버*/
+        NotificationCenter.default.addObserver(self, selector: #selector(changeProgressTitleView(_:)), name: NSNotification.Name("TestNotification"), object: nil)
+        
+        
     }
+    
+    @objc func changeProgressTitleView(_ notification: NSNotification){
+        guard let alertMSG: String = notification.userInfo?["alert"] as? String else { return }
+        
+        print("alert :", alertMSG)
+        
+        if  (alertMSG == "주문이 접수되었습니다.") {
+            progressTitle_Label.text = "메뉴 준비 중"
+        }
+        else if (alertMSG == "주문하신 메뉴가 나왔습니다.") {
+            progressTitle_Label.text = "메뉴 완성"
+        }
+//        progressTitle_Label.text = alertMSG
+        
+    }
+    
     
     
     override func viewWillDisappear(_ animated: Bool) {
         self.navigationController!.isNavigationBarHidden = false
+        
     }
     
     
@@ -319,5 +308,7 @@ class MainController : UIViewController{
         cP.setProgressWithAnimation(duration: 0.4, value: 0.25)
         
     }
+    
+    
     
 }
