@@ -10,7 +10,6 @@
     FavoriteMenuController에서 받을 수 있다.
  */
 import UIKit
-import Alamofire
 
 
 /*

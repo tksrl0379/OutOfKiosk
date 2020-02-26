@@ -1,24 +1,20 @@
 PODS:
-  - Alamofire (4.9.1)
   - FloatRatingView (4.0)
   - lottie-ios (3.1.5)
 
 DEPENDENCIES:
-  - Alamofire (~> 4.3)
   - FloatRatingView (~> 4)
   - lottie-ios
 
 SPEC REPOS:
   trunk:
-    - Alamofire
     - FloatRatingView
     - lottie-ios
 
 SPEC CHECKSUMS:
-  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   FloatRatingView: bb6bdddfbeec51b1d387b4bd50abc27b4dfccd48
   lottie-ios: 32bf84389337d86fbc8b12266e88452e0abf1dee
 
-PODFILE CHECKSUM: c465de2e848762b0100afbfce62f6cf9c90af188
+PODFILE CHECKSUM: 81f1837257b393687949b87c73fdc7fd90b6775a
 
 COCOAPODS: 1.8.4

@@ -7,34 +7,9 @@
 //
 
 import UIKit
-import Alamofire
 import CoreLocation
 
-/*
- 장바구니 뷰
- 메뉴이름과 수량, 그리고 각 메뉴에 대한 가격정보가 적혀있다.
- 
- 필요기능 ->
- 1. 각 테이블에 대한 아이템에 대하여 개수는 수정가능하고
- 2. 아이템 자체를 삭제할 수 있도록 한다.
- 3. 마지막에는 총 메뉴에 대한 가격을 알려주는 것이 좋다.
- 
- 프로세스
- 
- 1.임의로 메뉴이름, 수량, 가격을 라벨에 적어둔다. (Dictionary로 해야할지, 혹은 Array로 해야할지)
- 
- 1-1) 챗봇을 통해 메뉴가 생길때마다 append를 한다?
- rvc.blarblar = ddd
- Dictionary가 별 의미가 없는것이 한 아이템을 주문할때 순차적으로 모든값이 들어오고 rvc에 적재되므로 배열이 좋지 않을까 싶다.
- 
- 
- 2.수량은 버튼등을 이용해 올리기?내리기?
- 3.삭제버튼생성
- 
- */
 class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate{
-    
-    //    @IBOutlet weak var ProductName_Label: UILabel!
     
     @IBOutlet weak var ShoppingBasketTableView: UITableView!
     
@@ -43,10 +18,6 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     
     /* 비콘으로 주문하기 UI outlet*/
     @IBOutlet weak var orderItemByBeacon: UIButton!
-    
-    
-    
-    //    @IBOutlet weak var deleteShoppingBasketProduct_Btn: UIButton!
     
     /* 주문을 하면서 CafeDetailController의 UIBtn을 초기화 해주어야한다.*/
     var willGetShoppingBasket_Btn : UIButton!
@@ -70,7 +41,6 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     /* beacon variables
      1.locationManager : responsible for requesting location permission from users
      2.beaconConfrimFlag : 비콘버튼을 누르면 True가 되고 그 이후 비콘이 탐지가 되면 자동으로 전송한다.
-     3.taksld : background에서도 orderItem()이 실행할 수 있도록 하게 하는 변수
      */
     var locationManager: CLLocationManager! //
     var beaconConfirmFlag : Bool = false //
@@ -100,18 +70,16 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         /* 메뉴의 수량, 가격, 그리고 옵션을 보여주는 변수*/
         var productInfo : String = String(shoppingBasket_productCount[indexPath.row])+"개"+"\t\t\t" + String(shoppingBasket_productEachPrice[indexPath.row]*shoppingBasket_productCount[indexPath.row])+"원"+"\n"
         
-        orderItems_Btn.setTitle("주문하기 "+String(totalPrice)+"원", for: .normal)
         /* 접근성 */
+        orderItems_Btn.setTitle("주문하기 "+String(totalPrice)+"원", for: .normal)
         orderItems_Btn.accessibilityLabel = "주문하기 버튼. \(totalPrice)원 입니다"
         
         orderItemByBeacon.setTitle("비콘주문 "+String(totalPrice)+"원", for: .normal)
-        /* 접근성 */
         orderItemByBeacon.accessibilityLabel = "비콘주문 . \(totalPrice)원 입니다"
-        
         
         /* Stepper 초기값 */
         cell.shoppingBasketProductSize_Stepper.value = Double(shoppingBasket_productCount[indexPath.row])
-      
+        
         /* delete customizing*/
         cell.deleteShoppingBasket_Btn.layer.cornerRadius = 5
         
@@ -138,11 +106,10 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         attributedString.append(normalString)
         
         
-        //행간 늘리는건 나중에
-         let paragraphStyle = NSMutableParagraphStyle()
-         paragraphStyle.lineSpacing = 9
-         attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attributedString.length))
-         
+        /*행 간 커스터마이지*/
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 9
+        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attributedString.length))        
         
         /* 메뉴정보를 BasketItemInfo_Label에 저장 한다. 후에 출력 됨*/
         cell.BasketItemInfo_Label.attributedText = attributedString
@@ -163,8 +130,6 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         /*Index를 찾는다.*/
         let point = sender.convert(CGPoint.zero, to: ShoppingBasketTableView)
         guard let indexPath = ShoppingBasketTableView.indexPathForRow(at: point)else{return}
-        
-        //        print(sender.value)
         
         let ad = UIApplication.shared.delegate as? AppDelegate
         shoppingBasket_productCount[indexPath.row] = Int(sender.value)
@@ -210,8 +175,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         ad?.menuEachPriceArray.remove(at: Int(indexPath.row))
         ad?.menuSugarContent.remove(at: Int(indexPath.row))
         ad?.menuIsWhippedCream.remove(at: Int(indexPath.row))
-        
-        
+                
         ShoppingBasketTableView.deleteRows(at: [indexPath], with: .fade)
         
         /* 장바구니에 담겨진 메뉴 개수가 0개면 알아서 popView 되기.*/
@@ -232,62 +196,34 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         let date = DateFormatter()
         date.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let currentDate = date.string(from: now)
-        //        print(currentDate, type(of: currentDate))
-        
-        
         
         for i in 0...shoppingBasket_numOfProducts-1 {
-            /*if let userId = UserDefaults.standard.string(forKey: "id"){
-             
-             print("My ID : ", userId , "type : ", type(of: userId))
-             }*/
             
             let userId = UserDefaults.standard.string(forKey: "id")!
             let token = UserDefaults.standard.string(forKey: "token")
             
             print("userID type is : ", type(of: userId))
-            let parameters: Parameters=[
-                "name" : shoppingBasket_productName[i]+" "+shoppingBasket_productSize[i],
-                "count": shoppingBasket_productCount[i],
-                "sugar": shoppingBasket_productSugarContent[i],
-                "whippedcream": shoppingBasket_productIsWhippedCream[i],
-                "currentDate" : currentDate,
-                "userID" : userId,
-                "token" : token!
-                //UserDefaults.standard.string(forKey: "id")
-                //user Id또한 넣어주어야한다.
-                //order ID는 DB에서 auto_increament 한다.
-            ]
             
-            /* php 서버 위치 */
-            let URL_ORDER = "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/order/api/order.php"
-            //Sending http post request
-            Alamofire.request(URL_ORDER, method: .post, parameters: parameters).responseString
-                {
-                    response in
-                    print("응답",response)
-                    
-                    self.alertMessage("주문 성공", "주문한 메뉴가 나올 때까지 기다려 주세요.")
-                    
-                    
-                    
+            CustomHttpRequest().phpCommunication(url: "order/api/order.php", postString: "name=\(shoppingBasket_productName[i]+" "+shoppingBasket_productSize[i])&count=\(shoppingBasket_productCount[i])&sugar=\(shoppingBasket_productSugarContent[i])&whippedcream=\(shoppingBasket_productIsWhippedCream[i])&currentDate=\(currentDate)&userID=\(userId)&token=\(token!)"){
+                responseString in
+                
+                print("order 응답 = ",responseString)
+                
+                self.alertMessage("주문 성공", "주문한 메뉴가 나올 때까지 기다려 주세요.")
+                
+                DispatchQueue.main.async {
                     let ad = UIApplication.shared.delegate as? AppDelegate
                     
                     print("현재 주문성공한 가게 이름은 ", ad?.menuStoreName)
                     
+                    /* UserDefault에 Main에 보여줄 문자를 저장한다*/
                     UserDefaults.standard.set(self.shoppingBasket_productName[0], forKey: "mainProgressMenuName")
                     UserDefaults.standard.set(ad?.numOfProducts, forKey: "mainProgressMenuCount")
                     UserDefaults.standard.set(ad?.menuStoreName, forKey: "mainProgressStoreName")
-                    
                     UserDefaults.standard.set("주문 접수 중", forKey: "pushMSG")
                     
-                    self.navigationController?.popViewController(animated: true)
-                    //        let ad = UIApplication.shared.delegate as? AppDelegate
-                    
-                    ad?.numOfProducts = 0
                     /* 주문이 완료되면 현재 장바구니의 아이템을 삭제해야하므로 appdelegate의 모든 아이템을 초기화한다.*/
-                    //self.willGetShoppingBasket_Btn.setTitle("장바구니 : " + String(ad!.numOfProducts) + " 개", for: .normal)
-                    
+                    ad?.numOfProducts = 0
                     ad?.menuNameArray = []
                     ad?.menuSizeArray = []
                     ad?.menuCountArray = []
@@ -295,14 +231,16 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
                     ad?.menuSugarContent = []
                     ad?.menuIsWhippedCream = []
                     
+                }
+                
             }
+            
         }
-        
-        
-        
-        
-        
+        /* HTTP 통신이 끝나면 전 화면으로 돌아간다.*/
+        self.navigationController?.popViewController(animated: true)
     }
+    
+    
     @IBAction func orderItems_Btn(_ sender: Any) {
         orderItem()
     }
@@ -367,9 +305,9 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     /* 상시 비콘을 탐색하는 프로토콜*/
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         if beacons.count > 0 {
-                        
+            
             print("found # of \(beacons.count) beacons")
-
+            
             /* 비콘이 탐지가 되고 비콘전송을 누를시에 주문 전송이 되게 한다.*/
             /* 이슈 -> Background에서 감지가 되지만 계속 이 함수를 여러번 스택하고
              후에 foreground로 갔을 때 바로 쌓여저 있는 orderItem을 한꺼번에 쏜다.
@@ -381,7 +319,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
                 /* 주문이 완료되면 비콘 탐지를 종료한다.*/
                 let uuid = UUID(uuidString: "fda50693-a4e2-4fb1-afcf-c6eb07647825")! //UUID를 입력해야한다.
                 let beaconRegion = CLBeaconRegion(uuid: uuid, major: 10001, minor: 19641, identifier: "MyBeacon")
-                                
+                
                 locationManager.stopUpdatingLocation()
                 locationManager.stopMonitoringSignificantLocationChanges()
                 locationManager.allowsBackgroundLocationUpdates = false
@@ -408,7 +346,6 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
             let defaultAction = UIAlertAction(title: "확인", style: .destructive) { (action) in
             }
             alert.addAction(defaultAction)
-
             
             /* Alert Message 띄우기 */
             self.present(alert, animated: false, completion: nil)
@@ -446,11 +383,8 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         locationManager.allowsBackgroundLocationUpdates = true  // 백그라운드에서도 위치를 체크할 것인지에 대한 여부. 필요없으면 false로 처리하자.
         locationManager.pausesLocationUpdatesAutomatically = false  // 이걸 써줘야 백그라운드에서 멈추지 않고 돈다
         
-        
         /* UI : 버튼의 각을 줄인다*/
         orderItems_Btn.layer.cornerRadius = 5
-   
-        
         
         ShoppingBasketTableView.delegate=self
         ShoppingBasketTableView.dataSource=self
@@ -458,7 +392,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         
         
         
-                        
+        
         /*
          Appdelegate를 사용하여, 챗봇을 통해 주문한 정보를 AppDelegate에서 불러오는 작업. 이후 각 Array에 넣어준다.
          */
@@ -467,42 +401,31 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         if let numOfProducts = ad?.numOfProducts{
             shoppingBasket_numOfProducts = numOfProducts
         }
-        
         if let menuNameArray = ad?.menuNameArray {
-            
             shoppingBasket_productName = menuNameArray
-            
         }
         if let menuSizeArray = ad?.menuSizeArray {
-            
             shoppingBasket_productSize = menuSizeArray
-            
         }
         if let menuCountArray = ad?.menuCountArray {
-            
             shoppingBasket_productCount = menuCountArray
-            
         }
         if let menuEachPriceArray = ad?.menuEachPriceArray {
-            
             shoppingBasket_productEachPrice = menuEachPriceArray
         }
         if let menuSugarContent = ad?.menuSugarContent {
-            
             shoppingBasket_productSugarContent = menuSugarContent
         }
         if let menuIsWhippedCream = ad?.menuIsWhippedCream {
-            
             shoppingBasket_productIsWhippedCream = menuIsWhippedCream
         }
-        
-      
+                
     }   
     
     override func viewWillAppear(_ animated: Bool) {
-       /* navigationbar 투명 설정 */
-       self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
-       self.navigationController!.navigationBar.shadowImage = UIImage()
+        /* navigationbar 투명 설정 */
+        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController!.navigationBar.shadowImage = UIImage()
         
     }
     

@@ -7,7 +7,6 @@
 //
 
 /* PHP통신으로 Data를 받는다. 각 유저마다 원하는 정보의 Data를 받을것이다.*/
-import Alamofire
 import UIKit
 
 class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableViewDataSource{

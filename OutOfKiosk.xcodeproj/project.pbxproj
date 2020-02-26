@@ -524,8 +524,6 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
-					"\"Alamofire\"",
-					"-framework",
 					"\"CoreGraphics\"",
 					"-framework",
 					"\"FloatRatingView\"",
@@ -568,8 +566,6 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-framework",
-					"\"Alamofire\"",
 					"-framework",
 					"\"CoreGraphics\"",
 					"-framework",

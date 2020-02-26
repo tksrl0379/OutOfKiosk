@@ -10,7 +10,6 @@ import UIKit
 /* Push Notification 을 받기 위한 모듈*/
 import UserNotifications
 /*Push Notification 권환 받을 때 달라지는 토큰값을 pushNotificatio.php에 저장해야 한다.*/
-import Alamofire
  
 /*
  모든 View 컨트롤러에서 접근이 가능하며 앱이 종료되지 않는 이상 데이터가 유지가 될 수 있다.
@@ -61,10 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
         if favoriteMenuInfoDict == nil{
             defaults.set(dictionary, forKey: "favoriteMenuInfoDict")
         }
-        
-        
-        
-        
+                
         Thread.sleep(forTimeInterval: 2.0)
         
         /* 최초에 사용자로부터 pushNotification의 권환을 받기 위한 코드*/
@@ -119,24 +115,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
         if (application.applicationState == .active){ //포그라운드에서 pushNotification 받음.
             print("포그라운드!")
             
-            /*MainController 옵져버*/
-            //NotificationCenter.default.addObserver(self, selector: #selector(changeTitleView), name: UIApplication., object: nil)
-            
-            
-//            test.progressTitle_Label.text = "TEST"
-            //print(test.progressTitle_Label.text!)
-            
         }else if (application.applicationState == .background){
             print("백그라운드!")
             
-            /* Background 에서 push notification 받으면 badgeNumber 숫자가 1씩 증가한다.*/
-            //self.badgeCount += 1
-            //UIApplication.shared.applicationIconBadgeNumber += self.badgeCount
+            UIApplication.shared.applicationIconBadgeNumber += 1 /* 아이콘에 뱃지 넘버수를 증가시킨다.*/
             
         }
-        
-        UIApplication.shared.applicationIconBadgeNumber += 1 /* 아이콘에 뱃지 넘버수를 증가시킨다.*/
-        
+                    
         print(UIApplication.shared.applicationIconBadgeNumber)
         
         let aps = data[AnyHashable("aps")] as? NSDictionary

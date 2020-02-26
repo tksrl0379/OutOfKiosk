@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Alamofire
 
 
 /* 가게 접속하면 뜨는 메인 화면 */

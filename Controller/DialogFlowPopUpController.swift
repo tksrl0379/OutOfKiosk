@@ -11,7 +11,6 @@
 import AVFoundation
 import Speech
 import UIKit
-import Alamofire
 import Lottie
 
 

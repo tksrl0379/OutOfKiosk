@@ -7,7 +7,6 @@ target 'OutOfKiosk' do
 
   # Pods for OutOfKiosk
 
-  pod 'Alamofire', '~> 4.3' 
   pod 'lottie-ios'
   pod 'FloatRatingView', '~> 4'
 end
