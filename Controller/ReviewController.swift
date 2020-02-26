@@ -30,13 +30,12 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return reviewUserId!.count
-//        return willgetCategroyName.count
     }
     
 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//         재사용할 수 있는 cell을 ProductTableView에 넣는다는 뜻. UITableViewCell을 반환하기 때문에 Reviewlist로 다운캐스팅
+//      재사용할 수 있는 cell을 ProductTableView에 넣는다는 뜻. UITableViewCell을 반환하기 때문에 Reviewlist로 다운캐스팅
         
         let cell = reviewTableView.dequeueReusableCell(withIdentifier: "ReviewList", for: indexPath ) as! ReviewList
         
@@ -116,9 +115,11 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
         reviewTime?.removeAll()
         reviewRating?.removeAll()
         
-        phpGetReviewInfo(storeEnName!){
-            dict in
+        CustomHttpRequest().phpCommunication(url: "getReviewInfo.php", postString: "storeEnName=\(storeEnName!)"){
+            responseString in
             
+            guard let dict = CustomConvert().convertStringToDictionary(text: responseString as! String) else {return}
+        
             for i in 1...dict.count{
                 let dict = dict[String(i)] as! NSDictionary
                 self.reviewUserId?.append(dict["userId"] as! String)
@@ -140,34 +141,6 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     
-    func phpGetReviewInfo(_ storeEnName : String, handler: @escaping (_ dict : NSDictionary)->Void){
-        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/getReviewInfo.php")! as URL)
-        request.httpMethod = "POST"
-        
-        let postString = "storeEnName=\(storeEnName)"
-        
-        
-        request.httpBody = postString.data(using: String.Encoding.utf8)
-        
-        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
-        let task = URLSession.shared.dataTask(with: request as URLRequest) {
-            data, response, error in
-            
-            print("response = \(response!)")
-            
-            /* php server에서 echo한 내용들이 담김 */
-            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-            print("responseString = \(responseString!)")
-            
-            
-            guard let dict = CustomConvert().convertStringToDictionary(text: responseString as! String) else {return}
-            
-            handler(dict)
-        }
-        
-        //실행
-        task.resume()
-    }
     
     
 }

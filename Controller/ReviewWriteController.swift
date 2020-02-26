@@ -18,45 +18,20 @@ class ReviewWriteController : UIViewController, UITextFieldDelegate{
     @IBAction func ReviewWrite_Btn(_ sender: Any) {
         let userId = UserDefaults.standard.string(forKey: "id")!
         guard let contents = self.reviewContents_TextField.text else {return}
-        phpSendReview(self.storeEnName!, userId, self.floatRatingView.rating, contents){
-            response in
-            print(response)
+        
+        CustomHttpRequest().phpCommunication(url: "sendReviewInfo.php", postString: "storeEnName=\(self.storeEnName!)&userId=\(userId)&rating=\(self.floatRatingView.rating)&contents=\(contents)"){
+            responseString in
             
             DispatchQueue.main.async {
                 // 리뷰 전송 완료 후 종료
                 self.navigationController?.popViewController(animated: true)
             }
-            
-
+    
         }
     }
     
     
-    func phpSendReview(_ storeEnName : String, _ userId: String, _ rating: Double, _ contents: String, handler: @escaping (_ response : String)->Void){
-        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/sendReviewInfo.php")! as URL)
-        request.httpMethod = "POST"
-        
-        let postString = "storeEnName=\(storeEnName)&userId=\(userId)&rating=\(rating)&contents=\(contents)"
-        
-        
-        request.httpBody = postString.data(using: String.Encoding.utf8)
-        
-        /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
-        let task = URLSession.shared.dataTask(with: request as URLRequest) {
-            data, response, error in
-            
-            print("response = \(response!)")
-            
-            /* php server에서 echo한 내용들이 담김 */
-            var responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-            print("responseString = \(responseString!)")
-            
-            handler("전송성공")
-        }
-        
-        //실행
-        task.resume()
-    }
+    
     
     @objc func buttonAction(_ sender: UIBarButtonItem) {
       self.navigationController?.popViewController(animated: true)

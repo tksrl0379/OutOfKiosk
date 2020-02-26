@@ -28,7 +28,6 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
     var menuPriceArray : Array<Int> = []
     var favoriteTagArray : Array<String> = []
     
-//    var storeName : String?
     var storeNameArray : Array<String> = []
     var categoryNumber: Int?
     

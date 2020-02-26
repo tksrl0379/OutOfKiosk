@@ -175,7 +175,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         ad?.menuEachPriceArray.remove(at: Int(indexPath.row))
         ad?.menuSugarContent.remove(at: Int(indexPath.row))
         ad?.menuIsWhippedCream.remove(at: Int(indexPath.row))
-                
+        
         ShoppingBasketTableView.deleteRows(at: [indexPath], with: .fade)
         
         /* 장바구니에 담겨진 메뉴 개수가 0개면 알아서 popView 되기.*/
@@ -205,6 +205,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
             print("userID type is : ", type(of: userId))
             
             CustomHttpRequest().phpCommunication(url: "order/api/order.php", postString: "name=\(shoppingBasket_productName[i]+" "+shoppingBasket_productSize[i])&count=\(shoppingBasket_productCount[i])&sugar=\(shoppingBasket_productSugarContent[i])&whippedcream=\(shoppingBasket_productIsWhippedCream[i])&currentDate=\(currentDate)&userID=\(userId)&token=\(token!)"){
+
                 responseString in
                 
                 print("order 응답 = ",responseString)
@@ -419,7 +420,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         if let menuIsWhippedCream = ad?.menuIsWhippedCream {
             shoppingBasket_productIsWhippedCream = menuIsWhippedCream
         }
-                
+        
     }   
     
     override func viewWillAppear(_ animated: Bool) {
