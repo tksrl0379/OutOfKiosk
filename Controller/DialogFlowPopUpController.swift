@@ -638,7 +638,12 @@ class DialogFlowPopUpController: UIViewController{
                 print(self.favoriteMenuName!)
                 CustomHttpRequest().phpCommunication(url: "vendor/intent_query.php", postString: "query=\(self.favoriteMenuName!)"){
                     responseString in
+                    
+                    print("즐겨찾기 들어왔음")
                 
+                    var dict = CustomConvert().convertStringToDictionary(text: responseString as! String)
+                    let responseMessage = dict!["response"] as! String
+                    
                     self.speechAndText(responseMessage)
                     self.StartStopAct()
                 }
