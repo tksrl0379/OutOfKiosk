@@ -1,6 +1,6 @@
 PODS:
   - FloatRatingView (4.0)
-  - lottie-ios (3.1.5)
+  - lottie-ios (3.1.6)
 
 DEPENDENCIES:
   - FloatRatingView (~> 4)
@@ -13,7 +13,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   FloatRatingView: bb6bdddfbeec51b1d387b4bd50abc27b4dfccd48
-  lottie-ios: 32bf84389337d86fbc8b12266e88452e0abf1dee
+  lottie-ios: 85ce835dd8c53e02509f20729fc7d6a4e6645a0a
 
 PODFILE CHECKSUM: 81f1837257b393687949b87c73fdc7fd90b6775a
 
