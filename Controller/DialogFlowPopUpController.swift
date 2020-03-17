@@ -680,7 +680,7 @@ class DialogFlowPopUpController: UIViewController{
         inputNode?.removeTap(onBus: 0)
         
         /* Context Delete */
-        CustomHttpRequest().phpCommunication(url: "vendor/context_delete.php", postString: ""){
+        CustomHttpRequest().phpCommunication(url: "vendor/context_deleteAll.php", postString: ""){
             responseString in
             
         }
