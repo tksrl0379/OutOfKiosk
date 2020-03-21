@@ -127,27 +127,36 @@ class MainController : UIViewController{
         print("alert :", alertMSG)
         
         if  (alertMSG == "주문이 접수되었습니다.") {
-            progressTitle_Label.text = "메뉴 준비 중"
+            progressTitle_Label.text = "메뉴 조리 중"
+            UserDefaults.standard.set("메뉴 조리 중", forKey: "pushMSG")
+            UserDefaults.standard.set(0.66, forKey: "progressNumber")
+            animateProgress()
         }
         else if (alertMSG == "주문하신 메뉴가 나왔습니다.") {
             progressTitle_Label.text = "메뉴 완성"
+            UserDefaults.standard.set("메뉴 완성", forKey: "pushMSG")
+            UserDefaults.standard.set(1.0, forKey: "progressNumber")
+            animateProgress()
         }
         
     }
     
     /* 원형 애니메이션 */
     @objc func animateProgress() {
-           let cP = self.view.viewWithTag(101) as! CircularProgressView
-           cP.setProgressWithAnimation(duration: 0.4, value: 0.25)
+        var speed = UserDefaults.standard.float(forKey: "progressNumber")
+        let cP = self.view.viewWithTag(101) as! CircularProgressView
+        cP.setProgressWithAnimation(duration: 0.4, value: speed)
            
-       }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         /* 가장 최초에만 pushMSG를 nil로 한다.*/
-        UserDefaults.standard.set(nil, forKey: "pushMSG")
-        
+        //UserDefaults.standard.set(nil, forKey: "pushMSG")
+        if UserDefaults.standard.float(forKey: "progressNumber") == nil {
+            UserDefaults.standard.set(0, forKey: "progressNumber")
+        }
         
         
         /* 그림자 넣기, 둥글게 만들기 */
@@ -188,6 +197,7 @@ class MainController : UIViewController{
         /* 사용자 아이디 */
         userId = UserDefaults.standard.string(forKey: "id")!
         self.userProfileName_Label.text = "\(userId!)님"
+        self.profileSetting_Btn.accessibilityLabel = "\(userId!)님 프로필 버튼"
         
         
         
@@ -210,6 +220,7 @@ class MainController : UIViewController{
         /* 구매 횟수 애니메이션 바 갱신 */
         self.perform(#selector(self.animateProgress), with: nil, afterDelay: 1.0)
         
+        
         /* progress (주문현황) 관련 변수들 애니메이션 */
         progressComment_Label.alpha = 0
         progressComment2_Label.alpha = 0
@@ -229,7 +240,15 @@ class MainController : UIViewController{
             self.progressImage_ImageView.alpha = 1.0
         }
         
+        /* 주문 현황 갱신하는 부분 */
+        
+        /* AppDelegate에서 받은 정보를 관찰하는 옵져버 (주문 진행 정도 체크) */
+        NotificationCenter.default.addObserver(self, selector: #selector(changeProgressTitleView(_:)), name: NSNotification.Name("TestNotification"), object: nil)
+        
         /* progress (주문현황) 관련 변수들 : 가게이름, 메뉴 이름, 개수 설정 */
+        if let progress = UserDefaults.standard.string(forKey: "pushMSG"){
+            progressTitle_Label.text = progress
+        }
         if let storeName = UserDefaults.standard.string(forKey: "mainProgressStoreName"){
             progressComment_Label.text = storeName
         }
@@ -246,8 +265,7 @@ class MainController : UIViewController{
             }
         }
         
-        /* AppDelegate에서 받은 정보를 관찰하는 옵져버 */
-        NotificationCenter.default.addObserver(self, selector: #selector(changeProgressTitleView(_:)), name: NSNotification.Name("TestNotification"), object: nil)
+        
         
         
     }

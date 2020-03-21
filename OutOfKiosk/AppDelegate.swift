@@ -125,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
         print(UIApplication.shared.applicationIconBadgeNumber)
         
         let aps = data[AnyHashable("aps")] as? NSDictionary
-        let alert = aps!["alert"] as! NSMutableString
+        let alert = aps!["alert"] as? NSMutableString
         print("메시지 내용 찾기 : ", alert)
         
         //UserDefaults.standard.set(alert, forKey: "pushMSG")

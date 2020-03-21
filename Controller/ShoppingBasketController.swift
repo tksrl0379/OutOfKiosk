@@ -222,6 +222,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
                     UserDefaults.standard.set(ad?.numOfProducts, forKey: "mainProgressMenuCount")
                     UserDefaults.standard.set(ad?.menuStoreName, forKey: "mainProgressStoreName")
                     UserDefaults.standard.set("주문 접수 중", forKey: "pushMSG")
+                    UserDefaults.standard.set(0.33, forKey: "progressNumber")
                     
                     /* 주문이 완료되면 현재 장바구니의 아이템을 삭제해야하므로 appdelegate의 모든 아이템을 초기화한다.*/
                     ad?.numOfProducts = 0
