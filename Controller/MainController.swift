@@ -120,12 +120,13 @@ class MainController : UIViewController{
     }
     
     
-    /* progressTitle 내용을 변경하는 메소드 */
+    /* PushNotification에 반응 */
     @objc func changeProgressTitleView(_ notification: NSNotification){
         guard let alertMSG: String = notification.userInfo?["alert"] as? String else { return }
         
         print("alert :", alertMSG)
         
+        /* 1. progress 관련 변수들 내용 변경 */
         if  (alertMSG == "주문이 접수되었습니다.") {
             progressTitle_Label.text = "메뉴 조리 중"
             UserDefaults.standard.set("메뉴 조리 중", forKey: "pushMSG")
@@ -138,6 +139,36 @@ class MainController : UIViewController{
             UserDefaults.standard.set(1.0, forKey: "progressNumber")
             animateProgress()
         }
+        else if (alertMSG == "음식을 수령하셨습니다.") {
+            progressTitle_Label.text = "아직 주문이 없어요"
+            progressComment_Label.text = ""
+            progressComment2_Label.text = "진행 주문 없음"
+            progressComment3_Label.text = ""
+            UserDefaults.standard.set("아직 주문이 없어요", forKey: "pushMSG")
+            UserDefaults.standard.set(0, forKey: "progressNumber")
+            UserDefaults.standard.set(nil, forKey: "mainProgressStoreName")
+            UserDefaults.standard.set("진행 주문 없음", forKey: "mainProgressMenuName")
+            UserDefaults.standard.set(nil, forKey: "mainProgressMenuCount")
+
+            animateProgress()
+        }
+        
+        /* 2. VoiceOver 안내 변경 */
+        /* 순서: 아직 주문이 없어요 -> 주문 확인 중 -> 메뉴 조리 중 -> 메뉴 완성 */
+        if progressTitle_Label.text == "아직 주문이 없어요"{
+            progressTitle_Label.accessibilityLabel = progressTitle_Label.text! + ". 주문 후 주문 현황과 주문 정보를 알 수 있어요"
+        }
+        else if progressTitle_Label.text == "주문 확인 중"{
+            progressTitle_Label.accessibilityLabel = "매장에서 주문 확인 중입니다. 조금만 기다려 주세요."
+        }
+        else if progressTitle_Label.text == "메뉴 조리 중"{
+            progressTitle_Label.accessibilityLabel = "매장에서 메뉴를 조리 중입니다. 음식이 나오면 알려드릴게요."
+        }
+        else if progressTitle_Label.text == "메뉴 완성"{
+            progressTitle_Label.accessibilityLabel = "메뉴가 나왔습니다. 음식을 수령해주세요."
+        }
+        
+        
         
     }
     
@@ -154,9 +185,7 @@ class MainController : UIViewController{
         
         /* 가장 최초에만 pushMSG를 nil로 한다.*/
         //UserDefaults.standard.set(nil, forKey: "pushMSG")
-        if UserDefaults.standard.float(forKey: "progressNumber") == nil {
-            UserDefaults.standard.set(0, forKey: "progressNumber")
-        }
+        
         
         
         /* 그림자 넣기, 둥글게 만들기 */
@@ -177,6 +206,7 @@ class MainController : UIViewController{
         
         makeCircularShape(view: progress_View)
         makeCircularShape(view: userProfileImage_View)
+        makeCircularShape(view: progressTitle_Label)
         
         storeSelect_Btn.layer.cornerRadius = 40
         favorite_Btn.layer.cornerRadius = 40
@@ -242,10 +272,10 @@ class MainController : UIViewController{
         
         /* 주문 현황 갱신하는 부분 */
         
-        /* AppDelegate에서 받은 정보를 관찰하는 옵져버 (주문 진행 정도 체크) */
+        /* AppDelegate에서 받은 정보를 관찰하는 옵져버 (1. 주문 진행 정도 체크) */
         NotificationCenter.default.addObserver(self, selector: #selector(changeProgressTitleView(_:)), name: NSNotification.Name("TestNotification"), object: nil)
         
-        /* progress (주문현황) 관련 변수들 : 가게이름, 메뉴 이름, 개수 설정 */
+        /* progress (2. 주문 현황 갱신) 관련 변수들 : 가게이름, 메뉴 이름, 개수 설정 */
         if let progress = UserDefaults.standard.string(forKey: "pushMSG"){
             progressTitle_Label.text = progress
         }
@@ -260,13 +290,24 @@ class MainController : UIViewController{
             if (Int(numberOfMenu) == 1) {
                 progressComment3_Label.text = ""
             }else{
-                /* 이 부분이 오류가 된다.*/
                 progressComment3_Label.text = "외 \(Int(numberOfMenu)! - 1) "
             }
         }
         
-        
-        
+        /* 3. VoiceOver 안내 변경 */
+        /* 순서: 아직 주문이 없어요 -> 주문 확인 중 -> 메뉴 조리 중 -> 메뉴 완성 */
+        if progressTitle_Label.text == "아직 주문이 없어요"{
+            progressTitle_Label.accessibilityLabel = progressTitle_Label.text! + ". 주문 후 주문 현황과 주문 정보를 알 수 있어요"
+        }
+        else if progressTitle_Label.text == "주문 확인 중"{
+            progressTitle_Label.accessibilityLabel = "매장에서 주문 확인 중입니다. 조금만 기다려 주세요."
+        }
+        else if progressTitle_Label.text == "메뉴 조리 중"{
+            progressTitle_Label.accessibilityLabel = "매장에서 메뉴를 조리 중입니다. 음식이 나오면 알려드릴게요."
+        }
+        else if progressTitle_Label.text == "메뉴 완성"{
+            progressTitle_Label.accessibilityLabel = "메뉴가 나왔습니다. 음식을 수령해주세요."
+        }
         
     }
     
