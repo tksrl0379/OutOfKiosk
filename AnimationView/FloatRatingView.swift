@@ -24,6 +24,7 @@ open class FloatRatingView: UIView {
     // MARK: Properties
     
     open weak var delegate: FloatRatingViewDelegate?
+    
 
     /// Array of empty image views
     private var emptyImageViews: [UIImageView] = []
@@ -313,6 +314,8 @@ open class FloatRatingView: UIView {
         }
         
         print(self.rating)
+        let userInfo: [AnyHashable: Any] = ["rating": self.rating]
+        NotificationCenter.default.post(name: NSNotification.Name("rating"), object: nil, userInfo: userInfo)
         
     }
     

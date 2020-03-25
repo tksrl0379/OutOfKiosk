@@ -75,6 +75,7 @@ class ReviewWriteController : UIViewController, UITextFieldDelegate{
         
         self.navigationItem.leftBarButtonItem = addButton
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "리뷰 목록으로 가는 뒤로가기"
         
         /* 테두리 둥글게 만들기 */
         reviewWrite_Btn.layer.cornerRadius = 5
@@ -95,7 +96,14 @@ class ReviewWriteController : UIViewController, UITextFieldDelegate{
         floatRatingView.editable = true
     }
     
+    @objc func changeProgressTitleView(_ notification: NSNotification){
+        floatRatingView.accessibilityLabel = "별점" + String(notification.userInfo!["rating"] as! Double) + "개"
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(changeProgressTitleView(_:)), name: NSNotification.Name("rating"), object: nil)
+
+        
         /* navigationbar 투명 설정 */
         self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController!.navigationBar.shadowImage = UIImage()

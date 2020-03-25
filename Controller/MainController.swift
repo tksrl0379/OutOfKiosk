@@ -14,6 +14,8 @@ class MainController : UIViewController{
     private var userId: String?
     private var purchaseCount: Float = 0
     
+    var fixMessage: String = "주문 현황입니다."
+    
     
     @IBOutlet weak var title_View: UIView!
     @IBOutlet weak var sub_View: UIView!
@@ -127,34 +129,42 @@ class MainController : UIViewController{
         print("alert :", alertMSG)
         
         /* 1. progress 관련 변수들 내용 변경 */
-        if  (alertMSG == "주문이 접수되었습니다.") {
+        if  (alertMSG == "주문이 접수되었습니다") {
             progressTitle_Label.text = "메뉴 조리 중"
             UserDefaults.standard.set("메뉴 조리 중", forKey: "pushMSG")
+            
+            /* CircularProgressView */
             UserDefaults.standard.set(0.66, forKey: "progressNumber")
             animateProgress()
         }
-        else if (alertMSG == "주문하신 메뉴가 나왔습니다.") {
+        else if (alertMSG == "주문하신 메뉴가 나왔습니다") {
             progressTitle_Label.text = "메뉴 완성"
             UserDefaults.standard.set("메뉴 완성", forKey: "pushMSG")
+            
+            /* CircularProgressView */
             UserDefaults.standard.set(1.0, forKey: "progressNumber")
             animateProgress()
         }
-        else if (alertMSG == "음식을 수령하셨습니다.") {
+        else if (alertMSG == "음식을 수령하셨습니다") {
             progressTitle_Label.text = "아직 주문이 없어요"
+            
+            /* 음식을 수령했으므로 주문 현황 초기화 */
             progressComment_Label.text = ""
             progressComment2_Label.text = "진행 주문 없음"
             progressComment3_Label.text = ""
             UserDefaults.standard.set("아직 주문이 없어요", forKey: "pushMSG")
-            UserDefaults.standard.set(0, forKey: "progressNumber")
             UserDefaults.standard.set(nil, forKey: "mainProgressStoreName")
             UserDefaults.standard.set("진행 주문 없음", forKey: "mainProgressMenuName")
             UserDefaults.standard.set(nil, forKey: "mainProgressMenuCount")
 
+            /* CircularProgressView */
+            UserDefaults.standard.set(0, forKey: "progressNumber")
             animateProgress()
         }
         
         /* 2. VoiceOver 안내 변경 */
         /* 순서: 아직 주문이 없어요 -> 주문 확인 중 -> 메뉴 조리 중 -> 메뉴 완성 */
+        
         if progressTitle_Label.text == "아직 주문이 없어요"{
             progressTitle_Label.accessibilityLabel = progressTitle_Label.text! + ". 주문 후 주문 현황과 주문 정보를 알 수 있어요"
         }
@@ -191,9 +201,9 @@ class MainController : UIViewController{
         /* 그림자 넣기, 둥글게 만들기 */
         self.navigationController!.navigationBar.setBackgroundImage(nil, for: .default)
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.black.cgColor
-        self.navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 0.0, height: 0.6)
-        self.navigationController?.navigationBar.layer.shadowRadius = 4
-        self.navigationController?.navigationBar.layer.shadowOpacity = 0.3
+        self.navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 0.0, height: 0.5)
+        self.navigationController?.navigationBar.layer.shadowRadius = 3
+        self.navigationController?.navigationBar.layer.shadowOpacity = 0.2
         self.navigationController?.navigationBar.layer.masksToBounds = false
         
         addShadow(view: title_View)
@@ -227,7 +237,7 @@ class MainController : UIViewController{
         /* 사용자 아이디 */
         userId = UserDefaults.standard.string(forKey: "id")!
         self.userProfileName_Label.text = "\(userId!)님"
-        self.profileSetting_Btn.accessibilityLabel = "\(userId!)님 프로필 버튼"
+        self.profileSetting_Btn.accessibilityLabel = "\(userId!)님 프로필"
         
         
         
@@ -290,23 +300,23 @@ class MainController : UIViewController{
             if (Int(numberOfMenu) == 1) {
                 progressComment3_Label.text = ""
             }else{
-                progressComment3_Label.text = "외 \(Int(numberOfMenu)! - 1) "
+                progressComment3_Label.text = "외 \(Int(numberOfMenu)! - 1)개 "
             }
         }
         
         /* 3. VoiceOver 안내 변경 */
         /* 순서: 아직 주문이 없어요 -> 주문 확인 중 -> 메뉴 조리 중 -> 메뉴 완성 */
         if progressTitle_Label.text == "아직 주문이 없어요"{
-            progressTitle_Label.accessibilityLabel = progressTitle_Label.text! + ". 주문 후 주문 현황과 주문 정보를 알 수 있어요"
+            progressTitle_Label.accessibilityLabel = fixMessage + progressTitle_Label.text! + ". 주문 후 주문 현황과 주문 정보를 알 수 있어요"
         }
         else if progressTitle_Label.text == "주문 확인 중"{
-            progressTitle_Label.accessibilityLabel = "매장에서 주문 확인 중입니다. 조금만 기다려 주세요."
+            progressTitle_Label.accessibilityLabel = fixMessage + "매장에서 주문 확인 중입니다. 조금만 기다려 주세요."
         }
         else if progressTitle_Label.text == "메뉴 조리 중"{
-            progressTitle_Label.accessibilityLabel = "매장에서 메뉴를 조리 중입니다. 음식이 나오면 알려드릴게요."
+            progressTitle_Label.accessibilityLabel = fixMessage + "매장에서 메뉴를 조리 중입니다. 음식이 나오면 알려드릴게요."
         }
         else if progressTitle_Label.text == "메뉴 완성"{
-            progressTitle_Label.accessibilityLabel = "메뉴가 나왔습니다. 음식을 수령해주세요."
+            progressTitle_Label.accessibilityLabel = fixMessage + "메뉴가 나왔습니다. 음식을 수령해주세요."
         }
         
     }

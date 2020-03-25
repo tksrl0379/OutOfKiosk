@@ -147,8 +147,8 @@
                                         <rect key="frame" x="20" y="36" width="149" height="284"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <accessibility key="accessibilityConfiguration" label="가게 선택 버튼">
-                                            <accessibilityTraits key="traits" none="YES"/>
+                                        <accessibility key="accessibilityConfiguration" label="가게 목록">
+                                            <accessibilityTraits key="traits" button="YES"/>
                                         </accessibility>
                                         <fontDescription key="fontDescription" name="NanumSquareB" family="NanumSquare" pointSize="21"/>
                                         <state key="normal" image="shop">
@@ -158,7 +158,7 @@
                                             <action selector="storeSelect_Btn:" destination="vo8-u6-hUb" eventType="touchUpInside" id="9yg-RX-pvg"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="가게 선택" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TvK-ep-Lcy">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="가게 목록" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TvK-ep-Lcy">
                                         <rect key="frame" x="59" y="258" width="71" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <accessibility key="accessibilityConfiguration">
@@ -172,8 +172,8 @@
                                         <rect key="frame" x="190" y="35" width="149" height="284"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <accessibility key="accessibilityConfiguration" label="즐겨찾기 버튼">
-                                            <accessibilityTraits key="traits" none="YES"/>
+                                        <accessibility key="accessibilityConfiguration" label="즐겨찾기">
+                                            <accessibilityTraits key="traits" button="YES"/>
                                         </accessibility>
                                         <state key="normal" image="favorite">
                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -621,9 +621,6 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="storeName" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CeW-AJ-zGJ">
                                                     <rect key="frame" x="106" y="40" width="96" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <accessibility key="accessibilityConfiguration">
-                                                        <accessibilityTraits key="traits" button="YES"/>
-                                                    </accessibility>
                                                     <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="19"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -673,9 +670,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TVw-t7-ojP">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TVw-t7-ojP">
                                 <rect key="frame" x="0.0" y="227" width="375" height="367"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cvl-PS-Toi">
                                         <rect key="frame" x="195" y="12" width="166" height="110"/>
@@ -709,6 +705,10 @@
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.92538958790000003" green="0.92554813619999998" blue="0.92537957429999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="375" id="1VQ-3I-yVp"/>
+                                    <constraint firstAttribute="height" constant="367" id="faR-cH-WYf"/>
+                                </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="메뉴" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0hk-dZ-7UP">
                                 <rect key="frame" x="16" y="194" width="55" height="21"/>
@@ -730,18 +730,24 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3aR-aO-Qrl">
-                                <rect key="frame" x="-14" y="174" width="403" height="7"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3aR-aO-Qrl">
+                                <rect key="frame" x="0.0" y="174" width="375" height="7"/>
                                 <color key="backgroundColor" red="0.92614479567193742" green="0.92614479567193742" blue="0.92614479567193742" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="7" id="GDY-d2-Fx9"/>
+                                    <constraint firstAttribute="width" constant="375" id="pbS-9I-rfU"/>
+                                </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F0E-de-uea">
-                                <rect key="frame" x="16" y="608" width="343" height="45"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F0E-de-uea">
+                                <rect key="frame" x="16" y="608" width="343" height="40"/>
                                 <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" none="YES"/>
                                 </accessibility>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="EUX-Hh-9VN"/>
+                                    <constraint firstAttribute="width" constant="343" id="RaV-85-xrs"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="25"/>
                                 <state key="normal" title="장바구니">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -750,8 +756,24 @@
                                     <action selector="shoppingList_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="yRE-AR-3eK"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8p8-ck-chV" userLabel="split_border">
+                                <rect key="frame" x="186" y="124" width="3" height="42"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.92538958790000003" green="0.92554813619999998" blue="0.92537957429999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oVs-g6-Ram" userLabel="reviewBtn">
+                                <rect key="frame" x="228" y="129" width="103" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="NanumSquareB" family="NanumSquare" pointSize="18"/>
+                                <state key="normal" title=" 리뷰하기" image="review">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="reviewMenu_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="35q-pC-MWA"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleAspectFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hpp-lh-Xcn">
-                                <rect key="frame" x="-27" y="94" width="207" height="72"/>
+                                <rect key="frame" x="24" y="121" width="137" height="49"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <accessibility key="accessibilityConfiguration" label="음성주문 버튼">
                                     <accessibilityTraits key="traits" none="YES"/>
@@ -764,24 +786,20 @@
                                     <action selector="orderMenuByAI_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="v3j-mz-Ikg"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8p8-ck-chV">
-                                <rect key="frame" x="187" y="124" width="2" height="42"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.92538958790000003" green="0.92554813619999998" blue="0.92537957429999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oVs-g6-Ram" userLabel="reviewBtn">
-                                <rect key="frame" x="232" y="129" width="103" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="NanumSquareB" family="NanumSquare" pointSize="18"/>
-                                <state key="normal" title=" 리뷰하기" image="review">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="reviewMenu_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="35q-pC-MWA"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="F0E-de-uea" firstAttribute="leading" secondItem="Wtr-hX-ECd" secondAttribute="leading" constant="16" id="4g3-6i-yTb"/>
+                            <constraint firstItem="Wtr-hX-ECd" firstAttribute="bottom" secondItem="F0E-de-uea" secondAttribute="bottom" constant="19" id="ARG-4U-L79"/>
+                            <constraint firstItem="TVw-t7-ojP" firstAttribute="top" secondItem="3aR-aO-Qrl" secondAttribute="bottom" constant="46" id="Jr2-ls-rvk"/>
+                            <constraint firstItem="3aR-aO-Qrl" firstAttribute="leading" secondItem="Wtr-hX-ECd" secondAttribute="leading" id="K8b-2z-LjQ"/>
+                            <constraint firstItem="F0E-de-uea" firstAttribute="top" secondItem="TVw-t7-ojP" secondAttribute="bottom" constant="14" id="dWO-yh-2mB"/>
+                            <constraint firstItem="3aR-aO-Qrl" firstAttribute="trailing" secondItem="Wtr-hX-ECd" secondAttribute="trailing" id="lzx-vg-BdO"/>
+                            <constraint firstItem="3aR-aO-Qrl" firstAttribute="top" secondItem="99A-pz-754" secondAttribute="top" constant="174" id="nW2-m1-sNf"/>
+                            <constraint firstItem="TVw-t7-ojP" firstAttribute="leading" secondItem="Wtr-hX-ECd" secondAttribute="leading" id="pdp-84-hCd"/>
+                            <constraint firstItem="TVw-t7-ojP" firstAttribute="trailing" secondItem="Wtr-hX-ECd" secondAttribute="trailing" id="pku-qD-uFf"/>
+                            <constraint firstItem="F0E-de-uea" firstAttribute="top" secondItem="TVw-t7-ojP" secondAttribute="bottom" constant="14" id="xIu-7R-FwP"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Wtr-hX-ECd"/>
                     </view>
                     <connections>

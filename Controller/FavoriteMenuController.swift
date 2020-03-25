@@ -178,6 +178,7 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
     
     override func viewWillAppear(_ animated: Bool) {
         
+        
         /* 내비게이션바 이름 및 접근성 설정 */
         self.navigationController?.navigationBar.topItem?.title = "즐겨찾기"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "NanumSquare", size: 20)!]
@@ -200,6 +201,8 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
         let ad = UIApplication.shared.delegate as? AppDelegate
         shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
         shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
+        
+        
         
     }
     

@@ -59,7 +59,7 @@ class StoreDetailController : UIViewController{
         
         // 가게 영어이름 전송
         rvc.storeEnName = self.storeEnName
-        
+        rvc.storeKorName = self.storeKorName
         
         DispatchQueue.main.async {
             self.navigationController?.pushViewController(rvc, animated: true)
@@ -177,13 +177,13 @@ class StoreDetailController : UIViewController{
         
         //addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "가게 목록으로 가는 뒤로가기"
         
-        ///////
+        
         self.orderMenuByAI_Btn.imageView?.contentMode = .scaleAspectFit
-        self.orderMenuByAI_Btn.imageEdgeInsets = UIEdgeInsets(top: 70,left: 70,bottom: 70,right: 70)
-        self.orderMenuByAI_Btn.frame = CGRect(x: -37, y: 99, width: 180, height: 90)
-        orderMenuByAI_Btn.setTitle("                음성주문", for: .normal)
+        self.orderMenuByAI_Btn.imageEdgeInsets = UIEdgeInsets(top: 5,left: 10,bottom: 5,right: 80)
+        //self.orderMenuByAI_Btn.frame = CGRect(x: -30, y: 0, width: 180, height: 90)
+        orderMenuByAI_Btn.setTitle("음성주문", for: .normal)
         
         
         
@@ -207,7 +207,7 @@ class StoreDetailController : UIViewController{
         
         /* 접근성 */
         orderMenuByAI_Btn.accessibilityLabel = "스타벅스 음성주문"
-        menu_Label.accessibilityLabel = "아래에 스타벅스 메뉴가 있습니다"
+        menu_Label.accessibilityLabel = "아래에 메뉴가 있습니다"
         
         
         
@@ -242,13 +242,14 @@ class StoreDetailController : UIViewController{
         /* 장바구니 개수 갱신 */
         let ad = UIApplication.shared.delegate as? AppDelegate
         
-        //        ad?.numOfProducts = 1
-        //        ad?.menuNameArray = ["모카스무디"]
-        //        ad?.menuSizeArray = ["스몰"]
-        //        ad?.menuCountArray = [3]
-        //        ad?.menuEachPriceArray = [5300]
-        //        ad?.menuSugarContent = ["40%"]
-        //        ad?.menuIsWhippedCream = ["NULL"]
+//        ad?.menuStoreName = "스타벅스"
+//        ad?.numOfProducts = 2
+//        ad?.menuNameArray = ["모카스무디", "망고스무디"]
+//        ad?.menuSizeArray = ["스몰", "스몰"]
+//        ad?.menuCountArray = [3, 1]
+//        ad?.menuEachPriceArray = [5300, 4500]
+//        ad?.menuSugarContent = ["40%", "30%"]
+//        ad?.menuIsWhippedCream = ["NULL", "NULL"]
         
         shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
         shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
@@ -270,7 +271,6 @@ class StoreDetailController : UIViewController{
         
         /* navigationbar 투명 설정 */
         self.navigationController!.navigationBar.setBackgroundImage(nil, for: .default)
-        self.navigationController!.navigationBar.shadowImage = nil
         
     }
     

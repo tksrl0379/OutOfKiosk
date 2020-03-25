@@ -37,6 +37,8 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
         cell.storeName_Label.text = storeKorNameArray[indexPath.row]
         cell.storeType_Label.text = storeTypeArray[indexPath.row]
         
+        //cell.storeName_Label.accessibilityLabel = cell.storeName_Label.text + 
+        
         return cell
     }
     
@@ -50,6 +52,8 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
         /* 해당 가게의 한글이름, 영어이름을 넘겨줌 */
         rvc.storeKorName = self.storeKorNameArray[indexPath.row]
         rvc.storeEnName = self.storeEnNameArray[indexPath.row]
+        
+        
         
         DispatchQueue.main.async {
             /* StoreDetailController 로 화면 전환 */
@@ -68,6 +72,9 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        /* focus order 정할 수 있음 */
+        //self.view.accessibilityElements = [self.navigationItem.titleView, self.navigationItem.backBarButtonItem, self.CafeTableView]
+        
         /* backButton 커스터마이징 */
         let backBtn = UIButton(type: .custom)
         backBtn.frame = CGRect(x: 0.0, y: 0.0, width: 24, height: 24)
@@ -82,7 +89,7 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
         currHeight?.isActive = true
         
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "메인으로 가는 뒤로가기"
         
         
         /* TableView의 대리자(delegate)는 self(StoreListController)가 됨 */
@@ -93,6 +100,7 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
         
         storeKorNameArray.removeAll()
         storeTypeArray.removeAll()
@@ -118,13 +126,19 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
             
         }
         
-        self.navigationController?.navigationBar.topItem?.title = "가게"
+        self.navigationController?.navigationBar.topItem?.title = "가게 목록"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "NanumSquare", size: 20)!]
-        self.navigationController?.navigationBar.topItem?.accessibilityLabel = "가게 선택 메뉴입니다"
+        self.navigationController?.navigationBar.topItem?.accessibilityLabel = "가게 목록"
+        self.navigationController?.navigationBar.topItem?.accessibilityTraits = .header
+        
+        
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.navigationController?.navigationBar.topItem?.title = "가게"
+        self.navigationController?.navigationBar.topItem?.title = "가게 목록"
+        
     }
     
 }

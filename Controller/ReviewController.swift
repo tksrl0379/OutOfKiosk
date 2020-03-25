@@ -13,6 +13,7 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var reviewWrite_Btn: UIButton!
     
     var storeEnName : String?
+    var storeKorName: String?
     var reviewUserId: Array<String>? = []
     var reviewContents: Array<String>? = []
     var reviewTime: Array<String>? = []
@@ -47,8 +48,6 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
         // Reset float rating view's background color
         cell.floatRatingView.backgroundColor = UIColor.clear
 
-        /** Note: With the exception of contentMode, type and delegate,
-         all properties can be set directly in Interface Builder **/
         //cell.floatRatingView.delegate = self
         cell.floatRatingView.contentMode = UIView.ContentMode.scaleAspectFit
         cell.floatRatingView.type = .halfRatings
@@ -82,7 +81,7 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
         currHeight?.isActive = true
         
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = self.storeKorName! + "로 가는 뒤로가기"
         
         /* 테두리 둥글게 만들기 */
         reviewWrite_Btn.layer.cornerRadius = 5
