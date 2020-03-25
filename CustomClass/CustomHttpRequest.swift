@@ -22,6 +22,7 @@ class CustomHttpRequest{
         let task = URLSession.shared.dataTask(with: request as URLRequest) {
             data, response, error in
             
+            
             print("response = \(response!)")
             
             /* php server에서 echo한 내용들이 담김 */

@@ -318,6 +318,7 @@ class MainController : UIViewController{
         else if progressTitle_Label.text == "메뉴 완성"{
             progressTitle_Label.accessibilityLabel = fixMessage + "메뉴가 나왔습니다. 음식을 수령해주세요."
         }
+        progressComment_Label.accessibilityLabel = progressComment_Label.text! + progressComment2_Label.text! + progressComment3_Label.text!
         
     }
     

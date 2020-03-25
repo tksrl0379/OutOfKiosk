@@ -454,19 +454,21 @@ class DialogFlowPopUpController: UIViewController{
                                             ad?.menuStoreName = self.storeKorName!
                                             print("가게이름:", self.storeKorName!)
                                             
+                                            /* 대화가 모두 끝난 이후에도 TTS가 나와서 이를 막기 위함 */
+                                            self.viewIsRunning = false
+                                            // 종료
+                                            self.navigationController?.popViewController(animated: true)
+                                            
                                             /* 가게 체크?: 추후에 넣기 */
                                             
                                             
                                         }
                                         
                                     }
-                                    /* 대화가 모두 끝난 이후에도 TTS가 나와서 이를 막기 위함 */
-                                    self.viewIsRunning = false
                                     
-                                    DispatchQueue.main.async {
-                                        //종료
-                                        self.navigationController?.popViewController(animated: true)
-                                    }
+                                    
+                                    
+                                    
                                     
                                     
                                     /* 2-2-3. 장바구니에 담지 않고 끝내는 시나리오 */

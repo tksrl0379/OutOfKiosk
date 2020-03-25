@@ -212,29 +212,30 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
                 
                 self.alertMessage("주문 성공", "주문한 메뉴가 나올 때까지 기다려 주세요.")
                 
-                if i == self.shoppingBasket_numOfProducts-1 {
+                
                     DispatchQueue.main.async {
-                        let ad = UIApplication.shared.delegate as? AppDelegate
-                        
-                        print("현재 주문성공한 가게 이름은 ", ad?.menuStoreName)
-                        
-                        /* UserDefault에 Main에 보여줄 문자를 저장한다*/
-                        UserDefaults.standard.set(self.shoppingBasket_productName[0], forKey: "mainProgressMenuName")
-                        UserDefaults.standard.set(ad?.numOfProducts, forKey: "mainProgressMenuCount")
-                        UserDefaults.standard.set(ad?.menuStoreName, forKey: "mainProgressStoreName")
-                        UserDefaults.standard.set("주문 확인 중", forKey: "pushMSG")
-                        UserDefaults.standard.set(0.33, forKey: "progressNumber")
-                        
-                        /* 주문이 완료되면 현재 장바구니의 아이템을 삭제해야하므로 appdelegate의 모든 아이템을 초기화한다.*/
-                        ad?.numOfProducts = 0
-                        ad?.menuNameArray = []
-                        ad?.menuSizeArray = []
-                        ad?.menuCountArray = []
-                        ad?.menuEachPriceArray = []
-                        ad?.menuSugarContent = []
-                        ad?.menuIsWhippedCream = []
+                        if i == self.shoppingBasket_numOfProducts-1 {
+                            let ad = UIApplication.shared.delegate as? AppDelegate
+                            
+                            print("현재 주문성공한 가게 이름은 ", ad?.menuStoreName)
+                            
+                            /* UserDefault에 Main에 보여줄 문자를 저장한다*/
+                            UserDefaults.standard.set(self.shoppingBasket_productName[0], forKey: "mainProgressMenuName")
+                            UserDefaults.standard.set(ad?.numOfProducts, forKey: "mainProgressMenuCount")
+                            UserDefaults.standard.set(ad?.menuStoreName, forKey: "mainProgressStoreName")
+                            UserDefaults.standard.set("주문 확인 중", forKey: "pushMSG")
+                            UserDefaults.standard.set(0.33, forKey: "progressNumber")
+                            
+                            /* 주문이 완료되면 현재 장바구니의 아이템을 삭제해야하므로 appdelegate의 모든 아이템을 초기화한다.*/
+                            ad?.numOfProducts = 0
+                            ad?.menuNameArray = []
+                            ad?.menuSizeArray = []
+                            ad?.menuCountArray = []
+                            ad?.menuEachPriceArray = []
+                            ad?.menuSugarContent = []
+                            ad?.menuIsWhippedCream = []
+                        }
                     }
-                }
                 
             }
         }
