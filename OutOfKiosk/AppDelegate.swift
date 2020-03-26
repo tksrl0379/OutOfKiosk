@@ -60,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
         if favoriteMenuInfoDict == nil{
             defaults.set(dictionary, forKey: "favoriteMenuInfoDict")
         }
-                
+    
         Thread.sleep(forTimeInterval: 2.0)
         
         /* 최초에 사용자로부터 pushNotification의 권환을 받기 위한 코드*/
@@ -110,8 +110,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
     func application(_ application: UIApplication, didReceiveRemoteNotification data: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
         
-        
-        
         if (application.applicationState == .active){ //포그라운드에서 pushNotification 받음.
             print("포그라운드!")
             
@@ -128,19 +126,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
         let alert = aps!["alert"] as? NSMutableString
         print("메시지 내용 찾기 : ", alert)
         
-        //UserDefaults.standard.set(alert, forKey: "pushMSG")
         
         /*AppDelegate에서 MainView로 Notification 보내기(alert MSG)*/
         let userInfo: [AnyHashable: Any] = ["alert": alert]
         NotificationCenter.default.post(name: NSNotification.Name("TestNotification"), object: nil, userInfo: userInfo)
 
         
-        
-//        let test = MainController()
-//        test.viewDidAppear(true)
-                
-//        print("세팅할 내용 " , UserDefaults.standard.string(forKey: "pushMSG")!)
-                
         /* 후에 특정 메시지가 오게 되면 여기서 pushMSG의 값을 nil로 초기화 하는 작업을 할 듯.*/
                 
     }
