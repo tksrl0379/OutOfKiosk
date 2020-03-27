@@ -177,7 +177,16 @@ class DialogFlowPopUpController: UIViewController{
         
         /* 한글 설정 및 속도 조절 */
         speechUtterance.voice = AVSpeechSynthesisVoice(language: "ko-KR")
-        speechUtterance.rate = 0.65
+        if let rate = UserDefaults.standard.string(forKey: "speechSpeedRate"){
+            speechUtterance.rate = Float(rate)!
+        }else{
+            /* 초기 설정 시*/
+            print("초기")
+            speechUtterance.rate = 0.5
+        }
+
+        
+        
         
         
         /* if문 -> 대화가 모두 끝난 이후에도 TTS가 나와서 이를 막기 위함 */
@@ -665,6 +674,13 @@ class DialogFlowPopUpController: UIViewController{
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        /* 즐겨찾기에서 들어왔을 시 뒤로가기 accessibility 설정 */
+        if favoriteMenuName != nil {
+            self.navigationItem.leftBarButtonItem?.accessibilityLabel = "즐겨찾기로 가는 뒤로가기"
+        }else{
+            self.navigationItem.leftBarButtonItem?.accessibilityLabel = self.storeKorName! + "로 가는 뒤로가기"
+        }
         
         /* navigationbar 투명 설정 */
         self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
