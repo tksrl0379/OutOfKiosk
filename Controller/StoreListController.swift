@@ -71,6 +71,7 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         
         /* focus order 정할 수 있음 */
         //self.view.accessibilityElements = [self.navigationItem.titleView, self.navigationItem.backBarButtonItem, self.CafeTableView]
@@ -97,11 +98,16 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
         CafeTableView.dataSource = self
         self.CafeTableView.rowHeight = 100
         
+        
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
+        /* TableView 타이틀 자동 사이즈 조절(사용안함) */
+        self.navigationController?.navigationBar.prefersLargeTitles = false
         
+        /* 가게 정보 받기 */
         storeKorNameArray.removeAll()
         storeTypeArray.removeAll()
         storeEnNameArray.removeAll()

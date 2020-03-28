@@ -89,9 +89,9 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
         reviewWrite_Btn.layer.borderColor = UIColor.gray.cgColor
         
         reviewWrite_Btn.layer.shadowColor = UIColor.black.cgColor
-        reviewWrite_Btn.layer.shadowOffset = CGSize(width: 0.0, height: 0.6)
-        reviewWrite_Btn.layer.shadowRadius = 4
-        reviewWrite_Btn.layer.shadowOpacity = 0.6
+        reviewWrite_Btn.layer.shadowOffset = CGSize(width: 0.0, height: 0.5)
+        reviewWrite_Btn.layer.shadowRadius = 3
+        reviewWrite_Btn.layer.shadowOpacity = 0.3
         
         
         // 테이블
@@ -109,6 +109,12 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        /* TableView 제목 사이즈 동적 조절 */
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.title = "리뷰하기"
+        
+        /* 리뷰 정보 받아오기 */
         reviewUserId?.removeAll()
         reviewContents?.removeAll()
         reviewTime?.removeAll()
@@ -134,12 +140,10 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
         }
         
         /* navigationbar 투명 설정 */
-        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController!.navigationBar.shadowImage = UIImage()
+        //self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        //self.navigationController!.navigationBar.shadowImage = UIImage()
         
     }
-    
-    
     
     
 }

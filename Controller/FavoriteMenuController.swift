@@ -203,6 +203,8 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
         shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
         
         
+        /* 장바구니 버튼 둥글게 */
+        shoppingBasket_Btn.layer.cornerRadius = 5
         
     }
     

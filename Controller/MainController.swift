@@ -321,6 +321,18 @@ class MainController : UIViewController{
         progressComment_Label.accessibilityLabel = progressComment_Label.text! + progressComment2_Label.text! + progressComment3_Label.text!
      
 
+        /* 장바구니 개수 갱신(테스트용) */
+        let ad = UIApplication.shared.delegate as? AppDelegate
+        
+        ad?.menuStoreName = "스타벅스"
+        ad?.numOfProducts = 2
+        ad?.menuNameArray = ["모카스무디", "망고스무디"]
+        ad?.menuSizeArray = ["스몰", "스몰"]
+        ad?.menuCountArray = [3, 1]
+        ad?.menuEachPriceArray = [5300, 4500]
+        ad?.menuSugarContent = ["40", "30"]
+        ad?.menuIsWhippedCream = ["NULL", "NULL"]
+        
     }
     
     

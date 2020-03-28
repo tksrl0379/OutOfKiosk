@@ -61,6 +61,7 @@ class StoreDetailController : UIViewController{
         rvc.storeEnName = self.storeEnName
         rvc.storeKorName = self.storeKorName
         
+        
         DispatchQueue.main.async {
             self.navigationController?.pushViewController(rvc, animated: true)
         }
@@ -82,6 +83,9 @@ class StoreDetailController : UIViewController{
         /* 카테고리 번호 전송: 첫번째 메뉴라는 것을 알려주기 위함 */
         rvc.categoryNumber = 1
         
+        /* 메뉴 이름 넘기기 */
+        rvc.menuKorName = self.storeMenuNameArray[0]
+        
         
         self.navigationController?.pushViewController(rvc, animated: true)
         
@@ -101,6 +105,9 @@ class StoreDetailController : UIViewController{
         
         /* 카테고리 번호 전송: 첫번째 메뉴라는 것을 알려주기 위함 */
         rvc.categoryNumber = 2
+        
+        /* 메뉴 이름 넘기기 */
+        rvc.menuKorName = self.storeMenuNameArray[1]
         
         
         self.navigationController?.pushViewController(rvc, animated: true)
@@ -216,9 +223,18 @@ class StoreDetailController : UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         
+        
         /* navigationbar 투명 설정 */
-        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController!.navigationBar.shadowImage = UIImage()
+        //self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        //self.navigationController!.navigationBar.shadowImage = UIImage()
+        //self.navigationController?.navigationBar.isTranslucent = true
+        //self.navigationController?.view.backgroundColor = .clear
+        
+        /* navigationbar title 동적 변경 ( 이 경우엔 navigationbar 안보이게 하려고 설정함) */
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+
+        
+        
         
         /* 가게 이름, 카테고리 이름들 받아와서 UI 갱신 */
         CustomHttpRequest().phpCommunication(url: "getStoreDetailInfo.php", postString: "store_name=\(storeEnName!)"){
@@ -242,15 +258,6 @@ class StoreDetailController : UIViewController{
         /* 장바구니 개수 갱신 */
         let ad = UIApplication.shared.delegate as? AppDelegate
         
-//        ad?.menuStoreName = "스타벅스"
-//        ad?.numOfProducts = 2
-//        ad?.menuNameArray = ["모카스무디", "망고스무디"]
-//        ad?.menuSizeArray = ["스몰", "스몰"]
-//        ad?.menuCountArray = [3, 1]
-//        ad?.menuEachPriceArray = [5300, 4500]
-//        ad?.menuSugarContent = ["40%", "30%"]
-//        ad?.menuIsWhippedCream = ["NULL", "NULL"]
-        
         shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
         shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
         
@@ -267,11 +274,6 @@ class StoreDetailController : UIViewController{
     }
     
     
-    override func viewWillDisappear(_ animated: Bool) {
-        
-        /* navigationbar 투명 설정 */
-        self.navigationController!.navigationBar.setBackgroundImage(nil, for: .default)
-        
-    }
+    
     
 }

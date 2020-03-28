@@ -332,7 +332,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="V7J-5M-PMg">
-                                <rect key="frame" x="0.0" y="61" width="375" height="533"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="594"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
@@ -389,7 +389,7 @@
                                 </prototypes>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rtt-MX-Hao">
-                                <rect key="frame" x="16" y="608" width="343" height="45"/>
+                                <rect key="frame" x="16" y="605" width="343" height="52"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <accessibility key="accessibilityConfiguration">
@@ -517,27 +517,39 @@
                                     <action selector="orderItems_Btn:" destination="B88-YK-K4O" eventType="touchUpInside" id="wDj-7a-psz"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhw-0M-mRe">
+                                <rect key="frame" x="16" y="526" width="343" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="25"/>
+                                <state key="normal" title="비콘주문">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="orderItemByBeacon:" destination="B88-YK-K4O" eventType="touchUpInside" id="lVW-oW-GBv"/>
+                                </connections>
+                            </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kTm-JY-nua">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="518"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ShoppingBasket" rowHeight="244" id="2eX-Xd-SuU" customClass="ShoppingBasket" customModule="OutOfKiosk" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="244"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ShoppingBasket" rowHeight="229" id="2eX-Xd-SuU" customClass="ShoppingBasket" customModule="OutOfKiosk" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="229"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2eX-Xd-SuU" id="aoe-L3-aaI" customClass="ShoppingBasket" customModule="OutOfKiosk" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="244"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="229"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="hXC-9C-Qto" colorLabel="IBBuiltInLabel-Red">
-                                                    <rect key="frame" x="140" y="106" width="94" height="32"/>
+                                                <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="hXC-9C-Qto" colorLabel="IBBuiltInLabel-Red">
+                                                    <rect key="frame" x="139" y="112" width="94" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <connections>
                                                         <action selector="changeNumberOfProduct_Stepper:" destination="B88-YK-K4O" eventType="valueChanged" id="qQu-xD-VFt"/>
                                                     </connections>
                                                 </stepper>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X3A-dG-544">
-                                                    <rect key="frame" x="108" y="153" width="158" height="35"/>
+                                                    <rect key="frame" x="107" y="159" width="158" height="35"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="20"/>
@@ -549,7 +561,7 @@
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ProductInfo" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mfw-jF-IEi">
-                                                    <rect key="frame" x="15" y="11" width="352" height="87"/>
+                                                    <rect key="frame" x="15" y="17" width="352" height="87"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -565,25 +577,13 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhw-0M-mRe">
-                                <rect key="frame" x="16" y="526" width="343" height="45"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="25"/>
-                                <state key="normal" title="비콘주문">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="orderItemByBeacon:" destination="B88-YK-K4O" eventType="touchUpInside" id="lVW-oW-GBv"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="lh8-5K-smF"/>
                     </view>
                     <connections>
                         <outlet property="ShoppingBasketTableView" destination="kTm-JY-nua" id="iVh-mz-BMW"/>
-                        <outlet property="orderItemByBeacon" destination="Mhw-0M-mRe" id="wdg-Ta-kNT"/>
+                        <outlet property="orderItemByBeacon_Btn" destination="Mhw-0M-mRe" id="wdg-Ta-kNT"/>
                         <outlet property="orderItems_Btn" destination="RDM-Eo-UyV" id="4K5-pC-Ycb"/>
                     </connections>
                 </viewController>
@@ -600,7 +600,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="G1u-K5-aLx">
-                                <rect key="frame" x="0.0" y="66" width="375" height="601"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="601"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
@@ -735,24 +735,6 @@
                                     <constraint firstAttribute="width" constant="375" id="pbS-9I-rfU"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F0E-de-uea">
-                                <rect key="frame" x="16" y="608" width="343" height="40"/>
-                                <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" none="YES"/>
-                                </accessibility>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="EUX-Hh-9VN"/>
-                                    <constraint firstAttribute="width" constant="343" id="RaV-85-xrs"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="25"/>
-                                <state key="normal" title="장바구니">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="shoppingList_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="yRE-AR-3eK"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8p8-ck-chV" userLabel="split_border">
                                 <rect key="frame" x="186" y="124" width="3" height="42"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -783,19 +765,37 @@
                                     <action selector="orderMenuByAI_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="v3j-mz-Ikg"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F0E-de-uea">
+                                <rect key="frame" x="16" y="605" width="343" height="52"/>
+                                <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" none="YES"/>
+                                </accessibility>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="52" id="EUX-Hh-9VN"/>
+                                    <constraint firstAttribute="width" constant="343" id="RaV-85-xrs"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="25"/>
+                                <state key="normal" title="장바구니">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="shoppingList_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="yRE-AR-3eK"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="F0E-de-uea" firstAttribute="leading" secondItem="Wtr-hX-ECd" secondAttribute="leading" constant="16" id="4g3-6i-yTb"/>
-                            <constraint firstItem="Wtr-hX-ECd" firstAttribute="bottom" secondItem="F0E-de-uea" secondAttribute="bottom" constant="19" id="ARG-4U-L79"/>
+                            <constraint firstItem="Wtr-hX-ECd" firstAttribute="bottom" secondItem="F0E-de-uea" secondAttribute="bottom" constant="10" id="ARG-4U-L79"/>
                             <constraint firstItem="TVw-t7-ojP" firstAttribute="top" secondItem="3aR-aO-Qrl" secondAttribute="bottom" constant="46" id="Jr2-ls-rvk"/>
                             <constraint firstItem="3aR-aO-Qrl" firstAttribute="leading" secondItem="Wtr-hX-ECd" secondAttribute="leading" id="K8b-2z-LjQ"/>
-                            <constraint firstItem="F0E-de-uea" firstAttribute="top" secondItem="TVw-t7-ojP" secondAttribute="bottom" constant="14" id="dWO-yh-2mB"/>
+                            <constraint firstItem="F0E-de-uea" firstAttribute="top" secondItem="TVw-t7-ojP" secondAttribute="bottom" constant="11" id="dWO-yh-2mB"/>
                             <constraint firstItem="3aR-aO-Qrl" firstAttribute="trailing" secondItem="Wtr-hX-ECd" secondAttribute="trailing" id="lzx-vg-BdO"/>
                             <constraint firstItem="3aR-aO-Qrl" firstAttribute="top" secondItem="99A-pz-754" secondAttribute="top" constant="174" id="nW2-m1-sNf"/>
                             <constraint firstItem="TVw-t7-ojP" firstAttribute="leading" secondItem="Wtr-hX-ECd" secondAttribute="leading" id="pdp-84-hCd"/>
                             <constraint firstItem="TVw-t7-ojP" firstAttribute="trailing" secondItem="Wtr-hX-ECd" secondAttribute="trailing" id="pku-qD-uFf"/>
-                            <constraint firstItem="F0E-de-uea" firstAttribute="top" secondItem="TVw-t7-ojP" secondAttribute="bottom" constant="14" id="xIu-7R-FwP"/>
+                            <constraint firstItem="F0E-de-uea" firstAttribute="top" secondItem="TVw-t7-ojP" secondAttribute="bottom" constant="11" id="xIu-7R-FwP"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Wtr-hX-ECd"/>
                     </view>
@@ -892,7 +892,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="12R-7a-Je3">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="592"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
@@ -971,7 +971,7 @@
                                 </prototypes>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="8u8-Th-84s">
-                                <rect key="frame" x="16" y="600" width="343" height="52"/>
+                                <rect key="frame" x="16" y="605" width="343" height="52"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="0.8057073951" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="23"/>
@@ -1010,7 +1010,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZeF-J4-gPa">
-                                <rect key="frame" x="16" y="534" width="343" height="50"/>
+                                <rect key="frame" x="16" y="534" width="343" height="52"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="0.8057073951" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="25"/>

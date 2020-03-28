@@ -34,6 +34,8 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
     var storeKorName: String?
     var storeEnName: String?
     
+    var menuKorName: String?
+    
     
     @IBOutlet weak var ProductTableView: UITableView!
         
@@ -133,8 +135,9 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         ProductTableView.dataSource = self
         self.ProductTableView.rowHeight = 93.0
         
-        
-        
+        /* TableView 제목 사이즈 동적 조절 */
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.title = menuKorName
         
         
         
@@ -195,8 +198,8 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         
         
         /* navigationbar 투명 설정 */
-        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController!.navigationBar.shadowImage = UIImage()
+        //self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        //self.navigationController!.navigationBar.shadowImage = UIImage()
         
     }
     
