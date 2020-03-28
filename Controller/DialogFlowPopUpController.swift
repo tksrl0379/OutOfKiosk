@@ -588,6 +588,8 @@ class DialogFlowPopUpController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        /* navigationbar title 동적 변경 ( 이 경우엔 navigationbar 안보이게 하려고 설정함) */
+        self.navigationController?.navigationBar.prefersLargeTitles = true
         
         /* ViewController가 작동중임을 표시*/
         viewIsRunning = true
@@ -682,9 +684,7 @@ class DialogFlowPopUpController: UIViewController{
             self.navigationItem.leftBarButtonItem?.accessibilityLabel = self.storeKorName! + "로 가는 뒤로가기"
         }
         
-        /* navigationbar 투명 설정 */
-        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController!.navigationBar.shadowImage = UIImage()
+        
         
     }
     
