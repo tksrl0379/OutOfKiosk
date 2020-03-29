@@ -11,6 +11,8 @@ import CoreLocation
 
 class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate{
     
+    var beforeControllerName: String?
+    
     @IBOutlet weak var ShoppingBasketTableView: UITableView!
     
     /* 주문하기, 삭제하기 UI oultet*/
@@ -106,11 +108,11 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         cell.deleteShoppingBasket_Btn.accessibilityLabel = shoppingBasket_productName[indexPath.row] + " " + shoppingBasket_productSize[indexPath.row] + "삭제하기"
         print(shoppingBasket_productName[indexPath.row])
         
-        orderItems_Btn.setTitle("주문하기 "+String(totalPrice)+"원", for: .normal)
-        orderItems_Btn.accessibilityLabel = "주문하기 버튼. \(totalPrice)원 입니다"
+        orderItems_Btn.setTitle("바로 주문 " + String(totalPrice)+"원", for: .normal)
+        orderItems_Btn.accessibilityLabel = "바로 주문 \(totalPrice)원 입니다"
         
-        orderItemByBeacon_Btn.setTitle("비콘주문 "+String(totalPrice)+"원", for: .normal)
-        orderItemByBeacon_Btn.accessibilityLabel = "비콘주문 . \(totalPrice)원 입니다"
+        orderItemByBeacon_Btn.setTitle("자동 주문 " + String(totalPrice)+"원", for: .normal)
+        orderItemByBeacon_Btn.accessibilityLabel = "자동 주문 \(totalPrice)원 입니다"
         
         /* accessbilityElements를 이용하면 수량 증/감 버튼과 삭제하기 버튼을 순서로 정할 수 있다.*/
         cell.accessibilityElements = [cell.BasketItemInfo_Label! , cell.shoppingBasketProductSize_Stepper!, cell.deleteShoppingBasket_Btn!]
@@ -397,7 +399,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         
         //addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = self.beforeControllerName! + "로 뒤로가기"
         
         /* 비콘 권한 설정하기 */
         locationManager = CLLocationManager()   // locationManager 초기화.

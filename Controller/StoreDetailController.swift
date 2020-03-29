@@ -70,7 +70,7 @@ class StoreDetailController : UIViewController{
     
     
     /* 첫번째 메뉴 버튼: DetailMenuController로 넘어감 */
-    @IBAction func firstMenu_Btn(_ sender: Any) {
+    @IBAction func firstCategory_Btn(_ sender: Any) {
         
         //rvc 가 옵셔널 타입이므로 guard 구문을 통해서 옵셔널 바인딩 처리
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController") as? DetailMenuController else {
@@ -92,7 +92,7 @@ class StoreDetailController : UIViewController{
     }
     
     
-    @IBAction func secondMenu_Btn(_ sender: Any) {
+    @IBAction func secondCategory_Btn(_ sender: Any) {
         
         //rvc 가 옵셔널 타입이므로 guard 구문을 통해서 옵셔널 바인딩 처리
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController") as? DetailMenuController else {
@@ -126,7 +126,7 @@ class StoreDetailController : UIViewController{
                 guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingBasketController") as? ShoppingBasketController else {
                     return}
                 
-                
+                rvc.beforeControllerName = self.storeKorName
                 self.navigationController?.pushViewController(rvc, animated: true)
             }else{
                 self.alertMessage(" ","장바구니가 비어있어요")
@@ -184,7 +184,7 @@ class StoreDetailController : UIViewController{
         
         //addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "가게 목록으로 가는 뒤로가기"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "가게 목록 뒤로가기"
         
         
         self.orderMenuByAI_Btn.imageView?.contentMode = .scaleAspectFit
@@ -213,7 +213,7 @@ class StoreDetailController : UIViewController{
         shoppingBasket_Btn.layer.cornerRadius = 5
         
         /* 접근성 */
-        orderMenuByAI_Btn.accessibilityLabel = "스타벅스 음성주문"
+        orderMenuByAI_Btn.accessibilityLabel = self.storeKorName! + "음성주문"
         menu_Label.accessibilityLabel = "아래에 메뉴가 있습니다"
         
         
@@ -252,6 +252,9 @@ class StoreDetailController : UIViewController{
                 self.storeName_Label.text = self.storeKorName
                 self.firstCategory_Btn.setTitle(self.storeMenuNameArray[0], for: .normal)
                 self.secondCategory_Btn.setTitle(self.storeMenuNameArray[1], for: .normal)
+                
+                self.firstCategory_Btn.accessibilityLabel = self.storeMenuNameArray[0] + "메뉴 버튼"
+                self.secondCategory_Btn.accessibilityLabel = self.storeMenuNameArray[1] + "메뉴 버튼"
             }
         }
         

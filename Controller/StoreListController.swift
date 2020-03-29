@@ -90,7 +90,7 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
         currHeight?.isActive = true
         
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "메인으로 가는 뒤로가기"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "메인으로 뒤로가기"
         
         
         /* TableView의 대리자(delegate)는 self(StoreListController)가 됨 */
@@ -133,7 +133,6 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
         }
         
         self.navigationController?.navigationBar.topItem?.title = "가게 목록"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "NanumSquare", size: 20)!]
         self.navigationController?.navigationBar.topItem?.accessibilityLabel = "가게 목록"
         self.navigationController?.navigationBar.topItem?.accessibilityTraits = .header
         

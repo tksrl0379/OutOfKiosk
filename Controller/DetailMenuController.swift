@@ -128,7 +128,7 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         
         //addButton.tintColor = UIColor.black
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = self.storeKorName! + "뒤로가기"
         
         
         ProductTableView.delegate = self

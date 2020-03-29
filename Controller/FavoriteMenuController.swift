@@ -81,6 +81,8 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
                 guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingBasketController") as? ShoppingBasketController else {
                     return}
                 
+                rvc.beforeControllerName = "찜한 메뉴"
+
                 self.navigationController?.pushViewController(rvc, animated: true)
             }else{
                 /* 들어갈 기능 = message alert 혹은 팝업 cotroller를 뛰운다*/
@@ -169,7 +171,7 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
         currHeight?.isActive = true
         
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "메인으로 뒤로가기"
         
         
         
@@ -180,9 +182,9 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
         
         
         /* 내비게이션바 이름 및 접근성 설정 */
-        self.navigationController?.navigationBar.topItem?.title = "즐겨찾기"
+        self.navigationController?.navigationBar.topItem?.title = "찜한 메뉴"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "NanumSquare", size: 20)!]
-        self.navigationController?.navigationBar.topItem?.accessibilityLabel = "즐겨찾기 메뉴입니다"
+        self.navigationController?.navigationBar.topItem?.accessibilityLabel = "찜한 메뉴 목록"
         
         
         /* TableView 최초에 갱신해주는 역할 */

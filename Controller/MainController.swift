@@ -337,6 +337,7 @@ class MainController : UIViewController{
     
     
     override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "NanumSquare", size: 20)!]
         self.navigationController!.isNavigationBarHidden = false
         
     }

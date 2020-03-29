@@ -610,7 +610,13 @@ class DialogFlowPopUpController: UIViewController{
         currHeight?.isActive = true
         
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        
+        /* 즐겨찾기에서 들어왔을 시 뒤로가기 accessibility 설정 */
+        if favoriteMenuName != nil {
+            self.navigationItem.leftBarButtonItem?.accessibilityLabel = "찜한 목록 뒤로가기"
+        }else{
+            self.navigationItem.leftBarButtonItem?.accessibilityLabel = self.storeKorName! + " 뒤로가기"
+        }
         
         
         
@@ -677,12 +683,7 @@ class DialogFlowPopUpController: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         
-        /* 즐겨찾기에서 들어왔을 시 뒤로가기 accessibility 설정 */
-        if favoriteMenuName != nil {
-            self.navigationItem.leftBarButtonItem?.accessibilityLabel = "즐겨찾기로 가는 뒤로가기"
-        }else{
-            self.navigationItem.leftBarButtonItem?.accessibilityLabel = self.storeKorName! + "로 가는 뒤로가기"
-        }
+        
         
         
         

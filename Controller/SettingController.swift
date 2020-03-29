@@ -12,6 +12,17 @@ class SettingController : UIViewController{
     
     @IBOutlet weak var speechSpeedControl_Slider: UISlider!
     
+    @IBOutlet weak var userProfileImage_View: UIImageView!
+    
+    @IBOutlet weak var userProfileName_Label: UILabel!
+    
+    
+    @IBOutlet weak var profile_View: UIView!
+    
+    @IBOutlet weak var settingTitle_View: UIView!
+    
+    @IBOutlet weak var setting_View: UIView!
+    
     
     @IBAction func speechSpeedControl_Slider(_ sender: UISlider) {
         print(sender.value)
@@ -30,6 +41,17 @@ class SettingController : UIViewController{
             self?.presentingViewController?.dismiss(animated: true, completion: nil)
         }
     }
+    
+    /* view 둥글게 만들기 */
+    func makeCircularShape(view: UIView){
+        view.layer.cornerRadius = view.frame.height/2
+        view.layer.masksToBounds = false
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.clear.cgColor
+        view.clipsToBounds = true
+        view.contentMode = .scaleAspectFill
+    }
+    
     
     @objc func buttonAction(_ sender: UIBarButtonItem) {
       self.navigationController?.popViewController(animated: true)
@@ -52,7 +74,8 @@ class SettingController : UIViewController{
         currHeight?.isActive = true
         
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "메인으로 가는 뒤로가기"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "메인으로 뒤로가기"
+        self.navigationItem.title = "프로필"
         
         /* 말하기 속도 조절 */
         if let rate = UserDefaults.standard.string(forKey: "speechSpeedRate"){
@@ -62,7 +85,33 @@ class SettingController : UIViewController{
 
         }
         
+        /* 사용자 프로필 이미지 */
+        if let imageUrl = UserDefaults.standard.string(forKey: "profileImageUrl"){
+            let url = URL(string: imageUrl)
+            do {
+                let data = try Data(contentsOf: url!)
+                self.userProfileImage_View.image = UIImage(data: data)
+            }catch let err {
+                print("Error : \(err.localizedDescription)")
+            }
+        }
         
+        /* 사용자 아이디 */
+        self.userProfileName_Label.text = "안녕하세요. \(UserDefaults.standard.string(forKey: "id")!)님"
+        
+        self.makeCircularShape(view: self.userProfileImage_View) 
+        
+        /* 테두리 */
+        
+        
+        self.profile_View.layer.borderWidth = 0.35
+        self.profile_View.layer.borderColor = UIColor.gray.cgColor
+        
+        self.settingTitle_View.layer.borderWidth = 0.35
+        self.settingTitle_View.layer.borderColor = UIColor.gray.cgColor
+        
+        self.setting_View.layer.borderWidth = 0.35
+        self.setting_View.layer.borderColor = UIColor.gray.cgColor
     }
     
     

@@ -81,7 +81,7 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
         currHeight?.isActive = true
         
         self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = self.storeKorName! + "로 가는 뒤로가기"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = self.storeKorName! + " 뒤로가기"
         
         /* 테두리 둥글게 만들기 */
         reviewWrite_Btn.layer.cornerRadius = 5
