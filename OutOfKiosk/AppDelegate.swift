@@ -130,7 +130,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
         /*AppDelegate에서 MainView로 Notification 보내기(alert MSG)*/
         let userInfo: [AnyHashable: Any] = ["alert": alert]
         NotificationCenter.default.post(name: NSNotification.Name("TestNotification"), object: nil, userInfo: userInfo)
-
+        
+        /* 수정중 */
+        //UserDefaults.standard.set(alert, forKey: "pushMSG")
         
         /* 후에 특정 메시지가 오게 되면 여기서 pushMSG의 값을 nil로 초기화 하는 작업을 할 듯.*/
                 
