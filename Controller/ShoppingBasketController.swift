@@ -92,7 +92,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         /* 행 간격 조절 */
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 9
-        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attributedString.length))        
+        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attributedString.length))
         
         /* 메뉴정보를 BasketItemInfo_Label에 저장 한다. 후에 출력 됨*/
         cell.BasketItemInfo_Label.attributedText = attributedString
@@ -108,11 +108,12 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         cell.deleteShoppingBasket_Btn.accessibilityLabel = shoppingBasket_productName[indexPath.row] + " " + shoppingBasket_productSize[indexPath.row] + "삭제하기"
         print(shoppingBasket_productName[indexPath.row])
         
-        orderItems_Btn.setTitle("바로 주문 " + String(totalPrice)+"원", for: .normal)
-        orderItems_Btn.accessibilityLabel = "바로 주문 \(totalPrice)원 입니다"
         
-        orderItemByBeacon_Btn.setTitle("자동 주문 " + String(totalPrice)+"원", for: .normal)
-        orderItemByBeacon_Btn.accessibilityLabel = "자동 주문 \(totalPrice)원 입니다"
+        orderItemByBeacon_Btn.setTitle("현장 주문 " + String(totalPrice)+"원", for: .normal)
+        orderItemByBeacon_Btn.accessibilityLabel = "현장 주문 \(totalPrice)원"
+        
+        orderItems_Btn.setTitle("즉시 주문 " + String(totalPrice)+"원", for: .normal)
+        orderItems_Btn.accessibilityLabel = "즉시 주문 \(totalPrice)원"
         
         /* accessbilityElements를 이용하면 수량 증/감 버튼과 삭제하기 버튼을 순서로 정할 수 있다.*/
         cell.accessibilityElements = [cell.BasketItemInfo_Label! , cell.shoppingBasketProductSize_Stepper!, cell.deleteShoppingBasket_Btn!]
@@ -273,9 +274,11 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         self.beaconConfirmFlag = !(self.beaconConfirmFlag)
         
         if(self.beaconConfirmFlag == true){
-            orderItemByBeacon_Btn.setTitle("비콘주문 취소하기", for: .normal)
+            orderItemByBeacon_Btn.setTitle("현장 주문 취소하기", for: .normal)
+            orderItemByBeacon_Btn.accessibilityLabel = "현장 주문 취소하기"
         }else{
-            orderItemByBeacon_Btn.setTitle("비콘주문 "+String(totalPrice)+"원", for: .normal)
+            orderItemByBeacon_Btn.setTitle("현장 주문 "+String(totalPrice)+"원", for: .normal)
+            orderItemByBeacon_Btn.accessibilityLabel = "현장 주문 "+String(totalPrice)+"원"
         }
         
         print(self.beaconConfirmFlag)
@@ -449,7 +452,12 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         }
         
         
-    }   
+        //
+        orderItemByBeacon_Btn.accessibilityTraits = .button
+        orderItems_Btn.accessibilityTraits = .button
+        
+        
+    }
     
     
 }

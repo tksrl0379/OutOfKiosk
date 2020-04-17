@@ -1,6 +1,43 @@
 
-# 시각 장애인을 위한 음성주문 기반 키오스크 어플리케이션  '여기다'  
+# 여기다(Yeogida)
+### 시각 장애인을 위한 음성주문 기반 키오스크 어플리케이션
+### Kiosk Application for visually impaired people using voice order
 
+한국산업기술대학교 컴퓨터 공학과 졸업작품
+
+</br>
+
+* #### :family: 개발자
+  * 심영민, 박진서, 임의주, 신영명
+
+* #### :pushpin: 협업도구
+  * #### Git & Agile(Scrum)
+  * 방학 중 2주 간격 스프린트. 개강 후엔 자유롭게 issue 발행 및 해결
+
+* #### :iphone: APP
+  * Language & Environment: Swift, Xcode, iOS 13
+  * Frameworks: KaKaoLoginSDK, AVFoundation, Speech, CoreLocation,  Lottie, VoiceOver
+  * Developers: 심영민, 박진서
+
+* #### :computer: POS
+  * Language & Environment: C#, Visual Studio
+  * Developers: 임의주, 신영명
+  * https://github.com/skadkwld/pos_program
+  
+* #### :file_folder: Server
+  * AWS EC2: PHP 서버. 심영민, 박진서
+  * AWS RDS: DB 서버. 임의주, 신영명
+
+* #### :speech_balloon: Google Dialogflow
+  * Version: V2
+  * 가게, 메뉴 모델링하여 챗봇 제작
+  * Google cloud dialogflow PHP client library 사용
+
+<hr/>
+
+</br>
+
+## 1. 개요
 챗봇, TTS, STT를 결합하여 시각 장애인이 음성으로 주문을 할 수 있도록 함.
 
 APP 전반에 시각 장애인을 위한 장애인 접근성 지침을 준수하여 VoiceOver를 이용해 모든 기능을 사용할 수 있음.                                
@@ -11,40 +48,14 @@ APP 전반에 시각 장애인을 위한 장애인 접근성 지침을 준수하
 
 </br> </br>
 
-# :family: 개발자   
-## Team OOK(Out Of Kiosk)
 
-### :walking: 협업도구
-
-Git & Agile(Scrum) - 방학 중 2주 간격 스프린트. 개강 후엔 자유롭게 issue 발행 및 해결
-
-<hr/>
-
-### :iphone: APP 개발
-
-iOS, VoiceOver, Google Dialogflow V2, AWS EC2(PHP, DB Server)
-
-심영민, 박진서
-
-<hr/>
-
-### :computer: POS 개발
-
-C#, AWS EC2(DB Server)
-
-https://github.com/skadkwld/pos_program
-
-임의주, 신영명
-
-
-<hr/>
 
 ![image](https://user-images.githubusercontent.com/20080283/79094920-f4444200-7d93-11ea-97ea-049f433675c8.png)
 
 </br> </br>
 
 
-# :calling: 기능
+## :calling: 2. 기능
 
 ### 1. 카카오 간편 로그인
 <img src="https://user-images.githubusercontent.com/20080283/79095575-b1836980-7d95-11ea-941d-5179b3c374e2.gif" width="40%">
