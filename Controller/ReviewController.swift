@@ -111,7 +111,7 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
     override func viewWillAppear(_ animated: Bool) {
         
         /* TableView 제목 사이즈 동적 조절 */
-        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationItem.title = "리뷰하기"
         
         /* 리뷰 정보 받아오기 */

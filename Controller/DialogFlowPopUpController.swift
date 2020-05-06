@@ -564,7 +564,7 @@ class DialogFlowPopUpController: UIViewController{
             
         /* 있을 경우 */
         }else{
-            self.speechAndText("\(recommendedWord)\(helpText)가 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
+            self.speechAndText("\(recommendedWord)\(helpText)이 맞다면 화면을 더블탭, 아니면 다시 말씀해주세요.")
             self.checkSimilarEntityIsGet = true
             self.similarEntity = recommendedWord
             
