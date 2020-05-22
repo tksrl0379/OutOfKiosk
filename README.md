@@ -41,6 +41,8 @@
 
 * 시각 장애인이 키오스크를 사용하여 주문을 한다면?
 : https://www.youtube.com/watch?v=IaxXwVHHjXs
+* 노년층, 장애인들에게 불편한 키오스크
+: https://www.youtube.com/watch?v=hJEBDVeU6FU
 
 챗봇, TTS, STT를 결합하여 시각 장애인이 음성으로 주문을 할 수 있도록 함.
 
