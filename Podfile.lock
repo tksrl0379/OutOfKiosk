@@ -1,16 +1,20 @@
 PODS:
   - FloatRatingView (4.0)
+  - lottie-ios (3.1.8)
 
 DEPENDENCIES:
   - FloatRatingView (~> 4)
+  - lottie-ios
 
 SPEC REPOS:
   trunk:
     - FloatRatingView
+    - lottie-ios
 
 SPEC CHECKSUMS:
   FloatRatingView: bb6bdddfbeec51b1d387b4bd50abc27b4dfccd48
+  lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
 
-PODFILE CHECKSUM: 03283b7ac88aa52b6360eab175f655e0c5e4965a
+PODFILE CHECKSUM: 8a40bf64d10be08eea2cb6200851c22f27dfaa6b
 
 COCOAPODS: 1.8.4
