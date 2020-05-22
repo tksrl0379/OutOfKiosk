@@ -451,8 +451,6 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
             shoppingBasket_productIsWhippedCream = menuIsWhippedCream
         }
         
-        
-        //
         orderItemByBeacon_Btn.accessibilityTraits = .button
         orderItems_Btn.accessibilityTraits = .button
         

@@ -7,6 +7,5 @@ target 'OutOfKiosk' do
 
   # Pods for OutOfKiosk
 
-  pod 'lottie-ios'
   pod 'FloatRatingView', '~> 4'
 end

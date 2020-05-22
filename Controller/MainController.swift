@@ -324,6 +324,7 @@ class MainController : UIViewController{
         /* 장바구니 개수 갱신(테스트용) */
         let ad = UIApplication.shared.delegate as? AppDelegate
         
+        /* 미리 적재하고 싶은 경우 사용 */
 //        ad?.menuStoreName = "스타벅스"
 //        ad?.numOfProducts = 2
 //        ad?.menuNameArray = ["모카스무디", "망고스무디"]

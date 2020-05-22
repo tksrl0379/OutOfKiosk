@@ -196,11 +196,6 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
             
         
         
-        
-        /* navigationbar 투명 설정 */
-        //self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        //self.navigationController!.navigationBar.shadowImage = UIImage()
-        
     }
     
 }

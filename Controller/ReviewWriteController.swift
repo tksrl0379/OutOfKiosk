@@ -116,11 +116,9 @@ extension ReviewWriteController: FloatRatingViewDelegate {
     // MARK: FloatRatingViewDelegate
     
     func floatRatingView(_ ratingView: FloatRatingView, isUpdating rating: Double) {
-        //liveLabel.text = String(format: "%.2f", self.floatRatingView.rating)
     }
     
     func floatRatingView(_ ratingView: FloatRatingView, didUpdate rating: Double) {
-        //updatedLabel.text = String(format: "%.2f", self.floatRatingView.rating)
     }
     
 }
