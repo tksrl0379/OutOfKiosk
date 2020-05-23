@@ -13,11 +13,11 @@ class CustomHttpRequest{
     
     /* php 서버를 통해 mysql 서버와 통신하는 함수 */
     func phpCommunication(url: String, postString: String, handler: @escaping (_ responseString: String)->Void){
-        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-13-124-57-226.ap-northeast-2.compute.amazonaws.com/\(url)")! as URL)
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-54-180-97-160.ap-northeast-2.compute.amazonaws.com/\(url)")! as URL)
         request.httpMethod = "POST"
         
         request.httpBody = postString.data(using: String.Encoding.utf8)
-        
+        print("보낸 parameter:", postString)
         /* URLSession: HTTP 요청을 보내고 받는 핵심 객체 */
         let task = URLSession.shared.dataTask(with: request as URLRequest) {
             data, response, error in
