@@ -10,12 +10,14 @@ import Foundation
 
 class CustomConvert{
     
-    /* Stiring -> Dictionary */
+    // MARK: Custom Method
+
+    // Stiring -> Dictionary
     func convertStringToDictionary(text: String) -> NSDictionary? {//[String:AnyObject]? {
         if let data = text.data(using: .utf8) {
             do {
-                /* jsonObject: String type json을 Foundation Object로 바꿔줌 */
-                /* Foundation Object: NSArray, NSDictionary, NSNumber, NSDate, NSString or NSNull 로 변환 가능 */
+                // jsonObject: String type json을 Foundation Object로 변환
+                // Foundation Object: NSArray, NSDictionary, NSNumber, NSDate, NSString or NSNull 로 변환 가능 
                 let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? NSDictionary //[String:AnyObject]
                 return json
             } catch {
