@@ -6,8 +6,6 @@
 //  Copyright © 2020 OOK. All rights reserved.
 //
 
-/* 30초간 아무 말도 안하면 음성인식 기능 종료됨.*/
-
 import AVFoundation
 import Speech
 import UIKit
@@ -16,14 +14,12 @@ import Lottie
 
 class DialogFlowPopUpController: UIViewController {
     
-    
     // MARK: - Propery
     // MARK: 유사 단어 추천
     @IBOutlet weak var similarSelect_Btn: UIButton!
     var befResponse: String?
     var similarEntity: NSString?
     var similarEntityIsOn: Bool = false // 사용자가 유사 단어 선택 여부
-    
     
     // MARK: 세마포어
     let semaphore = DispatchSemaphore(value: 0)
@@ -63,8 +59,9 @@ class DialogFlowPopUpController: UIViewController {
     private var speechRecognizer : SFSpeechRecognizer?                     // 음성인식 지역 지원
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest? // 음성인식 요청 처리
     private var recognitionTask: SFSpeechRecognitionTask?                  // 음성인식 결과 제공
-    private var audioEngine = AVAudioEngine()                              // 순수 소리 인식
+    private var audioEngine: AVAudioEngine?                             // 순수 소리 인식
     private var inputNode: AVAudioInputNode?
+    
     
     
     // MARK: - Life cycle
@@ -72,6 +69,7 @@ class DialogFlowPopUpController: UIViewController {
         super.viewDidLoad()
         
         self.speechSynthesizer.delegate = self
+        self.audioEngine = AVAudioEngine()
         
         self.initializeView()
         
@@ -89,16 +87,16 @@ class DialogFlowPopUpController: UIViewController {
         
         // 스레드 종료 및 메모리 누수 방지
         viewIsRunning = false
+        
         inputNode?.removeTap(onBus: 0)
-        inputNode = nil
         
         // Context Delete
         CustomHttpRequest().phpCommunication(url: "vendor/context_deleteAll.php", postString: "") {
             responseString in
             
         }
-        
     }
+    
     
     
     // MARK: - Method
@@ -179,7 +177,7 @@ class DialogFlowPopUpController: UIViewController {
             let responseMessage = dict!["response"] as! String
             
             // 1. 즐겨찾기 시
-            if (self.favoriteMenuName != nil) {
+            if self.favoriteMenuName != nil {
                 print(self.favoriteMenuName!)
                 CustomHttpRequest().phpCommunication(url: "vendor/intent_query.php", postString: "query=\(self.favoriteMenuName!)") {
                     [unowned self] responseString in
@@ -208,7 +206,7 @@ class DialogFlowPopUpController: UIViewController {
         
         
         // startSTT() 내부의 콜백함수들 종료 여부 체크 후 startSTT 재실행
-        DispatchQueue.global().async {
+        DispatchQueue.global().async { [unowned self] in
             
             while(self.viewIsRunning){
                 
@@ -475,17 +473,17 @@ class DialogFlowPopUpController: UIViewController {
         recognitionRequest.shouldReportPartialResults = true
         
         // 소리 input을 받기 위해 input node 생성
-        inputNode = audioEngine.inputNode
+        inputNode = audioEngine?.inputNode
         
         // 특정 bus의 outputformat 반환: 보통 0번이 outputformat, 1번이 inputformat ( https://liveupdate.tistory.com/400 )
         let recordingFormat = inputNode?.outputFormat(forBus: 0)
         
         
         // 1. 음성인식 준비 및 시작
-        audioEngine.prepare()
+        audioEngine?.prepare()
         print("record ready")
         do {
-            try audioEngine.start()
+            try audioEngine?.start()
         } catch {
             print("audioEngine couldn't start because of an error.")
         }
@@ -522,7 +520,7 @@ class DialogFlowPopUpController: UIViewController {
                         print("EndOfConversation")
                                 
                         // STT 멈추기
-                        self.audioEngine.stop()
+                        self.audioEngine?.stop()
                         recognitionRequest.endAudio()
                         
                         recordingState = false
@@ -545,7 +543,7 @@ class DialogFlowPopUpController: UIViewController {
         
         
         // 3. inputnode의 output이 감지될 때마다 resultHandler callback 함수 호출
-        recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { [unowned self] (result, error) in
+        recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { [weak self] (result, error) in
             print("recording")
             
             // recording 상태 기록
@@ -556,18 +554,18 @@ class DialogFlowPopUpController: UIViewController {
             
             if result != nil {
                 
-                self.requestMsg_Label.text = result?.bestTranscription.formattedString
+                self?.requestMsg_Label.text = result?.bestTranscription.formattedString
                 isFinal = (result?.isFinal)!
             }
             
             /* 오류가 없거나 최종 결과가 나오면 audioEngine (오디오 입력)을 중지하고 인식 요청 및 인식 작업을 중지 */
             if error != nil || isFinal {
                 
-                self.audioEngine.stop() // 이미 앞에서 stop해서 필요 없는 거같은데 일단 보류
-                self.inputNode?.removeTap(onBus: 0)
+                self?.audioEngine?.stop() // 이미 앞에서 stop해서 필요 없는 거같은데 일단 보류
+                self?.inputNode?.removeTap(onBus: 0)
                 
-                self.recognitionRequest = nil
-                self.recognitionTask = nil
+                self?.recognitionRequest = nil
+                self?.recognitionTask = nil
                 
             }
         })
@@ -599,6 +597,7 @@ class DialogFlowPopUpController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
+    
     // MARK: IBAction
     @IBAction func select_Btn(_ sender: Any) {
         
@@ -611,6 +610,7 @@ class DialogFlowPopUpController: UIViewController {
     }
     
 }
+
 
 extension DialogFlowPopUpController: AVSpeechSynthesizerDelegate {
     
