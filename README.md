@@ -1,9 +1,15 @@
 
 # 여기다(Yeogida)
+![issue_badge](https://img.shields.io/badge/Team-ook-red?style=flat)
+![issue_badge](https://img.shields.io/badge/Ver-Swift5-red?style=flat)
+![GitHub stars](https://img.shields.io/github/stars/tksrl0379/OutOfKiosk?style=social)
+![YouTube Video Views](https://img.shields.io/youtube/views/QPmVavaMwBk?style=social)
 ### 시각 장애인을 위한 음성주문 기반 키오스크 어플리케이션
 ### Kiosk Application for visually impaired people using voice order
 
 한국산업기술대학교 컴퓨터 공학과 졸업작품
+
+
 
 </br>
 
