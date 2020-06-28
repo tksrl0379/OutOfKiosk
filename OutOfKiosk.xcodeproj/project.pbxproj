@@ -65,9 +65,9 @@
 		3356009023FCF97D00E9CB43 /* NanumSquareLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareLight.ttf; sourceTree = "<group>"; };
 		335EAC9923F3E66000071770 /* FloatRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatRatingView.swift; sourceTree = "<group>"; };
 		335EAC9B23F3E72100071770 /* ReviewWriteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewWriteController.swift; sourceTree = "<group>"; };
+		337A239524A78EE500D825DD /* KakaoOpenSDK-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KakaoOpenSDK-Bridging-Header.h"; sourceTree = "<group>"; };
 		337FFD1323FA3B5B006136A5 /* CustomConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomConvert.swift; sourceTree = "<group>"; };
 		337FFD1623FA5957006136A5 /* CustomHttpRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHttpRequest.swift; sourceTree = "<group>"; };
-		337FFD1A23FA7941006136A5 /* KakaoOpenSDK-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KakaoOpenSDK-Bridging-Header.h"; sourceTree = "<group>"; };
 		337FFD1B23FA7A41006136A5 /* KakaoOpenSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = KakaoOpenSDK.framework; sourceTree = "<group>"; };
 		3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogFlowPopUpController.swift; sourceTree = "<group>"; };
 		33BAD3E523FE501E00CE4C99 /* BMHANNA_11yrs_otf.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BMHANNA_11yrs_otf.otf; sourceTree = "<group>"; };
@@ -134,12 +134,6 @@
 		33259F4623BB017400D44CB0 = {
 			isa = PBXGroup;
 			children = (
-				337FFD1A23FA7941006136A5 /* KakaoOpenSDK-Bridging-Header.h */,
-				337FFD1523FA57FE006136A5 /* CustomClass */,
-				337FFD1223FA39BC006136A5 /* AnimationView */,
-				33F48FC323CDE8DE0037CC7B /* File */,
-				3308428E23BDA16400FCF4C0 /* Cell */,
-				3308428123BD724100FCF4C0 /* Controller */,
 				33259F5123BB017400D44CB0 /* OutOfKiosk */,
 				33259F5023BB017400D44CB0 /* Products */,
 				9E1764F034FCDECE5456BAB9 /* Pods */,
@@ -158,6 +152,11 @@
 		33259F5123BB017400D44CB0 /* OutOfKiosk */ = {
 			isa = PBXGroup;
 			children = (
+				337FFD1523FA57FE006136A5 /* CustomClass */,
+				337FFD1223FA39BC006136A5 /* AnimationView */,
+				33F48FC323CDE8DE0037CC7B /* File */,
+				3308428E23BDA16400FCF4C0 /* Cell */,
+				3308428123BD724100FCF4C0 /* Controller */,
 				FAE1803923FBD46E000D1C27 /* OutOfKiosk.entitlements */,
 				33259F5223BB017400D44CB0 /* AppDelegate.swift */,
 				33259F5423BB017400D44CB0 /* SceneDelegate.swift */,
@@ -190,6 +189,7 @@
 		33F48FC323CDE8DE0037CC7B /* File */ = {
 			isa = PBXGroup;
 			children = (
+				337A239524A78EE500D825DD /* KakaoOpenSDK-Bridging-Header.h */,
 				3356009023FCF97D00E9CB43 /* NanumSquareLight.ttf */,
 				3356008F23FCF96800E9CB43 /* NanumSquareRegular.ttf */,
 				33BAD3E523FE501E00CE4C99 /* BMHANNA_11yrs_otf.otf */,
@@ -537,7 +537,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = OOK.OutOfKiosk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "KakaoOpenSDK-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "./OutOfKiosk/File/KakaoOpenSDK-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -580,7 +580,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = OOK.OutOfKiosk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "KakaoOpenSDK-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "./OutOfKiosk/File/KakaoOpenSDK-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -31,9 +31,6 @@ class DialogFlowPopUpController: UIViewController {
     @IBOutlet weak var animationView: UIView!
     var animation: AnimationView?
     
-    // MARK: 종료 여부
-    private var viewIsRunning : Bool = true
-    
     // MARK: Dialogflow Parameter
     private var name: String?
     private var count: Int?
@@ -59,7 +56,7 @@ class DialogFlowPopUpController: UIViewController {
     private var speechRecognizer : SFSpeechRecognizer?                     // 음성인식 지역 지원
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest? // 음성인식 요청 처리
     private var recognitionTask: SFSpeechRecognitionTask?                  // 음성인식 결과 제공
-    private var audioEngine: AVAudioEngine?                             // 순수 소리 인식
+    private var audioEngine: AVAudioEngine?                                // 순수 소리 인식
     private var inputNode: AVAudioInputNode?
     
     
@@ -84,11 +81,8 @@ class DialogFlowPopUpController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        
-        // 스레드 종료 및 메모리 누수 방지
-        viewIsRunning = false
-        
-        inputNode?.removeTap(onBus: 0)
+    
+        self.inputNode?.removeTap(onBus: 0)
         
         // Context Delete
         CustomHttpRequest().phpCommunication(url: "vendor/context_deleteAll.php", postString: "") {
@@ -106,10 +100,7 @@ class DialogFlowPopUpController: UIViewController {
         
         // navigationbar title 동적 변경 ( 이 경우엔 navigationbar 안보이게 하려고 설정함)
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        
-        // ViewController가 작동중임을 표시
-        self.viewIsRunning = true
-        
+       
         self.similarSelect_Btn.isHidden = true
         
         // 즐겨찾기에서 들어왔을 시 뒤로가기 accessibility 설정
@@ -168,23 +159,25 @@ class DialogFlowPopUpController: UIViewController {
         
         // 해당 가게 Intent 로 시작하도록 설정 Ex) 스타벅스, 역전우동
         CustomHttpRequest().phpCommunication(url: "vendor/intent_query.php", postString: "query=\(self.storeKorName!)") {
-            [unowned self] responseString in
+            responseString in
             
             print(responseString)
             
-            var dict = CustomConvert().convertStringToDictionary(text: responseString as! String)
+            var dict = CustomConvert().convertStringToDictionary(text: responseString )
             
             let responseMessage = dict!["response"] as! String
             
             // 1. 즐겨찾기 시
             if self.favoriteMenuName != nil {
+                
                 print(self.favoriteMenuName!)
+                
                 CustomHttpRequest().phpCommunication(url: "vendor/intent_query.php", postString: "query=\(self.favoriteMenuName!)") {
-                    [unowned self] responseString in
+                    responseString in
                     
                     print("즐겨찾기 들어왔음")
                     
-                    var dict = CustomConvert().convertStringToDictionary(text: responseString as! String)
+                    var dict = CustomConvert().convertStringToDictionary(text: responseString)
                     let responseMessage = dict!["response"] as! String
                     
                     self.startTTS(responseMessage){ self.controlAsyncTask() }
@@ -206,15 +199,18 @@ class DialogFlowPopUpController: UIViewController {
         
         
         // startSTT() 내부의 콜백함수들 종료 여부 체크 후 startSTT 재실행
-        DispatchQueue.global().async { [unowned self] in
+        DispatchQueue.global().async { [weak self] in
             
-            while(self.viewIsRunning){
-                
-                self.semaphore.wait()
-                
-                self.inputNode?.removeTap(onBus: 0) // STT 시작 전 removeTap 필요
+            while true {
 
-                self.startSTT() // STT 시작
+                if self?.semaphore.wait(timeout: .now() + 10) == .success && self != nil {
+                    
+                    self?.inputNode?.removeTap(onBus: 0) // STT 시작 전 removeTap 필요
+                    self?.startSTT() // STT 시작
+                    
+                } else if self == nil {
+                    break
+                }
                 
             }
         }
@@ -258,10 +254,9 @@ class DialogFlowPopUpController: UIViewController {
         }
         
         // 대화가 모두 끝난 이후에는 TTS 방지
-        if(self.viewIsRunning){
             
-            speechSynthesizer.speak(speechUtterance)
-        }
+        speechSynthesizer.speak(speechUtterance)
+        
         
         handler()
     }
@@ -285,7 +280,7 @@ class DialogFlowPopUpController: UIViewController {
             
             // DialogFlow 서버에 requestMsg 전송 후 handler 호출
             CustomHttpRequest().phpCommunication(url: "vendor/intent_query.php", postString: "query=\(request!)"){
-                [unowned self] responseString in
+                responseString in
                 
                 var dict = CustomConvert().convertStringToDictionary(text: responseString as! String)
                 
@@ -298,7 +293,7 @@ class DialogFlowPopUpController: UIViewController {
                 
                 // CONTEXT DELETE
                 CustomHttpRequest().phpCommunication(url: "vendor/context_delete.php", postString: ""){
-                    [unowned self] responseString in
+                     responseString in
                 }
                 
                 
@@ -336,7 +331,7 @@ class DialogFlowPopUpController: UIViewController {
                 if responseMessage.contains("정확한 메뉴 이름을 말씀해주시겠어요 ?") { // 1-1. fallback intents 로 들어간 경우 혹은,
                     
                     CustomHttpRequest().phpCommunication(url: "similarity/measureSimilarity.php", postString: "word=\(request!)&category=MENU") {
-                        [unowned self] responseString in
+                        responseString in
                         
                         self.getSimilarEntityHandler(responseString as NSString, responseMessage, "")
                     }
@@ -344,7 +339,7 @@ class DialogFlowPopUpController: UIViewController {
                     if responseMessage.contains("어떤") { // 1-2-1. 메뉴 이름에 대해
                         
                         CustomHttpRequest().phpCommunication(url: "similarity/measureSimilarity.php", postString: "word=\(request!)&category=\(intentName)") {
-                            [unowned self] responseString in
+                            responseString in
                                                                         
                             self.getSimilarEntityHandler(responseString as NSString, responseMessage, "")
                         }
@@ -352,7 +347,7 @@ class DialogFlowPopUpController: UIViewController {
                     } else if (responseMessage.contains("사이즈")) { // 1-2-2. 사이즈에 대해
                         
                         CustomHttpRequest().phpCommunication(url: "similarity/measureSimilarity.php", postString: "word=\(request!)&category=SIZE") {
-                            [unowned self] responseString in
+                            responseString in
                                                                         
                             self.getSimilarEntityHandler(responseString as NSString, responseMessage, "")
                         }
@@ -362,7 +357,7 @@ class DialogFlowPopUpController: UIViewController {
                         DispatchQueue.main.async {
                             self.similarSelect_Btn.isHidden = true
                             self.startTTS(responseMessage){}
-                            print("일반")
+
                             // 질문이 반복되는지 감지하기 위해
                             self.befResponse = responseMessage
                         }
@@ -374,7 +369,7 @@ class DialogFlowPopUpController: UIViewController {
                     
                     // 가격정보 받은 후 장바구니(ShoppingListViewController)로 전송하고,
                     CustomHttpRequest().phpCommunication(url: "price.php", postString: "name=\(self.name!)&size=\(self.size!)&count=\(self.count!)") {
-                        [unowned self] price in
+                        price in
                                                             
                         DispatchQueue.main.async {
                             
@@ -419,14 +414,12 @@ class DialogFlowPopUpController: UIViewController {
                             
                             ad?.menuStoreName = self.storeKorName!
                             
-                            self.viewIsRunning = false
                             self.navigationController?.popViewController(animated: true)
                         }
                     }
                     
                 // 3. 장바구니에 담지 않고 끝내는 경우
                 } else if responseMessage.contains("필요하실때 다시 불러주세요.") {
-                    self.viewIsRunning = false
                     
                     DispatchQueue.main.async {
                         self.navigationController?.popViewController(animated: true)
@@ -494,9 +487,9 @@ class DialogFlowPopUpController: UIViewController {
         
         // 새 쓰레드 생성
         // 2. bus에 audio tap을 설치하여 inputnode의 output 감시: audioEngine이 start인 경우 계속해서 반복
-        inputNode?.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [unowned self] (buffer, when) in
+        inputNode?.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] (buffer, when) in
             
-            self.recognitionRequest?.append(buffer)
+            self?.recognitionRequest?.append(buffer)
             
             
             // 사용자의 무음 시간 체크
@@ -504,14 +497,14 @@ class DialogFlowPopUpController: UIViewController {
             monitorCount+=1
             
             // 사용자가 유사도 높은 단어 사용 선택 시
-            if(self.similarEntityIsOn){
+            if self?.similarEntityIsOn ?? false {
                 
                 recordingState = true
                 monitorCount = 12
                 recordingCount = befRecordingCount
             }
             
-            if(recordingState){ // 사용자가 말을 하기 시작하면 recordingState가 true 가 됨
+            if recordingState { // 사용자가 말을 하기 시작하면 recordingState가 true 가 됨
                 monitorCount %= 13 // monitorCount는 0~12
                 
                 if(monitorCount / 12 == 1){ // monitorCount가 12이 될 때마다 recordingCount 증가 여부 검사
@@ -520,7 +513,7 @@ class DialogFlowPopUpController: UIViewController {
                         print("EndOfConversation")
                                 
                         // STT 멈추기
-                        self.audioEngine?.stop()
+                        self?.audioEngine?.stop()
                         recognitionRequest.endAudio()
                         
                         recordingState = false
@@ -529,7 +522,7 @@ class DialogFlowPopUpController: UIViewController {
                         befRecordingCount = 0
                         
                         // Dialogflow 메시지 처리
-                        self.processMsg()
+                        self?.processMsg()
                         
                     } else {
                         
