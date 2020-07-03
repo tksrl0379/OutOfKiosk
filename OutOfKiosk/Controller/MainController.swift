@@ -56,7 +56,6 @@ class MainController : UIViewController{
     
     override func viewWillDisappear(_ animated: Bool) {
         
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "NanumSquare", size: 20)!]
         self.navigationController?.isNavigationBarHidden = false
     }
     
@@ -103,8 +102,10 @@ class MainController : UIViewController{
     
     func initializeView() {
         
+        // Navigationbar 글꼴 변경
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "NanumSquare", size: 20)!]
+        
         // 그림자 넣기, 둥글게 만들기
-        self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.black.cgColor
         self.navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 0.0, height: 0.5)
         self.navigationController?.navigationBar.layer.shadowRadius = 3

@@ -37,8 +37,8 @@ class StoreListController : UIViewController, UITableViewDelegate , UITableViewD
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.navigationController?.navigationBar.topItem?.title = "가게 목록"
         
+        self.navigationController?.navigationBar.topItem?.title = "가게 목록"
     }
     
     
