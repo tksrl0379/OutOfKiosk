@@ -9,37 +9,156 @@
 import UIKit
 
 
-/* 가게 접속하면 뜨는 메인 화면 */
+
 class StoreDetailController : UIViewController{
     
-    /* 가게 상세 정보 관련 변수들 */
+    // MARK: - Propery
+    
+    // MARK: 가게 정보
     var storeKorName: String?
     var storeEnName : String?
     var storeMenuNameArray: Array<String> = [String](repeating: "0", count: 6)
     
-    /* voiceover 접근성 전용 */
-    @IBOutlet weak var menu_Label: UILabel!
+    // MARK: IBOutlet
     @IBOutlet weak var storeName_Label: UILabel!
+    @IBOutlet weak var voiceOrder_Btn: UIButton!
+    @IBOutlet weak var review_Btn: UIButton!
     
-    /* DialogFlow 로 주문하기 버튼 */
-    @IBOutlet weak var orderMenuByAI_Btn: UIButton!
+    @IBOutlet weak var menu_Label: UILabel!
     
-    /* 리뷰로 넘어가는 버튼 */
-    @IBOutlet weak var reviewBtn: UIButton!
-    
-    /* 메뉴 버튼 관련 변수들 */
     @IBOutlet weak var firstCategory_Btn: UIButton!
     @IBOutlet weak var secondCategory_Btn: UIButton!
     
-    /* 경계선 UI 관련 변수들 */
+    @IBOutlet weak var shoppingBasket_Btn: UIButton!
+    
     @IBOutlet weak var border_View: UIView!
     @IBOutlet weak var border2_View: UIView!
     
-    /* 챗봇으로 주문할 때마다 숫자 증가*/
-    @IBOutlet weak var shoppingBasket_Btn: UIButton!
     
-    /* 음성주문 버튼: DialogFlowPopUpController로 넘어감 */
-    @IBAction func orderMenuByAI_Btn(_ sender: Any) {
+    // MARK: - Life cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.initializeNavigationItem()
+        self.initializeView()
+        self.getStoreInfo()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        // navigationbar title 동적 변경: navigationbar 안보이게 하려고 설정 ( viewWillAppear에서 동작)
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        
+        self.setUpShoppingBasket()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        self.navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
+    
+    // MARK: - Method
+    // MARK: Custom Method
+    
+    func initializeNavigationItem() {
+        
+        self.navigationItem.leftBarButtonItem = BackButton(controller: self)
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "가게 목록 뒤로가기"
+    }
+    
+    func initializeView() {
+        
+        // 음성주문 버튼 설정
+        self.voiceOrder_Btn.imageView?.contentMode = .scaleAspectFit
+        self.voiceOrder_Btn.imageEdgeInsets = UIEdgeInsets(top: 5,left: 10,bottom: 5,right: 80)
+        voiceOrder_Btn.setTitle("음성주문", for: .normal)
+        
+        // 테두리 설정
+        border_View.layer.borderWidth = 0.5
+        border_View.layer.borderColor = UIColor.gray.cgColor
+        
+        border2_View.layer.borderWidth = 0.5
+        border2_View.layer.borderColor = UIColor.gray.cgColor
+        
+        // 버튼 설정
+        firstCategory_Btn.layer.cornerRadius = 5
+        firstCategory_Btn.layer.borderWidth = 0.2
+        firstCategory_Btn.layer.borderColor = UIColor.gray.cgColor
+        
+        secondCategory_Btn.layer.cornerRadius = 5
+        secondCategory_Btn.layer.borderWidth = 0.2
+        secondCategory_Btn.layer.borderColor = UIColor.gray.cgColor
+        
+        shoppingBasket_Btn.layer.cornerRadius = 5
+        
+        // 접근성
+        voiceOrder_Btn.accessibilityLabel = self.storeKorName! + "음성주문"
+        menu_Label.accessibilityLabel = "아래에 메뉴가 있습니다"
+        
+    }
+    
+    func getStoreInfo() {
+        
+        // 가게 이름, 카테고리 이름들 받아와서 UI 갱신
+        CustomHttpRequest().phpCommunication(url: "getStoreDetailInfo.php", postString: "store_name=\(storeEnName!)"){
+            
+            responseString in
+            print(responseString)
+            
+            guard let dict = CustomConvert().convertStringToDictionary(text: responseString) else {return}
+            for i in 0..<dict.count{
+                
+                self.storeMenuNameArray[Int(Array(dict)[i].key as! String)! - 1] = Array(dict)[i].value as! String
+                
+            }
+            DispatchQueue.main.async{
+                self.storeName_Label.text = self.storeKorName
+                self.firstCategory_Btn.setTitle(self.storeMenuNameArray[0], for: .normal)
+                self.secondCategory_Btn.setTitle(self.storeMenuNameArray[1], for: .normal)
+                
+                self.firstCategory_Btn.accessibilityLabel = self.storeMenuNameArray[0] + "메뉴 버튼"
+                self.secondCategory_Btn.accessibilityLabel = self.storeMenuNameArray[1] + "메뉴 버튼"
+            }
+        }
+    }
+    
+    func setUpShoppingBasket() {
+        
+        // 장바구니 개수 갱신
+        let ad = UIApplication.shared.delegate as? AppDelegate
+        
+        shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
+        shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
+    }
+    
+    
+    func alertMessage(_ title: String, _ description: String){
+        
+        /* Alert는 MainThread에서 실행해야 함 */
+        DispatchQueue.main.async{
+            
+            /* Alert message 설정 */
+            let alert = UIAlertController(title: title, message: description, preferredStyle: UIAlertController.Style.alert)
+            
+            /* 버튼 설정 및 추가*/
+            let defaultAction = UIAlertAction(title: "확인", style: .destructive) { (action) in
+            }
+            alert.addAction(defaultAction)
+            
+            
+            /* Alert Message 띄우기 */
+            self.present(alert, animated: false, completion: nil)
+        }
+    }
+    
+    @objc func buttonAction(_ sender: UIBarButtonItem) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    
+    // MARK: IBAction
+    @IBAction func voiceOrder_Btn(_ sender: Any) {
         
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as? DialogFlowPopUpController else {
             return}
@@ -135,146 +254,11 @@ class StoreDetailController : UIViewController{
         }
     }
     
-    /* 장바구니가 비어있을 시 경고 메시지 함수*/
-    func alertMessage(_ title: String, _ description: String){
-        
-        /* Alert는 MainThread에서 실행해야 함 */
-        DispatchQueue.main.async{
-            
-            /* Alert message 설정 */
-            let alert = UIAlertController(title: title, message: description, preferredStyle: UIAlertController.Style.alert)
-            
-            /* 버튼 설정 및 추가*/
-            let defaultAction = UIAlertAction(title: "확인", style: .destructive) { (action) in
-            }
-            alert.addAction(defaultAction)
-            
-            
-            /* Alert Message 띄우기 */
-            self.present(alert, animated: false, completion: nil)
-        }
-    }
     
     
     
     
-    @objc func buttonAction(_ sender: UIBarButtonItem) {
-        self.navigationController?.popViewController(animated: true)
-    }
     
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        print(self.storeMenuNameArray)
-        
-        /* backButton 커스터마이징 */
-        let backBtn = UIButton(type: .custom)
-        backBtn.frame = CGRect(x: 0.0, y: 0.0, width: 24, height: 24)
-        backBtn.setImage(UIImage(named:"left_image"), for: .normal)
-        backBtn.addTarget(self, action: #selector(StoreDetailController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
-        
-        
-        let addButton = UIBarButtonItem(customView: backBtn)
-        let currWidth = addButton.customView?.widthAnchor.constraint(equalToConstant: 24)
-        currWidth?.isActive = true
-        let currHeight = addButton.customView?.heightAnchor.constraint(equalToConstant: 24)
-        currHeight?.isActive = true
-        
-        //addButton.tintColor = UIColor.black
-        self.navigationItem.leftBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "가게 목록 뒤로가기"
-        
-        
-        self.orderMenuByAI_Btn.imageView?.contentMode = .scaleAspectFit
-        self.orderMenuByAI_Btn.imageEdgeInsets = UIEdgeInsets(top: 5,left: 10,bottom: 5,right: 80)
-        //self.orderMenuByAI_Btn.frame = CGRect(x: -30, y: 0, width: 180, height: 90)
-        orderMenuByAI_Btn.setTitle("음성주문", for: .normal)
-        
-        
-        
-        /* 테두리 만들기 */
-        border_View.layer.borderWidth = 0.5
-        border_View.layer.borderColor = UIColor.gray.cgColor
-        
-        border2_View.layer.borderWidth = 0.5
-        border2_View.layer.borderColor = UIColor.gray.cgColor
-        
-        /* 테두리 둥글게 만들기 */
-        firstCategory_Btn.layer.cornerRadius = 5
-        firstCategory_Btn.layer.borderWidth = 0.2
-        firstCategory_Btn.layer.borderColor = UIColor.gray.cgColor
-        
-        secondCategory_Btn.layer.cornerRadius = 5
-        secondCategory_Btn.layer.borderWidth = 0.2
-        secondCategory_Btn.layer.borderColor = UIColor.gray.cgColor
-        
-        shoppingBasket_Btn.layer.cornerRadius = 5
-        
-        /* 접근성 */
-        orderMenuByAI_Btn.accessibilityLabel = self.storeKorName! + "음성주문"
-        menu_Label.accessibilityLabel = "아래에 메뉴가 있습니다"
-        
-        
-        
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        
-        /* navigationbar 투명 설정 */
-        //self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        //self.navigationController!.navigationBar.shadowImage = UIImage()
-        //self.navigationController?.navigationBar.isTranslucent = true
-        //self.navigationController?.view.backgroundColor = .clear
-        
-        /* navigationbar title 동적 변경 ( 이 경우엔 navigationbar 안보이게 하려고 설정함) */
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-
-        
-        
-        
-        /* 가게 이름, 카테고리 이름들 받아와서 UI 갱신 */
-        CustomHttpRequest().phpCommunication(url: "getStoreDetailInfo.php", postString: "store_name=\(storeEnName!)"){
-            
-            responseString in
-            print(responseString)
-            
-            guard let dict = CustomConvert().convertStringToDictionary(text: responseString) else {return}
-            for i in 0..<dict.count{
-                
-                self.storeMenuNameArray[Int(Array(dict)[i].key as! String)! - 1] = Array(dict)[i].value as! String
-                
-            }
-            DispatchQueue.main.async{
-                self.storeName_Label.text = self.storeKorName
-                self.firstCategory_Btn.setTitle(self.storeMenuNameArray[0], for: .normal)
-                self.secondCategory_Btn.setTitle(self.storeMenuNameArray[1], for: .normal)
-                
-                self.firstCategory_Btn.accessibilityLabel = self.storeMenuNameArray[0] + "메뉴 버튼"
-                self.secondCategory_Btn.accessibilityLabel = self.storeMenuNameArray[1] + "메뉴 버튼"
-            }
-        }
-        
-        /* 장바구니 개수 갱신 */
-        let ad = UIApplication.shared.delegate as? AppDelegate
-        
-        shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
-        shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
-        
-    }
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
-        
-        /* 장바구니 개수 갱신 */
-        let ad = UIApplication.shared.delegate as? AppDelegate
-        
-        shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
-        shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
-    }
     
     
     

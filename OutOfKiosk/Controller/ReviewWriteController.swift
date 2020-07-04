@@ -61,19 +61,7 @@ class ReviewWriteController : UIViewController, UITextFieldDelegate{
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
 
         
-        /* backButton 커스터마이징 */
-        let backBtn = UIButton(type: .custom)
-        backBtn.frame = CGRect(x: 0.0, y: 0.0, width: 24, height: 24)
-        backBtn.setImage(UIImage(named:"left_image"), for: .normal)
-        backBtn.addTarget(self, action: #selector(ReviewController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
-        
-        let addButton = UIBarButtonItem(customView: backBtn)
-        let currWidth = addButton.customView?.widthAnchor.constraint(equalToConstant: 24)
-        currWidth?.isActive = true
-        let currHeight = addButton.customView?.heightAnchor.constraint(equalToConstant: 24)
-        currHeight?.isActive = true
-        
-        self.navigationItem.leftBarButtonItem = addButton
+        self.navigationItem.leftBarButtonItem = BackButton(controller: self)
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "리뷰 목록으로 가는 뒤로가기"
         

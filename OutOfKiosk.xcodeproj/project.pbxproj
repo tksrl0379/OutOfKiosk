@@ -29,6 +29,7 @@
 		337FFD1C23FA7A41006136A5 /* KakaoOpenSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 337FFD1B23FA7A41006136A5 /* KakaoOpenSDK.framework */; };
 		3386079223BF0D89003208AD /* DialogFlowPopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */; };
 		33BAD3E623FE502400CE4C99 /* BMHANNA_11yrs_otf.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33BAD3E523FE501E00CE4C99 /* BMHANNA_11yrs_otf.otf */; };
+		33C74E8124B07BDD00A9084D /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C74E8024B07BDD00A9084D /* CustomButton.swift */; };
 		33D04E0423CEFA0E002FB5AE /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 33D04E0123CEFA0E002FB5AE /* loading.json */; };
 		33E1027A23EBA08900A2EB26 /* ReviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E1027923EBA08900A2EB26 /* ReviewController.swift */; };
 		33E1027C23EBA19000A2EB26 /* ReviewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E1027B23EBA19000A2EB26 /* ReviewList.swift */; };
@@ -71,6 +72,7 @@
 		337FFD1B23FA7A41006136A5 /* KakaoOpenSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = KakaoOpenSDK.framework; sourceTree = "<group>"; };
 		3386079123BF0D89003208AD /* DialogFlowPopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogFlowPopUpController.swift; sourceTree = "<group>"; };
 		33BAD3E523FE501E00CE4C99 /* BMHANNA_11yrs_otf.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BMHANNA_11yrs_otf.otf; sourceTree = "<group>"; };
+		33C74E8024B07BDD00A9084D /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		33D04E0123CEFA0E002FB5AE /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		33E1027923EBA08900A2EB26 /* ReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewController.swift; sourceTree = "<group>"; };
 		33E1027B23EBA19000A2EB26 /* ReviewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewList.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 			children = (
 				337FFD1323FA3B5B006136A5 /* CustomConvert.swift */,
 				337FFD1623FA5957006136A5 /* CustomHttpRequest.swift */,
+				33C74E8024B07BDD00A9084D /* CustomButton.swift */,
 			);
 			path = CustomClass;
 			sourceTree = "<group>";
@@ -356,6 +359,7 @@
 				FA0E254423E12FC500ACB1A0 /* FavoriteList.swift in Sources */,
 				33259F5523BB017400D44CB0 /* SceneDelegate.swift in Sources */,
 				3308428923BD7AF000FCF4C0 /* StoreListController.swift in Sources */,
+				33C74E8124B07BDD00A9084D /* CustomButton.swift in Sources */,
 				33E1027C23EBA19000A2EB26 /* ReviewList.swift in Sources */,
 				FA1E58AF23C41A79002215BB /* ProductList.swift in Sources */,
 				3386079223BF0D89003208AD /* DialogFlowPopUpController.swift in Sources */,

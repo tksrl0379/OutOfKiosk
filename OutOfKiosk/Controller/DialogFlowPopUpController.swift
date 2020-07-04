@@ -64,7 +64,7 @@ class DialogFlowPopUpController: UIViewController {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         self.speechSynthesizer.delegate = self
         self.audioEngine = AVAudioEngine()
         
@@ -78,6 +78,11 @@ class DialogFlowPopUpController: UIViewController {
         
         self.initializeOrder()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -116,18 +121,7 @@ class DialogFlowPopUpController: UIViewController {
     
     func initializeBackBtn() {
         
-        let backBtn = UIButton(type: .custom)
-        backBtn.frame = CGRect(x: 0.0, y: 0.0, width: 24, height: 24)
-        backBtn.setImage(UIImage(named:"left_image"), for: .normal)
-        backBtn.addTarget(self, action: #selector(FavoriteMenuController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
-        
-        let addButton = UIBarButtonItem(customView: backBtn)
-        let currWidth = addButton.customView?.widthAnchor.constraint(equalToConstant: 24)
-        let currHeight = addButton.customView?.heightAnchor.constraint(equalToConstant: 24)
-        currWidth?.isActive = true
-        currHeight?.isActive = true
-        
-        self.navigationItem.leftBarButtonItem = addButton
+        self.navigationItem.leftBarButtonItem = BackButton(controller: self)
     }
     
     func initializeLottie() {
@@ -198,7 +192,6 @@ class DialogFlowPopUpController: UIViewController {
         speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "ko-KR"))
         
         
-        // startSTT() 내부의 콜백함수들 종료 여부 체크 후 startSTT 재실행
         DispatchQueue.global().async { [weak self] in
             
             while true {
@@ -491,7 +484,6 @@ class DialogFlowPopUpController: UIViewController {
             
             self?.recognitionRequest?.append(buffer)
             
-            
             // 사용자의 무음 시간 체크
             print("monitoring")
             monitorCount+=1
@@ -585,7 +577,6 @@ class DialogFlowPopUpController: UIViewController {
         }
     }
     
-    // BackButton 클릭 시 수행할 action 지정
     @objc func buttonAction(_ sender: UIBarButtonItem) {
         self.navigationController?.popViewController(animated: true)
     }

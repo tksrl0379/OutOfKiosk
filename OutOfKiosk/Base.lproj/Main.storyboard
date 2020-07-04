@@ -761,7 +761,7 @@
                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </state>
                                 <connections>
-                                    <action selector="orderMenuByAI_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="v3j-mz-Ikg"/>
+                                    <action selector="voiceOrder_Btn:" destination="6xr-Jj-VDY" eventType="touchUpInside" id="v3j-mz-Ikg"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F0E-de-uea">
@@ -803,11 +803,11 @@
                         <outlet property="border_View" destination="3aR-aO-Qrl" id="Mgl-aK-oQ7"/>
                         <outlet property="firstCategory_Btn" destination="8ah-qg-zRI" id="hVO-1L-2Mg"/>
                         <outlet property="menu_Label" destination="0hk-dZ-7UP" id="2OM-8B-1dj"/>
-                        <outlet property="orderMenuByAI_Btn" destination="hpp-lh-Xcn" id="V9f-jn-quY"/>
-                        <outlet property="reviewBtn" destination="oVs-g6-Ram" id="dC0-Y5-ncE"/>
+                        <outlet property="review_Btn" destination="oVs-g6-Ram" id="dC0-Y5-ncE"/>
                         <outlet property="secondCategory_Btn" destination="cvl-PS-Toi" id="LJT-TT-W3T"/>
                         <outlet property="shoppingBasket_Btn" destination="F0E-de-uea" id="Ekj-Nf-o7e"/>
                         <outlet property="storeName_Label" destination="p4i-qn-XWl" id="v1N-wg-8GZ"/>
+                        <outlet property="voiceOrder_Btn" destination="hpp-lh-Xcn" id="V9f-jn-quY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="stm-2k-nfP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

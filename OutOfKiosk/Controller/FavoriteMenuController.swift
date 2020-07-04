@@ -70,20 +70,7 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
     
     func initializeNavigationItem() {
         
-        // backButton 커스터마이징
-        let backBtn = UIButton(type: .custom)
-        backBtn.frame = CGRect(x: 0.0, y: 0.0, width: 24, height: 24)
-        backBtn.setImage(UIImage(named:"left_image"), for: .normal)
-        backBtn.addTarget(self, action: #selector(FavoriteMenuController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
-        
-        let addButton = UIBarButtonItem(customView: backBtn)
-        let currWidth = addButton.customView?.widthAnchor.constraint(equalToConstant: 24)
-        currWidth?.isActive = true
-        let currHeight = addButton.customView?.heightAnchor.constraint(equalToConstant: 24)
-        currHeight?.isActive = true
-        
-        // navigation Item 설정
-        self.navigationItem.leftBarButtonItem = addButton
+        self.navigationItem.leftBarButtonItem = BackButton(controller: self)
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "메인으로 뒤로가기"
         self.navigationItem.title = "찜한 메뉴"
         self.navigationItem.accessibilityLabel = "찜한 메뉴 목록"

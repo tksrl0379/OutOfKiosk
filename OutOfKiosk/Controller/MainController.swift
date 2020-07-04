@@ -160,7 +160,7 @@ class MainController : UIViewController{
     
     // 원형 애니메이션
     @objc func animateProgress() {
-        var speed = UserDefaults.standard.float(forKey: "progressNumber")
+        let speed = UserDefaults.standard.float(forKey: "progressNumber")
         let cP = self.view.viewWithTag(101) as! CircularProgressView
         cP.setProgressWithAnimation(duration: 0.4, value: speed)
         
