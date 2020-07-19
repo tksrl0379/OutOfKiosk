@@ -55,7 +55,6 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
         
         // 별점
         cell.floatRatingView.backgroundColor = UIColor.clear
-        
         cell.floatRatingView.contentMode = UIView.ContentMode.scaleAspectFit
         cell.floatRatingView.type = .halfRatings
         cell.floatRatingView.editable = false

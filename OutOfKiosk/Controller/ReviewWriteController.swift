@@ -10,14 +10,97 @@ import UIKit
 
 class ReviewWriteController : UIViewController, UITextFieldDelegate{
     
+    // MARK: - Propery
+    // MARK: Custom Property
     var storeEnName: String?
+    
+    // MARK: IBOutlet
     @IBOutlet weak var floatRatingView: FloatRatingView!
     @IBOutlet weak var reviewContents_TextField: UITextField!
     @IBOutlet weak var reviewWrite_Btn: UIButton!
     
+    
+    // MARK: - Life cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.initializeKeyboard()
+        self.initializeNavigationItem()
+        self.initializeView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(changeProgressTitleView(_:)), name: NSNotification.Name("rating"), object: nil)
+        
+        /* navigationbar 투명 설정 */
+        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController!.navigationBar.shadowImage = UIImage()
+    }
+    
+    // MARK: - Method
+    // MARK: Custom Method
+    
+    func initializeKeyboard() {
+        
+        // 키보드 올라가고 내려가기 설정
+        reviewContents_TextField.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func initializeNavigationItem() {
+        
+        self.navigationItem.leftBarButtonItem = BackButton(controller: self)
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "리뷰 목록으로 가는 뒤로가기"
+    }
+    
+    func initializeView() {
+        
+        // 테두리 둥글게 만들기
+        reviewWrite_Btn.layer.cornerRadius = 5
+        reviewWrite_Btn.layer.borderWidth = 0.2
+        reviewWrite_Btn.layer.borderColor = UIColor.gray.cgColor
+        
+        
+        // 별표 평점
+        floatRatingView.delegate = self
+        
+        floatRatingView.backgroundColor = UIColor.clear
+        floatRatingView.contentMode = UIView.ContentMode.scaleAspectFit
+        floatRatingView.type = .halfRatings
+        
+        floatRatingView.editable = true
+    }
+    
+    @objc func buttonAction(_ sender: UIBarButtonItem) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // textField의 상태를 포기 -> 키보드 내려감
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    @objc func keyboardWillShow(_ sender: Notification) {
+        self.view.frame.origin.y = -150
+    }
+    
+    @objc func keyboardWillHide(_ sender: Notification) {
+        
+        self.view.frame.origin.y = 0
+    }
+    
+    @objc func changeProgressTitleView(_ notification: NSNotification){
+        floatRatingView.accessibilityLabel = "별점" + String(notification.userInfo!["rating"] as! Double) + "개"
+    }
+    
+    // MARK: IBAction
     @IBAction func ReviewWrite_Btn(_ sender: Any) {
         let userId = UserDefaults.standard.string(forKey: "id")!
-        guard let contents = self.reviewContents_TextField.text else {return}
+        guard let contents = self.reviewContents_TextField.text else { return }
         
         CustomHttpRequest().phpCommunication(url: "sendReviewInfo.php", postString: "storeEnName=\(self.storeEnName!)&userId=\(userId)&rating=\(self.floatRatingView.rating)&contents=\(contents)"){
             responseString in
@@ -26,83 +109,14 @@ class ReviewWriteController : UIViewController, UITextFieldDelegate{
                 // 리뷰 전송 완료 후 종료
                 self.navigationController?.popViewController(animated: true)
             }
-    
         }
-    }
-    
-    
-    
-    
-    @objc func buttonAction(_ sender: UIBarButtonItem) {
-      self.navigationController?.popViewController(animated: true)
-    }
-    
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            // textField의 상태를 포기 -> 키보드 내려감
-            textField.resignFirstResponder()
-            return true
-    }
-    @objc func keyboardWillShow(_ sender: Notification) {
-        self.view.frame.origin.y = -150 // Move view 150 points upward
-    }
-    
-    @objc func keyboardWillHide(_ sender: Notification) {
-        
-        self.view.frame.origin.y = 0 // Move view to original position
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        /* 아이폰 키보드 올라가고 내려가기 설정*/
-        reviewContents_TextField.delegate = self
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-
-        
-        self.navigationItem.leftBarButtonItem = BackButton(controller: self)
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
-        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "리뷰 목록으로 가는 뒤로가기"
-        
-        /* 테두리 둥글게 만들기 */
-        reviewWrite_Btn.layer.cornerRadius = 5
-        reviewWrite_Btn.layer.borderWidth = 0.2
-        reviewWrite_Btn.layer.borderColor = UIColor.gray.cgColor
-        
-        
-        // 별표 평점
-        // Reset float rating view's background color
-        floatRatingView.backgroundColor = UIColor.clear
-
-        /** Note: With the exception of contentMode, type and delegate,
-         all properties can be set directly in Interface Builder **/
-        floatRatingView.delegate = self
-        floatRatingView.contentMode = UIView.ContentMode.scaleAspectFit
-        floatRatingView.type = .halfRatings
-        
-        floatRatingView.editable = true
-    }
-    
-    @objc func changeProgressTitleView(_ notification: NSNotification){
-        floatRatingView.accessibilityLabel = "별점" + String(notification.userInfo!["rating"] as! Double) + "개"
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        NotificationCenter.default.addObserver(self, selector: #selector(changeProgressTitleView(_:)), name: NSNotification.Name("rating"), object: nil)
-
-        
-        /* navigationbar 투명 설정 */
-        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController!.navigationBar.shadowImage = UIImage()
     }
     
 }
 
 extension ReviewWriteController: FloatRatingViewDelegate {
-
-    // MARK: FloatRatingViewDelegate
     
+    // MARK: FloatRatingViewDelegate
     func floatRatingView(_ ratingView: FloatRatingView, isUpdating rating: Double) {
     }
     
