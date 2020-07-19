@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y49-lh-7VC">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -9,6 +9,9 @@
     <customFonts key="customFonts">
         <array key="NanumSquareBold.ttf">
             <string>NanumSquareB</string>
+        </array>
+        <array key="NanumSquareLight.ttf">
+            <string>NanumSquareL</string>
         </array>
         <array key="NanumSquareRegular.ttf">
             <string>NanumSquareR</string>
@@ -892,28 +895,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="12R-7a-Je3">
-                                <rect key="frame" x="0.0" y="120" width="414" height="742"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="12R-7a-Je3">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="414" id="fNK-fZ-3hu"/>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="742" id="zne-aG-qQ6"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="818" id="7I3-v1-GMe"/>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="414" id="TeP-vM-XUI"/>
                                 </constraints>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ReviewList" rowHeight="127" id="998-rI-bi8" customClass="ReviewList" customModule="OutOfKiosk" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="127"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ReviewList" rowHeight="160" id="998-rI-bi8" customClass="ReviewList" customModule="OutOfKiosk" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="55.333332061767578" width="374" height="160"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="998-rI-bi8" id="yOd-ZO-0hJ">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="127"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="160"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CHj-Zt-q0m" customClass="FloatRatingView" customModule="OutOfKiosk" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="42.5" width="130" height="30.5"/>
+                                                    <rect key="frame" x="16" y="44" width="159" height="31"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                     <color key="tintColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="aOB-Lx-YJc"/>
-                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30.5" id="jkU-Rp-sgR"/>
+                                                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="31" id="FA3-vU-Jcc"/>
+                                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="159" id="SyV-eW-KcW"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="image" keyPath="emptyImage" value="star" catalog="system"/>
@@ -930,54 +932,48 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jOy-5F-ytR">
-                                                    <rect key="frame" x="22" y="96.5" width="381" height="14"/>
+                                                    <rect key="frame" x="20" y="97" width="343" height="22.333333333333329"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="381" id="64j-KI-Mwl"/>
-                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="14" id="AWE-8v-0pO"/>
-                                                        <constraint firstAttribute="height" constant="14" id="L7D-95-RgM"/>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="381" id="bRA-U1-wpu"/>
+                                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="343" id="fDS-Ys-dc4"/>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22.329999999999998" id="j1Z-Lz-SS8"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="20"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="id" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cG7-Ww-y4e">
-                                                    <rect key="frame" x="22" y="16" width="191" height="20"/>
+                                                    <rect key="frame" x="22" y="16" width="16.333333333333329" height="20"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="191" id="5MJ-Ie-8MZ"/>
-                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="SUL-9g-evF"/>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="191" id="TNt-Yg-AER"/>
-                                                        <constraint firstAttribute="height" constant="20" id="dyg-My-phB"/>
+                                                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="20" id="fNs-my-EZW"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="20"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Cy-ES-98i">
-                                                    <rect key="frame" x="171" y="48" width="223" height="19"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Cy-ES-98i">
+                                                    <rect key="frame" x="196" y="48" width="158" height="19"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="223" id="Abp-oX-NPv"/>
-                                                        <constraint firstAttribute="height" constant="19" id="BLJ-IP-9p2"/>
+                                                        <constraint firstAttribute="height" constant="19" id="Ht6-FY-o5L"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="NanumSquareB" family="NanumSquare" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" name="NanumSquareL" family="NanumSquare" pointSize="17"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="3Cy-ES-98i" firstAttribute="top" secondItem="yOd-ZO-0hJ" secondAttribute="top" constant="48" id="5Kk-5m-mKm"/>
-                                                <constraint firstAttribute="bottom" secondItem="jOy-5F-ytR" secondAttribute="bottom" constant="16.5" id="GCc-y7-44n"/>
-                                                <constraint firstItem="cG7-Ww-y4e" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="yOd-ZO-0hJ" secondAttribute="leading" constant="20" symbolic="YES" id="aNI-aa-Mfp"/>
-                                                <constraint firstItem="CHj-Zt-q0m" firstAttribute="top" secondItem="cG7-Ww-y4e" secondAttribute="bottom" constant="6.5" id="aXY-ez-GzC"/>
-                                                <constraint firstItem="jOy-5F-ytR" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="yOd-ZO-0hJ" secondAttribute="leading" constant="20" symbolic="YES" id="kzE-Ug-BnA"/>
-                                                <constraint firstAttribute="trailing" secondItem="cG7-Ww-y4e" secondAttribute="trailing" constant="201" id="nbB-7f-jAg"/>
-                                                <constraint firstItem="3Cy-ES-98i" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="CHj-Zt-q0m" secondAttribute="trailing" constant="8" symbolic="YES" id="oHt-7h-WkO"/>
-                                                <constraint firstAttribute="trailing" secondItem="jOy-5F-ytR" secondAttribute="trailing" constant="11" id="oOt-2Y-b8A"/>
-                                                <constraint firstItem="jOy-5F-ytR" firstAttribute="top" secondItem="CHj-Zt-q0m" secondAttribute="bottom" constant="23.5" id="ort-LJ-Ooc"/>
-                                                <constraint firstItem="3Cy-ES-98i" firstAttribute="leading" secondItem="CHj-Zt-q0m" secondAttribute="trailing" constant="21" id="qEk-Tp-wYP"/>
-                                                <constraint firstItem="cG7-Ww-y4e" firstAttribute="top" secondItem="yOd-ZO-0hJ" secondAttribute="top" constant="16" id="wht-nK-m3a"/>
-                                                <constraint firstAttribute="trailing" secondItem="3Cy-ES-98i" secondAttribute="trailing" constant="20" id="wjD-xf-OfH"/>
-                                                <constraint firstItem="CHj-Zt-q0m" firstAttribute="leading" secondItem="yOd-ZO-0hJ" secondAttribute="leading" constant="20" id="yYp-Tg-5gg"/>
+                                                <constraint firstItem="CHj-Zt-q0m" firstAttribute="leading" secondItem="yOd-ZO-0hJ" secondAttribute="leading" constant="16" id="9Er-vn-OmJ"/>
+                                                <constraint firstItem="3Cy-ES-98i" firstAttribute="top" secondItem="yOd-ZO-0hJ" secondAttribute="topMargin" constant="37" id="ANs-vd-3N4"/>
+                                                <constraint firstItem="jOy-5F-ytR" firstAttribute="top" secondItem="CHj-Zt-q0m" secondAttribute="bottom" constant="22" id="FH7-8F-5rj"/>
+                                                <constraint firstItem="cG7-Ww-y4e" firstAttribute="top" secondItem="yOd-ZO-0hJ" secondAttribute="topMargin" constant="5" id="LdY-Bf-Mbd"/>
+                                                <constraint firstItem="3Cy-ES-98i" firstAttribute="trailing" secondItem="yOd-ZO-0hJ" secondAttribute="trailingMargin" id="Oir-QT-f2O"/>
+                                                <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="cG7-Ww-y4e" secondAttribute="trailing" id="Qfu-iD-oZi"/>
+                                                <constraint firstItem="CHj-Zt-q0m" firstAttribute="top" secondItem="cG7-Ww-y4e" secondAttribute="bottom" constant="8" id="Sr7-xo-g3v"/>
+                                                <constraint firstItem="3Cy-ES-98i" firstAttribute="leading" secondItem="CHj-Zt-q0m" secondAttribute="trailing" constant="21" id="Ye7-Vf-1LP"/>
+                                                <constraint firstItem="jOy-5F-ytR" firstAttribute="top" secondItem="3Cy-ES-98i" secondAttribute="bottom" constant="30" id="et6-80-xm9"/>
+                                                <constraint firstItem="cG7-Ww-y4e" firstAttribute="leading" secondItem="yOd-ZO-0hJ" secondAttribute="leadingMargin" constant="2" id="r2j-pG-KD6"/>
+                                                <constraint firstItem="jOy-5F-ytR" firstAttribute="leading" secondItem="yOd-ZO-0hJ" secondAttribute="leading" constant="20" id="vB9-hs-P3Q"/>
+                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="jOy-5F-ytR" secondAttribute="bottom" constant="40.670000000000002" id="xYJ-g1-Yga"/>
+                                                <constraint firstAttribute="trailing" secondItem="jOy-5F-ytR" secondAttribute="trailing" constant="11" id="zej-CA-g1f"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -989,35 +985,18 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bqg-in-whb">
-                                <rect key="frame" x="20" y="58" width="374" height="48"/>
-                                <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="48" id="q4Y-6E-zdx"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="NanumSquareB" family="NanumSquare" pointSize="24"/>
-                                <state key="normal" title="리뷰 작성하기">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="reviewWriteButton:" destination="MTb-lx-VIw" eventType="touchUpInside" id="Ztm-MW-1bP"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="12R-7a-Je3" firstAttribute="bottom" secondItem="9D9-QC-w16" secondAttribute="bottom" id="EUx-vM-iUR"/>
-                            <constraint firstItem="12R-7a-Je3" firstAttribute="leading" secondItem="9D9-QC-w16" secondAttribute="leading" id="JSO-Rt-JUQ"/>
-                            <constraint firstItem="12R-7a-Je3" firstAttribute="top" secondItem="bqg-in-whb" secondAttribute="bottom" constant="14" id="RcV-Hl-Jyn"/>
-                            <constraint firstItem="bqg-in-whb" firstAttribute="top" secondItem="9D9-QC-w16" secondAttribute="top" constant="14" id="XrY-EX-OBl"/>
-                            <constraint firstItem="bqg-in-whb" firstAttribute="leading" secondItem="9D9-QC-w16" secondAttribute="leading" constant="20" id="j4Y-qK-mBc"/>
-                            <constraint firstItem="9D9-QC-w16" firstAttribute="trailing" secondItem="bqg-in-whb" secondAttribute="trailing" constant="20" id="wSX-MC-jBB"/>
+                            <constraint firstItem="12R-7a-Je3" firstAttribute="trailing" secondItem="9D9-QC-w16" secondAttribute="trailing" id="6Sz-Kd-kJ7"/>
+                            <constraint firstItem="12R-7a-Je3" firstAttribute="leading" secondItem="9D9-QC-w16" secondAttribute="leading" id="s2f-HN-r3v"/>
+                            <constraint firstItem="12R-7a-Je3" firstAttribute="top" secondItem="9D9-QC-w16" secondAttribute="top" id="tOZ-Xd-EQg"/>
+                            <constraint firstItem="12R-7a-Je3" firstAttribute="bottom" secondItem="9D9-QC-w16" secondAttribute="bottom" id="uBP-II-Pva"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="9D9-QC-w16"/>
                     </view>
                     <connections>
                         <outlet property="reviewTableView" destination="12R-7a-Je3" id="G4U-i5-O5d"/>
-                        <outlet property="reviewWrite_Btn" destination="bqg-in-whb" id="sLe-TX-2Qd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uKD-OX-OYo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1032,34 +1011,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" borderStyle="line" placeholder="리뷰 내용을 입력해주세요" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="s2e-KD-x4Q">
-                                <rect key="frame" x="16" y="147" width="343" height="379"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="NanumSquareB" family="NanumSquare" pointSize="18"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZeF-J4-gPa">
-                                <rect key="frame" x="16" y="534" width="343" height="52"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="1" green="0.8057073951" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="25"/>
-                                <state key="normal" title="리뷰쓰기">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="ReviewWrite_Btn:" destination="Ik2-oW-G1R" eventType="touchUpInside" id="zaV-BJ-lFt"/>
-                                </connections>
-                            </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0bv-LE-Htn" customClass="FloatRatingView" customModule="OutOfKiosk" customModuleProvider="target">
-                                <rect key="frame" x="67" y="79" width="240" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="YaV-Xt-TmJ">
+                                <rect key="frame" x="20" y="156" width="374" height="686"/>
+                                <color key="backgroundColor" red="0.93532603979999995" green="0.93530851599999998" blue="0.935320437" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="686" id="psJ-rU-blA"/>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="374" id="u24-bQ-usE"/>
+                                </constraints>
+                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="17"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0bv-LE-Htn" customClass="FloatRatingView" customModule="OutOfKiosk" customModuleProvider="target">
+                                <rect key="frame" x="64" y="82" width="286" height="66"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="tintColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <bool key="isElement" value="YES"/>
                                 </accessibility>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="286" id="tM3-Pu-Id2"/>
+                                    <constraint firstAttribute="height" constant="66" id="uK9-d2-gId"/>
+                                </constraints>
                                 <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="image" keyPath="emptyImage" value="star" catalog="system"/>
                                     <userDefinedRuntimeAttribute type="image" keyPath="fullImage" value="star.fill" catalog="system"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="minRating">
                                         <integer key="value" value="1"/>
@@ -1070,21 +1044,30 @@
                                     <userDefinedRuntimeAttribute type="number" keyPath="rating">
                                         <real key="value" value="2.5"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="emptyImage" value="star" catalog="system"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="m17-EV-VCx" firstAttribute="bottom" secondItem="YaV-Xt-TmJ" secondAttribute="bottom" constant="20" id="7jZ-Gg-NAo"/>
+                            <constraint firstItem="m17-EV-VCx" firstAttribute="trailing" secondItem="0bv-LE-Htn" secondAttribute="trailing" constant="64" id="Ekk-HF-z5j"/>
+                            <constraint firstItem="YaV-Xt-TmJ" firstAttribute="top" secondItem="0bv-LE-Htn" secondAttribute="bottom" constant="8" id="G3l-Pg-Ifu"/>
+                            <constraint firstItem="0bv-LE-Htn" firstAttribute="leading" secondItem="m17-EV-VCx" secondAttribute="leading" constant="64" id="VcS-IU-TJs"/>
+                            <constraint firstItem="m17-EV-VCx" firstAttribute="trailing" secondItem="YaV-Xt-TmJ" secondAttribute="trailing" constant="20" id="g58-g1-Rou"/>
+                            <constraint firstItem="0bv-LE-Htn" firstAttribute="top" secondItem="m17-EV-VCx" secondAttribute="top" constant="38" id="ok2-Rh-DJ2"/>
+                            <constraint firstItem="YaV-Xt-TmJ" firstAttribute="leading" secondItem="m17-EV-VCx" secondAttribute="leading" constant="20" id="v8f-tX-kxv"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="m17-EV-VCx"/>
                     </view>
                     <connections>
                         <outlet property="floatRatingView" destination="0bv-LE-Htn" id="ykD-cb-jTf"/>
-                        <outlet property="reviewContents_TextField" destination="s2e-KD-x4Q" id="WUY-gd-BWp"/>
-                        <outlet property="reviewWrite_Btn" destination="ZeF-J4-gPa" id="J8r-m1-7j4"/>
+                        <outlet property="reviewContents_TextView" destination="YaV-Xt-TmJ" id="TPm-qo-fOP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a7c-J2-xmt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5132" y="119.1904047976012"/>
+            <point key="canvasLocation" x="5131.884057971015" y="118.52678571428571"/>
         </scene>
         <!--환경설정-->
         <scene sceneID="tW2-dc-rXI">

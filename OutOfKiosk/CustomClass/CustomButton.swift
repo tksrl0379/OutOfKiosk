@@ -59,10 +59,8 @@ class BackButton: UIBarButtonItem {
         button.addTarget(controller, action: #selector(SettingController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
 
         self.customView = button
-        let currWidth = self.customView?.widthAnchor.constraint(equalToConstant: 24)
-        currWidth?.isActive = true
-        let currHeight = self.customView?.heightAnchor.constraint(equalToConstant: 24)
-        currHeight?.isActive = true
+        self.customView?.widthAnchor.constraint(equalToConstant: 24).isActive = true
+        self.customView?.heightAnchor.constraint(equalToConstant: 24).isActive = true
     }
     
 }

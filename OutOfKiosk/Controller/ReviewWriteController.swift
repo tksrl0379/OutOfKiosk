@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ReviewWriteController : UIViewController, UITextFieldDelegate{
+class ReviewWriteController : UIViewController, UITextFieldDelegate, UITextViewDelegate{
     
     // MARK: - Propery
     // MARK: Custom Property
@@ -16,8 +16,7 @@ class ReviewWriteController : UIViewController, UITextFieldDelegate{
     
     // MARK: IBOutlet
     @IBOutlet weak var floatRatingView: FloatRatingView!
-    @IBOutlet weak var reviewContents_TextField: UITextField!
-    @IBOutlet weak var reviewWrite_Btn: UIButton!
+    @IBOutlet weak var reviewContents_TextView: UITextView!
     
     
     // MARK: - Life cycle
@@ -31,10 +30,6 @@ class ReviewWriteController : UIViewController, UITextFieldDelegate{
     
     override func viewWillAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(changeProgressTitleView(_:)), name: NSNotification.Name("rating"), object: nil)
-        
-        /* navigationbar 투명 설정 */
-        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController!.navigationBar.shadowImage = UIImage()
     }
     
     // MARK: - Method
@@ -43,25 +38,32 @@ class ReviewWriteController : UIViewController, UITextFieldDelegate{
     func initializeKeyboard() {
         
         // 키보드 올라가고 내려가기 설정
-        reviewContents_TextField.delegate = self
+        reviewContents_TextView.delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func initializeNavigationItem() {
         
+        self.navigationItem.title = "리뷰 작성하기"
+        
+        // 좌측 버튼
         self.navigationItem.leftBarButtonItem = BackButton(controller: self)
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "뒤로가기"
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "리뷰 목록으로 가는 뒤로가기"
+        
+        // 우측 버튼
+        let writeBtn = UIButton(frame: CGRect(x: 0.0, y: 0.0, width: 30, height: 30))
+        writeBtn.setImage(UIImage(systemName: "pencil.and.ellipsis.rectangle"), for: .normal)
+        writeBtn.tintColor = UIColor.black
+        writeBtn.addTarget(self, action: #selector(ReviewWriteController.writeAction(_:)), for: UIControl.Event.touchUpInside)
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: writeBtn)
+        self.navigationItem.rightBarButtonItem?.accessibilityLabel = "리뷰 제출하기"
+
     }
     
     func initializeView() {
-        
-        // 테두리 둥글게 만들기
-        reviewWrite_Btn.layer.cornerRadius = 5
-        reviewWrite_Btn.layer.borderWidth = 0.2
-        reviewWrite_Btn.layer.borderColor = UIColor.gray.cgColor
-        
         
         // 별표 평점
         floatRatingView.delegate = self
@@ -97,10 +99,10 @@ class ReviewWriteController : UIViewController, UITextFieldDelegate{
         floatRatingView.accessibilityLabel = "별점" + String(notification.userInfo!["rating"] as! Double) + "개"
     }
     
-    // MARK: IBAction
-    @IBAction func ReviewWrite_Btn(_ sender: Any) {
+    @objc func writeAction(_ sender: UIBarButtonItem) {
+        
         let userId = UserDefaults.standard.string(forKey: "id")!
-        guard let contents = self.reviewContents_TextField.text else { return }
+        guard let contents = self.reviewContents_TextView.text else { return }
         
         CustomHttpRequest().phpCommunication(url: "sendReviewInfo.php", postString: "storeEnName=\(self.storeEnName!)&userId=\(userId)&rating=\(self.floatRatingView.rating)&contents=\(contents)"){
             responseString in

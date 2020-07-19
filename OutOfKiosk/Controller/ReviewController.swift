@@ -20,7 +20,6 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
     var reviewRating: Array<Double> = []
     
     // MARK: IBOutlet
-    @IBOutlet weak var reviewWrite_Btn: UIButton!
     @IBOutlet weak var reviewTableView: UITableView!
     
     
@@ -51,7 +50,9 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
         
         cell.reviewUserId_Label.text = reviewUserId[indexPath.row] + "님"
         cell.reviewContents_Label.text = reviewContents[indexPath.row]
-        cell.reviewTime_Label.text = reviewTime[indexPath.row]
+        cell.reviewContents_Label.numberOfLines = 0
+        var str = reviewTime[indexPath.row]
+        cell.reviewTime_Label.text = String(str[str.startIndex...str.index(str.startIndex, offsetBy: 10)])
         
         // 별점
         cell.floatRatingView.backgroundColor = UIColor.clear
@@ -65,29 +66,31 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
     
     // MARK: Custom Method
     func initializeNavigationItem() {
-        self.navigationItem.title = "리뷰하기"
+        
+        self.navigationItem.title = "리뷰 목록"
+        
+        // 좌측 버튼
         self.navigationItem.leftBarButtonItem = BackButton(controller: self)
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = self.storeKorName! + " 뒤로가기"
+        
+        // 우측 버튼
+        let writeBtn = UIButton(frame: CGRect(x: 0.0, y: 0.0, width: 30, height: 30))
+        writeBtn.setImage(UIImage(systemName: "pencil.and.ellipsis.rectangle"), for: .normal)
+        writeBtn.tintColor = UIColor.black
+        writeBtn.addTarget(self, action: #selector(ReviewController.writeAction(_:)), for: UIControl.Event.touchUpInside)
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: writeBtn)
+        self.navigationItem.rightBarButtonItem?.accessibilityLabel = "리뷰 작성하기"
+        
     }
     
     func initializeView() {
         
-        // 테두리 둥글게 만들기
-        reviewWrite_Btn.layer.cornerRadius = 5
-        reviewWrite_Btn.layer.borderWidth = 0.2
-        reviewWrite_Btn.layer.borderColor = UIColor.gray.cgColor
-        
-        reviewWrite_Btn.layer.shadowColor = UIColor.black.cgColor
-        reviewWrite_Btn.layer.shadowOffset = CGSize(width: 0.0, height: 0.5)
-        reviewWrite_Btn.layer.shadowRadius = 3
-        reviewWrite_Btn.layer.shadowOpacity = 0.3
-        
-        
         // 테이블
         reviewTableView.delegate = self
         reviewTableView.dataSource = self
-        //reviewTableView.estimatedRowHeight = 100.0
         reviewTableView.rowHeight = UITableView.automaticDimension // 테이블의 rowHeight 유동적으로 설정
+        reviewTableView.estimatedRowHeight = 200.0
     }
     
     func setUpReviewContents() {
@@ -121,13 +124,15 @@ class ReviewController : UIViewController, UITableViewDelegate, UITableViewDataS
         self.navigationController?.popViewController(animated: true)
     }
     
-    // MARK: IBAction
-    @IBAction func reviewWriteButton(_ sender: Any) {
+    @objc func writeAction(_ sender: UIBarButtonItem) {
+        
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ReviewWriteController") as? ReviewWriteController else { return }
         
         rvc.storeEnName = self.storeEnName
         self.navigationController?.pushViewController(rvc, animated: true)
     }
+    
+    
     
 }
 
