@@ -135,19 +135,14 @@ class StoreDetailController : UIViewController{
     
     func alertMessage(_ title: String, _ description: String){
         
-        /* Alert는 MainThread에서 실행해야 함 */
         DispatchQueue.main.async{
             
-            /* Alert message 설정 */
             let alert = UIAlertController(title: title, message: description, preferredStyle: UIAlertController.Style.alert)
             
-            /* 버튼 설정 및 추가*/
-            let defaultAction = UIAlertAction(title: "확인", style: .destructive) { (action) in
-            }
+            // 버튼 설정 및 추가
+            let defaultAction = UIAlertAction(title: "확인", style: .destructive) { (action) in }
             alert.addAction(defaultAction)
             
-            
-            /* Alert Message 띄우기 */
             self.present(alert, animated: false, completion: nil)
         }
     }
@@ -169,8 +164,6 @@ class StoreDetailController : UIViewController{
         self.navigationController?.pushViewController(rvc, animated: true)
     }
     
-    
-    /* 리뷰 버튼: ReviewController로 넘어감 */
     @IBAction func reviewMenu_Btn(_ sender: Any) {
         
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ReviewController") as? ReviewController else {
@@ -187,22 +180,15 @@ class StoreDetailController : UIViewController{
         
     }
     
-    
-    /* 첫번째 메뉴 버튼: DetailMenuController로 넘어감 */
     @IBAction func firstCategory_Btn(_ sender: Any) {
         
-        //rvc 가 옵셔널 타입이므로 guard 구문을 통해서 옵셔널 바인딩 처리
-        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController") as? DetailMenuController else {
-            return}
+        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController") as? DetailMenuController else { return }
         
-        /* 가게 영어, 한글 이름 전송 */
         rvc.storeEnName = storeEnName
         rvc.storeKorName = storeKorName
         
-        /* 카테고리 번호 전송: 첫번째 메뉴라는 것을 알려주기 위함 */
+        // 카테고리 번호, 메뉴 이름 넘기기
         rvc.categoryNumber = 1
-        
-        /* 메뉴 이름 넘기기 */
         rvc.menuKorName = self.storeMenuNameArray[0]
         
         
@@ -213,54 +199,33 @@ class StoreDetailController : UIViewController{
     
     @IBAction func secondCategory_Btn(_ sender: Any) {
         
-        //rvc 가 옵셔널 타입이므로 guard 구문을 통해서 옵셔널 바인딩 처리
-        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController") as? DetailMenuController else {
-            //아니면 종료
-            return}
+        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DetailMenuController") as? DetailMenuController else { return }
         
-        /* 가게 영어, 한글 이름 전송 */
         rvc.storeEnName = storeEnName
         rvc.storeKorName = storeKorName
         
-        /* 카테고리 번호 전송: 첫번째 메뉴라는 것을 알려주기 위함 */
         rvc.categoryNumber = 2
-        
-        /* 메뉴 이름 넘기기 */
         rvc.menuKorName = self.storeMenuNameArray[1]
         
-        
         self.navigationController?.pushViewController(rvc, animated: true)
-        
     }
     
     
-    /* 장바구니 버튼: ShoppingBasketController 로 넘어감 */
     @IBAction func shoppingList_Btn(_ sender: Any) {
         
-        /* 장바구니가 비어있지 않은 경우 화면이 전환. 비어있을 시 경고 메시지 뜸 */
+        // 장바구니가 비어 있는 경우 화면 전환 X
         let ad = UIApplication.shared.delegate as? AppDelegate
         
-        if let count = ad?.numOfProducts{
+        if let count = ad?.numOfProducts {
+            
             if count != 0 {
-                guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingBasketController") as? ShoppingBasketController else {
-                    return}
+                guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingBasketController") as? ShoppingBasketController else { return }
                 
-                rvc.beforeControllerName = self.storeKorName
+                rvc.prevViewName = self.storeKorName
                 self.navigationController?.pushViewController(rvc, animated: true)
             }else{
                 self.alertMessage(" ","장바구니가 비어있어요")
             }
-            
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

@@ -21,7 +21,6 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
     @IBOutlet weak var favoriteMenuTableView: UITableView!
     
     
-    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -166,7 +165,7 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
             if count != 0 {
                 guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "ShoppingBasketController") as? ShoppingBasketController else { return }
                 
-                rvc.beforeControllerName = "찜한 메뉴"
+                rvc.prevViewName = "찜한 메뉴"
                 self.navigationController?.pushViewController(rvc, animated: true)
             }else{
                 self.alertMessage(" ","장바구니가 비어있어요")

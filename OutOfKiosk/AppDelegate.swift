@@ -17,9 +17,6 @@ import UserNotifications
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenterDelegate{
     
-    
-    /*ORIGINAL*/
-    
     var numOfProducts : Int = 0
     var menuNameArray: Array<String> = []
     var menuSizeArray: Array<String> = []
@@ -30,21 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
     var menuStoreName : String = ""
         
     var badgeCount : Int = 0
-    //    var orderState : String = nil
-    //    /*TEST*/
-    //
-    //    var numOfProducts : Int = 1
-    //    var menuNameArray: Array<String> = ["초콜렛스무디"]
-    //    var menuSizeArray: Array<String> = ["스몰"]
-    //    var menuCountArray: Array<Int> = [1]
-    //    var menuEachPriceArray: Array<Int> = [5000]
-    //    var menuSugarContent : Array<String> = ["30"]
-    //    var menuIsWhippedCream : Array<String> = ["NULL"]
-    
-    /* 즐겨찾기된 menu를 저장하는 배열.*/
-    //    var menuFavoriteArray: Array<String> = []
-    
-    
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -83,10 +65,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
         return true
     }
     
-    /* ======================================================================================================================== */
     
     /* Push Notification에 관련된 protocol */
-    
     
     // 토큰 정상 등록(registerForRemoteNotifications()을 호출한 결과가 성공일 때)
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
@@ -102,9 +82,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
         print("에러 발생 : \(error)")
     }
     
-//    @objc func changeTitleView(){
-//
-//    }
     
     /* 이 프로토콜은 push notification을 알람으로 받는다.*/
     func application(_ application: UIApplication, didReceiveRemoteNotification data: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
@@ -130,11 +107,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
         /*AppDelegate에서 MainView로 Notification 보내기(alert MSG)*/
         let userInfo: [AnyHashable: Any] = ["alert": alert]
         NotificationCenter.default.post(name: NSNotification.Name("TestNotification"), object: nil, userInfo: userInfo)
-        
-        /* 수정중 */
-        //UserDefaults.standard.set(alert, forKey: "pushMSG")
-        
-        /* 후에 특정 메시지가 오게 되면 여기서 pushMSG의 값을 nil로 초기화 하는 작업을 할 듯.*/
                 
     }
     
@@ -181,18 +153,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
         print("background entered")
         
     }
-    
-    /*
-     현재 이 메소드가 안 불러지는 상황
-     applicationWillEnterForeground(_ application: UIApplication)
-     applicationDidBecomeActive(_ application: UIApplication)
-     
-     iOS 13 has a new way of sending app lifecycle events
-     Instead of coming through the UIApplicationDelegate they come through the UIWindowSceneDelegate which is a UISceneDelegate sub-protocol
-     
-     https://stackoverflow.com/questions/56508764/app-delegate-methods-arent-being-called-in-ios-13
-     */
-    
     
 }
 
