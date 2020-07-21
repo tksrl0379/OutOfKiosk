@@ -7,13 +7,8 @@
 //
 
 import UIKit
-/* Push Notification 을 받기 위한 모듈*/
 import UserNotifications
-/*Push Notification 권환 받을 때 달라지는 토큰값을 pushNotificatio.php에 저장해야 한다.*/
- 
-/*
- 모든 View 컨트롤러에서 접근이 가능하며 앱이 종료되지 않는 이상 데이터가 유지가 될 수 있다.
- */
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenterDelegate{
     
@@ -37,36 +32,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
         
         
         var favoriteMenuInfoDict = defaults.object(forKey: "favoriteMenuInfoDict") as? [String:String]
-        print("개수:", favoriteMenuInfoDict?.count)
-        /* 비어있으면 초기화 */
+        
+        // 비어 있을 시 초기화
         if favoriteMenuInfoDict == nil{
             defaults.set(dictionary, forKey: "favoriteMenuInfoDict")
         }
     
         Thread.sleep(forTimeInterval: 2.0)
         
-        /* 최초에 사용자로부터 pushNotification의 권환을 받기 위한 코드*/
+        // pushNotification 권한 받기 (최초에 한 번 동작)
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.badge, .alert, .sound]) {
             (granted, error) in
-            // Enable or disable features based on authorization.
-            if(granted){
+            
+            if granted {
                 print("사용자가 푸시를 허용했습니다")
                 DispatchQueue.main.async {
                     application.registerForRemoteNotifications()
-                    
                 }
             } else {
                 print("사용자가 푸시를 거절했습니다")
             }
         }
         
-        
         return true
     }
-    
-    
-    /* Push Notification에 관련된 protocol */
     
     // 토큰 정상 등록(registerForRemoteNotifications()을 호출한 결과가 성공일 때)
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
@@ -82,37 +72,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
         print("에러 발생 : \(error)")
     }
     
-    
-    /* 이 프로토콜은 push notification을 알람으로 받는다.*/
+    // Push Notification 콜백
     func application(_ application: UIApplication, didReceiveRemoteNotification data: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
-        
-        if (application.applicationState == .active){ //포그라운드에서 pushNotification 받음.
-            print("포그라운드!")
+        if application.applicationState == .active { // 포그라운드에서 pushNotification 받음
+            print("포그라운드")
+        }else if application.applicationState == .background {
+            print("백그라운드")
             
-        }else if (application.applicationState == .background){
-            print("백그라운드!")
-            
-            UIApplication.shared.applicationIconBadgeNumber += 1 /* 아이콘에 뱃지 넘버수를 증가시킨다.*/
-            
+            UIApplication.shared.applicationIconBadgeNumber += 1
         }
                     
         print(UIApplication.shared.applicationIconBadgeNumber)
         
         let aps = data[AnyHashable("aps")] as? NSDictionary
         let alert = aps!["alert"] as? NSMutableString
-        print("메시지 내용 찾기 : ", alert)
+        print("메시지 내용: ", alert)
         
-        
-        /*AppDelegate에서 MainView로 Notification 보내기(alert MSG)*/
+        // AppDelegate에서 MainView로 Notification 전송 (alert MSG)
         let userInfo: [AnyHashable: Any] = ["alert": alert]
         NotificationCenter.default.post(name: NSNotification.Name("TestNotification"), object: nil, userInfo: userInfo)
-                
     }
     
-    /* ForeGround에서 알람이 오면 출력해주는 메소드*/
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
-    {
+    // ForeGround 에서 알람이 오면 출력
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert, .badge, .sound])
     }
 
@@ -128,9 +111,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
         }
         return false
     }
-    
-    
-    
     
     
     // MARK: UISceneSession Lifecycle

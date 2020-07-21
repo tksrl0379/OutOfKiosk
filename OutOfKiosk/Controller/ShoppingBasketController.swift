@@ -184,7 +184,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         return attributedString
     }
     
-    func orderItem(){
+    func orderItem() {
         
         let taskGroup = DispatchGroup()
         
@@ -230,7 +230,6 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
             // 주문이 끝나면 이전 View 로 돌아감
             self.navigationController?.popViewController(animated: true)
         }
-        
     }
     
     // 비콘 관련 메소드
@@ -392,12 +391,5 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
             beaconOrder_Btn.accessibilityLabel = "현장 주문 "+String(totalPrice)+"원"
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
+   
 }
