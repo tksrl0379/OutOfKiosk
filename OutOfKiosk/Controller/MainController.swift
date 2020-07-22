@@ -162,7 +162,7 @@ class MainController : UIViewController{
     func initializeProgress() {
         
         // 원형 애니메이션
-        let cp = CircularProgressView(frame: CGRect(x: 31, y: 14.0, width: 119.5, height: 119.5))
+        let cp = CircularProgressView(frame: CGRect(x: 27, y: 14.0, width: 119.5, height: 119.5))
         cp.trackColor = UIColor(red: 230.0/255.0, green: 188.0/255.0, blue: 188.0/255.0, alpha: 0.3)
         cp.progressColor = UIColor.black
         cp.tag = 101
