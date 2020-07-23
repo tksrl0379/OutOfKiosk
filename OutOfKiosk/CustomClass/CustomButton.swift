@@ -54,7 +54,6 @@ class BackButton: UIBarButtonItem {
     }
     
     func initializeBackBtn(controller: UIViewController) {
-        
         let button = CustomizedButton(frame: .zero)
         button.addTarget(controller, action: #selector(SettingController.buttonAction(_:)), for: UIControl.Event.touchUpInside)
 
