@@ -63,7 +63,7 @@ APP 전반에 시각 장애인을 위한 장애인 접근성 지침을 준수하
 
 
 
-![image](https://user-images.githubusercontent.com/20080283/79094920-f4444200-7d93-11ea-97ea-049f433675c8.png)
+![image](https://user-images.githubusercontent.com/20080283/89703440-a75d2a80-d985-11ea-852d-7474bb08aa59.png)
 
 </br> </br>
 
