@@ -15,7 +15,7 @@ class CustomHttpRequest{
     // PHP 서버와 HTTP 통신
     func phpCommunication(url: String, postString: String, handler: @escaping (_ responseString: String)->Void){
         
-        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-54-180-97-160.ap-northeast-2.compute.amazonaws.com/\(url)")! as URL)
+        let request = NSMutableURLRequest(url: NSURL(string: "http://ec2-54-180-97-136.ap-northeast-2.compute.amazonaws.com/\(url)")! as URL)
         request.httpMethod = "POST"
         
         request.httpBody = postString.data(using: String.Encoding.utf8)
