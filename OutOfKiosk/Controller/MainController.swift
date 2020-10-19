@@ -331,7 +331,7 @@ class MainController : UIViewController{
         
         guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteMenuController") as? FavoriteMenuController else {return}
         
-        var favoriteMenuInfoDict = UserDefaults.standard.object(forKey: "favoriteMenuInfoDict") as? [String:String]
+        let favoriteMenuInfoDict = UserDefaults.standard.object(forKey: "favoriteMenuInfoDict") as? [String:[String]]
         
         if favoriteMenuInfoDict!.count != 0 {
             self.navigationController?.pushViewController(rvc, animated: true)

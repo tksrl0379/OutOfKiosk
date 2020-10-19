@@ -14,7 +14,7 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
     
     // MARK: 찜한 메뉴의 이름 / 가게이름
     var favoriteMenuNameArray: Array<String> = []
-    var favoriteStoreKorNameArray: Array<String> = []
+    var favoriteStoreKorNameArray: [[String]] = []
     
     // MARK: View
     @IBOutlet weak var shoppingBasket_Btn: UIButton!
@@ -25,8 +25,8 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        favoriteMenuTableView.delegate=self
-        favoriteMenuTableView.dataSource=self
+        favoriteMenuTableView.delegate = self
+        favoriteMenuTableView.dataSource = self
         self.favoriteMenuTableView.rowHeight = 100.0
         
         self.initializeNavigationItem()
@@ -34,11 +34,7 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        // 장바구니 개수 표시
-        let ad = UIApplication.shared.delegate as? AppDelegate
-        shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
-        shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
+        setUpBasketCounts()
     }
     
     
@@ -67,6 +63,13 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
     
     // MARK: Custom Method
     
+    func setUpBasketCounts() {
+        // 장바구니 개수 표시
+        let ad = UIApplication.shared.delegate as? AppDelegate
+        shoppingBasket_Btn.setTitle("장바구니 : "+String(ad!.numOfProducts) + " 개", for: .normal)
+        shoppingBasket_Btn.accessibilityLabel = "장바구니 버튼. 현재 \(ad!.numOfProducts)개 담겨있습니다."
+    }
+    
     func initializeNavigationItem() {
         
         self.navigationItem.leftBarButtonItem = BackButton(controller: self)
@@ -81,10 +84,13 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
         shoppingBasket_Btn.layer.cornerRadius = 5
         
         // TableView 최초 갱신
-        let favoriteMenuInfoDict = UserDefaults.standard.object(forKey: "favoriteMenuInfoDict") as? [String:String]
+        let favoriteMenuInfoDict = UserDefaults.standard.object(forKey: "favoriteMenuInfoDict") as? [String: [String]]
         
         self.favoriteMenuNameArray = Array(favoriteMenuInfoDict!.keys)
-        self.favoriteStoreKorNameArray = Array(favoriteMenuInfoDict!.values)
+        for value in favoriteMenuInfoDict!.values {
+            favoriteStoreKorNameArray.append(value)
+        }
+//        self.favoriteStoreKorNameArray = favoriteMenuInfoDict!.values
         
         DispatchQueue.main.async {
             self.favoriteMenuTableView.reloadData()
@@ -117,16 +123,33 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
         
         // 선택한 Cell을 알기 위해 indexPath 구함
         let point = sender.convert(CGPoint.zero, to: favoriteMenuTableView)
-        guard let indexPath = favoriteMenuTableView.indexPathForRow(at: point)else{return}
+        guard let indexPath = favoriteMenuTableView.indexPathForRow(at: point) else { return }
         
+        let ad = UIApplication.shared.delegate as? AppDelegate
+        
+        // 장바구니 개수 갱신
+        ad?.numOfProducts += 1
+        
+        ad?.menuNameArray.append(favoriteMenuNameArray[indexPath.row])
+    
+        ad?.menuSizeArray.append("스몰")
+        ad?.menuCountArray.append(1)
+        ad?.menuEachPriceArray.append(Int(favoriteStoreKorNameArray[indexPath.row][1]) ?? 1)
+        ad?.menuSugarContent.append("50")
+        ad?.menuIsWhippedCream.append("NULL")
+        ad?.menuStoreName = favoriteStoreKorNameArray[indexPath.row][0]
+        
+        setUpBasketCounts()
         // 음성주문(DialogflowPopUpController)로 넘어감
-        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as? DialogFlowPopUpController else { return }
+//        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "DialogFlowPopUpController") as? DialogFlowPopUpController else { return }
+//
+//        // 선택한 메뉴의 이름 및 한글 이름을 DialogFlow 에 전송
+//        rvc.favoriteMenuName = favoriteMenuNameArray[indexPath.row]
+//        rvc.storeKorName = favoriteStoreKorNameArray[indexPath.row]
+//
+//        self.navigationController?.pushViewController(rvc, animated: true)
         
-        // 선택한 메뉴의 이름 및 한글 이름을 DialogFlow 에 전송
-        rvc.favoriteMenuName = favoriteMenuNameArray[indexPath.row]
-        rvc.storeKorName = favoriteStoreKorNameArray[indexPath.row]
         
-        self.navigationController?.pushViewController(rvc, animated: true)
     }
     
     
@@ -138,7 +161,7 @@ class FavoriteMenuController : UIViewController, UITableViewDelegate , UITableVi
         guard let indexPath = favoriteMenuTableView.indexPathForRow(at: point) else { return }
         
         let defaults = UserDefaults.standard
-        var favoriteMenuInfoDict = defaults.object(forKey: "favoriteMenuInfoDict") as? [String:String]
+        var favoriteMenuInfoDict = defaults.object(forKey: "favoriteMenuInfoDict") as? [String:[String]]
         
         // 삭제 내용 반영하여 즐겨찾기 관련된 자료구조 갱신: 1. UserDefault의 즐겨찾기(favoriteMenuInfoDict), 2. 테이블 뷰의 메뉴이름 출력하는 배열(favoriteMenuNameArray)
         favoriteMenuInfoDict?.removeValue(forKey: favoriteMenuNameArray[indexPath.row])

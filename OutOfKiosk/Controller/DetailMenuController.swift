@@ -101,15 +101,14 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
                 self.storeNameArray.append(self.storeKorName!)
                 
                 // FavoriteTag Array 초기화: cell 마다 찜 여부 표시
-                let favoriteMenuInfoDict = UserDefaults.standard.object(forKey: "favoriteMenuInfoDict") as? [String:String]
-
+                let favoriteMenuInfoDict = UserDefaults.standard.object(forKey: "favoriteMenuInfoDict") as? [String:[String]]
                 for menuName in self.menuNameArray {
 
                     self.favoriteTagArray.append("")
                     for favoriteMenuName in favoriteMenuInfoDict!.keys {
                         if menuName == favoriteMenuName {
                             
-                            self.favoriteTagArray[self.menuNameArray.firstIndex(of: menuName)!] = "즐겨찾기 됨!"
+                            self.favoriteTagArray[self.menuNameArray.firstIndex(of: menuName)!] = "선호메뉴 등록됨"
                             break
                         }
                     }
@@ -137,7 +136,7 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
         guard let indexPath = ProductTableView.indexPathForRow(at: point) else { return }
       
         let defaults = UserDefaults.standard
-        var favoriteMenuInfoDict = defaults.object(forKey: "favoriteMenuInfoDict") as? [String:String]
+        var favoriteMenuInfoDict = defaults.object(forKey: "favoriteMenuInfoDict") as? [String: [String]]
         
         // 이미 찜한 경우
         if let _ = favoriteMenuInfoDict![menuNameArray[indexPath.row]] {
@@ -151,12 +150,11 @@ class DetailMenuController : UIViewController, UITableViewDelegate, UITableViewD
 
         // 아직 찜 하지 않은 경우
         } else {
-        
-            favoriteMenuInfoDict?[self.menuNameArray[indexPath.row]] = self.storeKorName!
+            
+            favoriteMenuInfoDict?[self.menuNameArray[indexPath.row]] = [self.storeKorName!, "\(menuPriceArray[indexPath.row])"]
             
             defaults.set(favoriteMenuInfoDict, forKey: "favoriteMenuInfoDict")
-            
-            self.favoriteTagArray[indexPath.row] = "찜하기 됨"
+            self.favoriteTagArray[indexPath.row] = "선호메뉴 등록됨"
             self.ProductTableView.reloadRows(at: [indexPath], with: .automatic)
         }
         

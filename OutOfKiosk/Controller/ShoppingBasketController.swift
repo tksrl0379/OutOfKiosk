@@ -19,12 +19,12 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     
     // cell 관련
     var basket_productNum : Int = 0
-    var basket_productName : Array<String>! = []
-    var basket_productSize : Array<String>! = []
-    var basket_productCount : Array<Int>! = []
-    var basket_productPrice : Array<Int>! = []
-    var basket_productSugar : Array<String>! = []
-    var basket_productWhippedCream : Array<String>! = []
+    var basket_productName : [String] = []
+    var basket_productSize : [String] = []
+    var basket_productCount : [Int] = []
+    var basket_productPrice : [Int] = []
+    var basket_productSugar : [String] = []
+    var basket_productWhippedCream : [String] = []
     
     // 비콘 관련
     var locationManager: CLLocationManager!

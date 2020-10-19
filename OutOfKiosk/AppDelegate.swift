@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
         let defaults = UserDefaults.standard
         
         
-        var favoriteMenuInfoDict = defaults.object(forKey: "favoriteMenuInfoDict") as? [String:String]
+        let favoriteMenuInfoDict = defaults.object(forKey: "favoriteMenuInfoDict") as? [String: [String]]
         
         // 비어 있을 시 초기화
         if favoriteMenuInfoDict == nil{

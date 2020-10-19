@@ -546,7 +546,7 @@ class DialogFlowPopUpController: UIViewController {
             // 오류가 없거나 최종 결과가 나오면 audioEngine (오디오 입력)을 중지하고 인식 요청 및 인식 작업을 중지
             if error != nil || isFinal {
                 
-                self?.audioEngine?.stop() 
+                self?.audioEngine?.stop()
                 self?.inputNode?.removeTap(onBus: 0)
                 
                 self?.recognitionRequest = nil
