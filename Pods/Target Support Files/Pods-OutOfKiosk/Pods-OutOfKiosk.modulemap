@@ -1,6 +1,0 @@
-framework module Pods_OutOfKiosk {
-  umbrella header "Pods-OutOfKiosk-umbrella.h"
-
-  export *
-  module * { export * }
-}

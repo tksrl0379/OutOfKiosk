@@ -3,6 +3,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=swift,xcode
 
 Pods/
+.DS_Store
 
 ### Swift ###
 # Xcode
