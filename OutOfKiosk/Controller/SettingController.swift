@@ -103,21 +103,7 @@ class SettingController : UIViewController{
     
     // MARK: IBAction
     @IBAction func speechSpeedControl_Slider(_ sender: UISlider) {
-        
-//        print(sender.value)
         UserDefaults.standard.set(sender.value, forKey: "speechSpeedRate")
-    }
-    
-    @IBAction func logout_Btn(_ sender: Any) {
-        
-        KOSession.shared()?.logoutAndClose { [weak self] (success, error) -> Void in
-            UserDefaults.standard.set(nil, forKey: "id")
-            UserDefaults.standard.set(nil, forKey: "pwd")
-            UserDefaults.standard.set(nil, forKey: "profileImageUrl")
-            
-            // View dismiss
-            self?.presentingViewController?.dismiss(animated: true, completion: nil)
-        }
     }
 }
 

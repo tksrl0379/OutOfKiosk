@@ -171,7 +171,7 @@ class DialogFlowPopUpController: UIViewController {
                     
                     print("즐겨찾기 들어왔음")
                     
-                    var dict = CustomConvert().convertStringToDictionary(text: responseString)
+                    let dict = CustomConvert().convertStringToDictionary(text: responseString)
                     let responseMessage = dict!["response"] as! String
                     
                     self.startTTS(responseMessage){ self.controlAsyncTask() }
