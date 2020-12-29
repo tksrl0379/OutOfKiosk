@@ -66,38 +66,14 @@
                                     <constraint firstAttribute="width" constant="150" id="sL6-1J-BRm"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="홍길동" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yUy-gi-MV6">
-                                <rect key="frame" x="268" y="123" width="74" height="19"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" none="YES"/>
-                                    <bool key="isElement" value="NO"/>
-                                </accessibility>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="74" id="kki-MS-heu"/>
-                                    <constraint firstAttribute="height" constant="19" id="yUf-0W-Ls5"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Ctl-iW-nwa">
-                                <rect key="frame" x="349" y="108" width="49" height="47.666666666666671"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gearshape" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Ctl-iW-nwa">
+                                <rect key="frame" x="358" y="111.33333333333331" width="40" height="39.666666666666686"/>
                                 <color key="tintColor" systemColor="darkTextColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="49" id="IFw-Dz-oJk"/>
-                                    <constraint firstAttribute="width" constant="49" id="TN6-Xs-mKw"/>
+                                    <constraint firstAttribute="height" constant="40" id="IFw-Dz-oJk"/>
+                                    <constraint firstAttribute="width" constant="40" id="TN6-Xs-mKw"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzZ-d3-CPs">
-                                <rect key="frame" x="268" y="108" width="130" height="49"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="130" id="J4k-rY-fbY"/>
-                                    <constraint firstAttribute="height" constant="49" id="JrA-UN-4BD"/>
-                                </constraints>
-                                <connections>
-                                    <action selector="profileSetting_Btn:" destination="vo8-u6-hUb" eventType="touchUpInside" id="Wqj-nI-PDC"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bge-ce-DgV">
                                 <rect key="frame" x="20" y="191" width="374" height="354"/>
                                 <subviews>
@@ -144,7 +120,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="가게 목록" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TvK-ep-Lcy">
-                                        <rect key="frame" x="72.333333333333343" y="258" width="67.333333333333343" height="21"/>
+                                        <rect key="frame" x="71" y="258" width="70.333333333333314" height="20"/>
                                         <accessibility key="accessibilityConfiguration">
                                             <bool key="isElement" value="NO"/>
                                         </accessibility>
@@ -153,7 +129,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="선호 메뉴" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oGA-he-xYh">
-                                        <rect key="frame" x="234.33333333333334" y="258" width="67.333333333333343" height="21"/>
+                                        <rect key="frame" x="233.00000000000003" y="258" width="70.333333333333343" height="20"/>
                                         <accessibility key="accessibilityConfiguration">
                                             <bool key="isElement" value="NO"/>
                                         </accessibility>
@@ -261,6 +237,16 @@
                                     <constraint firstItem="hP5-gR-BdQ" firstAttribute="top" secondItem="aMV-bf-Dhc" secondAttribute="top" constant="19" id="uKl-kG-d9l"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzZ-d3-CPs">
+                                <rect key="frame" x="353" y="111" width="45" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="45" id="J4k-rY-fbY"/>
+                                    <constraint firstAttribute="height" constant="45" id="JrA-UN-4BD"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="profileSetting_Btn:" destination="vo8-u6-hUb" eventType="touchUpInside" id="Wqj-nI-PDC"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="XT4-if-LEx"/>
                         <color key="backgroundColor" red="0.92538958790000003" green="0.92554813619999998" blue="0.92537957429999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -270,15 +256,13 @@
                             <constraint firstItem="XT4-if-LEx" firstAttribute="trailing" secondItem="Ctl-iW-nwa" secondAttribute="trailing" constant="16" id="EUV-H2-kTx"/>
                             <constraint firstItem="aMV-bf-Dhc" firstAttribute="centerX" secondItem="XT4-if-LEx" secondAttribute="centerX" id="F5g-OJ-vXl"/>
                             <constraint firstItem="GHb-p7-v6z" firstAttribute="leading" secondItem="XT4-if-LEx" secondAttribute="leading" constant="26" id="FXD-7U-XAu"/>
-                            <constraint firstItem="nzZ-d3-CPs" firstAttribute="top" secondItem="XT4-if-LEx" secondAttribute="top" constant="20" id="WAH-lZ-E9z"/>
+                            <constraint firstItem="nzZ-d3-CPs" firstAttribute="top" secondItem="XT4-if-LEx" secondAttribute="top" constant="23" id="WAH-lZ-E9z"/>
                             <constraint firstItem="bge-ce-DgV" firstAttribute="leading" secondItem="XT4-if-LEx" secondAttribute="leading" constant="20" id="YOS-jM-3mA"/>
                             <constraint firstItem="XT4-if-LEx" firstAttribute="trailing" secondItem="nzZ-d3-CPs" secondAttribute="trailing" constant="16" id="ZAj-Wm-RwI"/>
                             <constraint firstItem="XT4-if-LEx" firstAttribute="trailing" secondItem="aMV-bf-Dhc" secondAttribute="trailing" constant="20" id="abG-SI-W4M"/>
-                            <constraint firstItem="Ctl-iW-nwa" firstAttribute="leading" secondItem="yUy-gi-MV6" secondAttribute="trailing" constant="7" id="hrY-fV-LkO"/>
-                            <constraint firstItem="yUy-gi-MV6" firstAttribute="top" secondItem="XT4-if-LEx" secondAttribute="top" constant="35" id="iBI-Ei-WcF"/>
                             <constraint firstItem="XT4-if-LEx" firstAttribute="trailing" secondItem="bge-ce-DgV" secondAttribute="trailing" constant="20" id="kRe-Ur-irx"/>
                             <constraint firstItem="bge-ce-DgV" firstAttribute="top" secondItem="GHb-p7-v6z" secondAttribute="bottom" constant="30" id="lrg-di-T06"/>
-                            <constraint firstItem="Ctl-iW-nwa" firstAttribute="top" secondItem="XT4-if-LEx" secondAttribute="top" constant="19" id="nvR-a1-EGA"/>
+                            <constraint firstItem="Ctl-iW-nwa" firstAttribute="top" secondItem="XT4-if-LEx" secondAttribute="top" constant="23" id="nvR-a1-EGA"/>
                             <constraint firstItem="bge-ce-DgV" firstAttribute="centerX" secondItem="XT4-if-LEx" secondAttribute="centerX" id="tIj-vE-nKR"/>
                             <constraint firstItem="XT4-if-LEx" firstAttribute="bottom" secondItem="aMV-bf-Dhc" secondAttribute="bottom" constant="15" id="vxz-8V-bov"/>
                         </constraints>
@@ -299,12 +283,11 @@
                         <outlet property="sub_View" destination="bge-ce-DgV" id="8pt-a2-yqt"/>
                         <outlet property="title_View" destination="GHb-p7-v6z" id="y4N-1u-mPN"/>
                         <outlet property="userProfileImage_View" destination="Ctl-iW-nwa" id="ehU-Tn-E9T"/>
-                        <outlet property="userProfileName_Label" destination="yUy-gi-MV6" id="Am6-zA-CZs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7ES-pq-w9C" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="306.39999999999998" y="91.304347826086968"/>
+            <point key="canvasLocation" x="305.79710144927537" y="91.071428571428569"/>
         </scene>
         <!--Favorite Menu Controller-->
         <scene sceneID="sfS-9I-bhx">
@@ -1172,7 +1155,7 @@
         <image name="confirm" width="32" height="32"/>
         <image name="favorite" width="64" height="64"/>
         <image name="gear" width="32" height="32"/>
-        <image name="person.circle" catalog="system" width="128" height="121"/>
+        <image name="gearshape" catalog="system" width="128" height="121"/>
         <image name="review" width="32" height="32"/>
         <image name="shop" width="64" height="64"/>
         <image name="speak_image" width="69" height="60"/>

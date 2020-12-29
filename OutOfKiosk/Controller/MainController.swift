@@ -25,10 +25,8 @@ class MainController : UIViewController{
     @IBOutlet weak var favorite_Btn: UIButton!
     
     @IBOutlet weak var userProfileImage_View: UIImageView!
-    @IBOutlet weak var userProfileName_Label: UILabel!
     @IBOutlet weak var profileSetting_Btn: UIButton!
     
-    @IBOutlet weak var progressBar_view: UIView!
     @IBOutlet weak var progress_View: UIView!
     @IBOutlet weak var progressImage_ImageView: UIImageView!
     
@@ -155,7 +153,6 @@ class MainController : UIViewController{
         
         // 사용자 아이디
         guard let userId = UserDefaults.standard.string(forKey: "id") else { return }
-        self.userProfileName_Label.text = "\(userId)님"
         self.profileSetting_Btn.accessibilityLabel = "\(userId)님 프로필"
     }
     
