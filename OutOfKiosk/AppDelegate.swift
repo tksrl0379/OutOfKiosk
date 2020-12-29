@@ -25,6 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate , UNUserNotificationCenter
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        UserDefaults.standard.setValue("test", forKey: "id")
+        UserDefaults.standard.setValue("test", forKey: "pwd")
+        
         UNUserNotificationCenter.current().delegate = self
         
         let dictionary = [String:String]()
