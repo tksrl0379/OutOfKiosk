@@ -13,10 +13,7 @@ class SettingController : UIViewController{
     // MARK: - Property
     // MARK: IBOutlet
     @IBOutlet weak var speechSpeedControl_Slider: UISlider!
-    @IBOutlet weak var userProfileImage_View: UIImageView!
-    @IBOutlet weak var userProfileName_Label: UILabel!
-
-    @IBOutlet weak var profile_View: UIView!
+    
     @IBOutlet weak var settingTitle_View: UIView!
     @IBOutlet weak var setting_View: UIView!
     
@@ -25,7 +22,6 @@ class SettingController : UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        self.initializeProfile()
         self.initializeBackBtn()
         self.initializeView()
         self.initializeSpeechRate()
@@ -56,31 +52,7 @@ class SettingController : UIViewController{
         self.navigationItem.title = "프로필"
     }
     
-    func initializeProfile() {
-        
-        // 사용자 프로필 이미지
-        if let imageUrl = UserDefaults.standard.string(forKey: "profileImageUrl"){
-            let url = URL(string: imageUrl)
-            do {
-                let data = try Data(contentsOf: url!)
-                self.userProfileImage_View.image = UIImage(data: data)
-            }catch let err {
-                print("Error : \(err.localizedDescription)")
-            }
-        }
-        
-        // 프로필 이미지 둥글게
-        self.makeCircularShape(view: self.userProfileImage_View)
-        
-        // 사용자 아이디
-        self.userProfileName_Label.text = "안녕하세요. \(UserDefaults.standard.string(forKey: "id")!)님"
-    }
-    
     func initializeView() {
-        
-        // 테두리
-        self.profile_View.layer.borderWidth = 0.35
-        self.profile_View.layer.borderColor = UIColor.gray.cgColor
         
         self.settingTitle_View.layer.borderWidth = 0.35
         self.settingTitle_View.layer.borderColor = UIColor.gray.cgColor

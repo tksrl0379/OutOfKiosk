@@ -81,8 +81,24 @@ class DialogFlowPopUpController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationBar.prefersLargeTitles = false
 
+        guard self.navigationController?.topViewController === self else { return }
+            self.transitionCoordinator?.animate(alongsideTransition: { [weak self](context) in
+                self?.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+                self?.navigationController?.navigationBar.shadowImage = UIImage()
+                self?.navigationController?.navigationBar.backgroundColor = .clear
+                self?.navigationController?.navigationBar.barTintColor = .clear
+            }, completion: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.transitionCoordinator?.animate(alongsideTransition: { [weak self](context) in
+                self?.navigationController?.navigationBar.setBackgroundImage(nil, for: UIBarMetrics.default)
+                self?.navigationController?.navigationBar.shadowImage = nil
+                self?.navigationController?.navigationBar.backgroundColor = .white
+                self?.navigationController?.navigationBar.barTintColor = .white
+                }, completion: nil)
     }
     
     override func viewDidDisappear(_ animated: Bool) {

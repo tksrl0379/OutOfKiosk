@@ -26,14 +26,10 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     var basket_productSugar : [String] = []
     var basket_productWhippedCream : [String] = []
     
-    // 비콘 관련
-    var locationManager: CLLocationManager!
-    var beaconConfirmFlag : Bool = false // 비콘버튼을 누르면 True가 되고 그 이후 비콘이 탐지가 되면 자동으로 전송
     
     // MARK: IBOutlet
     @IBOutlet weak var basket_TableView: UITableView!
     @IBOutlet weak var onlineOrder_Btn: UIButton!    // 즉시 주문
-    @IBOutlet weak var beaconOrder_Btn: UIButton!    // 현장 주문
     
     
     
@@ -44,7 +40,6 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         super.viewDidLoad()
         
         self.initializeNavigationItem()
-        self.initializeBeacon()
         self.initializeView()
         self.initializeOrderInfo()     // 주문 정보 불러오기
         self.initializeTableView()
@@ -73,9 +68,6 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         // 주문 버튼 초기화
         self.totalPrice += basket_productPrice[indexPath.row] * basket_productCount[indexPath.row]
         
-        self.beaconOrder_Btn.setTitle("현장 주문 " + String(totalPrice)+"원", for: .normal)
-        self.beaconOrder_Btn.accessibilityLabel = "현장 주문 \(totalPrice)원"
-        
         self.onlineOrder_Btn.setTitle("즉시 주문 " + String(totalPrice)+"원", for: .normal)
         self.onlineOrder_Btn.accessibilityLabel = "즉시 주문 \(totalPrice)원"
         
@@ -96,19 +88,6 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = self.prevViewName! + "로 뒤로가기"
     }
     
-    func initializeBeacon() {
-        
-        // 비콘 권할 설정
-        self.locationManager = CLLocationManager()
-        self.locationManager.delegate = self
-        self.locationManager.requestAlwaysAuthorization()                // 위치 권한 받기
-        
-        self.locationManager.startUpdatingLocation()                     // 위치 업데이트 시작
-        self.locationManager.allowsBackgroundLocationUpdates = true      // true: 백그라운드에서도 위치 체크, 필요없으면 false
-        self.locationManager.pausesLocationUpdatesAutomatically = false  // 백그라운드에서 작동하기 위함
-    }
-    
-    
     func initializeTableView() {
         
         self.basket_TableView.delegate = self
@@ -119,10 +98,8 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     func initializeView() {
         
         self.onlineOrder_Btn.layer.cornerRadius = 5
-        self.beaconOrder_Btn.layer.cornerRadius = 5
         
         self.onlineOrder_Btn.accessibilityTraits = .button
-        self.beaconOrder_Btn.accessibilityTraits = .button
     }
     
     // 주문한 정보 불러오기
@@ -198,7 +175,7 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
             let token = UserDefaults.standard.string(forKey: "token")
             
             taskGroup.enter()
-            CustomHttpRequest().phpCommunication(url: "order/api/order.php", postString: "name=\(basket_productName[i]+" "+basket_productSize[i])&count=\(basket_productCount[i])&sugar=\(basket_productSugar[i])&whippedcream=\(basket_productWhippedCream[i])&currentDate=\(currentDate)&userID=\(userId)&token=\(token!)"){ responseString in
+            CustomHttpRequest().phpCommunication(url: "order/api/order.php", postString: "name=\(basket_productName[i]+" "+basket_productSize[i])&count=\(basket_productCount[i])&sugar=\(basket_productSugar[i])&whippedcream=\(basket_productWhippedCream[i])&currentDate=\(currentDate)&userID=\(userId)&token=\(token ?? "")"){ responseString in
                 
                 taskGroup.leave()
             }
@@ -229,69 +206,6 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
             
             // 주문이 끝나면 이전 View 로 돌아감
             self.navigationController?.popViewController(animated: true)
-        }
-    }
-    
-    // 비콘 관련 메소드
-    
-    /*
-     
-    현재 비콘정보
-    MiniBecon_00353
-    UUID : fda50693-a4e2-4fb1-afcf-c6eb07647825
-    Major : 10001
-    Minor : 19641
-     
-    */
-    
-    func startScanning() {
-        
-        let uuid = UUID(uuidString: "fda50693-a4e2-4fb1-afcf-c6eb07647825")!
-        let beaconRegion = CLBeaconRegion(uuid: uuid, major: 10001, minor: 19641, identifier: "MyBeacon")
-        
-        locationManager.startMonitoring(for: beaconRegion)
-        locationManager.startRangingBeacons(in: beaconRegion)
-    }
-    
-    // 1. 권한 여부 체크
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .authorizedAlways {
-            
-            // background에서도 허용
-            locationManager.startUpdatingLocation()
-            locationManager.startMonitoringSignificantLocationChanges()
-            locationManager.allowsBackgroundLocationUpdates = true
-            
-            if CLLocationManager.isMonitoringAvailable(for: CLBeaconRegion.self) { // Background에서도 실행가능하게 권한 부여
-                
-                if CLLocationManager.isRangingAvailable() {
-                    startScanning()
-                }
-            }
-        }
-    }
-    
-    // 2. 비콘 탐색
-    func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
-        if beacons.count > 0 {
-            
-            print("found # of \(beacons.count) beacons")
-            
-            if self.beaconConfirmFlag == true {
-                orderItem()
-                
-                // 주문이 완료 시 비콘 탐지 중지
-                let uuid = UUID(uuidString: "fda50693-a4e2-4fb1-afcf-c6eb07647825")! //UUID를 입력해야한다.
-                let beaconRegion = CLBeaconRegion(uuid: uuid, major: 10001, minor: 19641, identifier: "MyBeacon")
-                
-                locationManager.stopUpdatingLocation()
-                locationManager.stopMonitoringSignificantLocationChanges()
-                locationManager.allowsBackgroundLocationUpdates = false
-                locationManager.stopMonitoring(for: beaconRegion)
-                locationManager.stopRangingBeacons(in: beaconRegion)
-            }
-        } else {
-            print("Not found!")
         }
     }
     
@@ -379,17 +293,4 @@ class ShoppingBasketController : UIViewController, UITableViewDelegate, UITableV
     @IBAction func orderItems_Btn(_ sender: Any) {
         orderItem()
     }
-    
-    @IBAction func orderItemByBeacon(_ sender: Any) {
-        self.beaconConfirmFlag = !self.beaconConfirmFlag
-        
-        if self.beaconConfirmFlag == true {
-            beaconOrder_Btn.setTitle("현장 주문 취소하기", for: .normal)
-            beaconOrder_Btn.accessibilityLabel = "현장 주문 취소하기"
-        } else {
-            beaconOrder_Btn.setTitle("현장 주문 "+String(totalPrice)+"원", for: .normal)
-            beaconOrder_Btn.accessibilityLabel = "현장 주문 "+String(totalPrice)+"원"
-        }
-    }
-   
 }

@@ -40,17 +40,17 @@ class MainController : UIViewController{
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-//        let ad = UIApplication.shared.delegate as? AppDelegate
-//
-//        // 미리 적재하고 싶은 경우 사용
-//        ad?.menuStoreName = "스타벅스"
-//        ad?.numOfProducts = 2
-//        ad?.menuNameArray = ["모카스무디", "망고스무디"]
-//        ad?.menuSizeArray = ["스몰", "스몰"]
-//        ad?.menuCountArray = [3, 1]
-//        ad?.menuEachPriceArray = [5300, 4500]
-//        ad?.menuSugarContent = ["40", "30"]
-//        ad?.menuIsWhippedCream = ["NULL", "NULL"]
+        let ad = UIApplication.shared.delegate as? AppDelegate
+
+        // 미리 적재하고 싶은 경우 사용
+        ad?.menuStoreName = "스타벅스"
+        ad?.numOfProducts = 2
+        ad?.menuNameArray = ["모카스무디", "망고스무디"]
+        ad?.menuSizeArray = ["스몰", "스몰"]
+        ad?.menuCountArray = [3, 1]
+        ad?.menuEachPriceArray = [5300, 4500]
+        ad?.menuSugarContent = ["40", "30"]
+        ad?.menuIsWhippedCream = ["NULL", "NULL"]
         
         self.initializeView()
         self.initializeProfile()

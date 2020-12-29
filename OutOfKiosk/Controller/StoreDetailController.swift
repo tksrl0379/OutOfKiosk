@@ -47,14 +47,26 @@ class StoreDetailController : UIViewController{
     override func viewWillAppear(_ animated: Bool) {
         
         // navigationbar title 동적 변경: navigationbar 안보이게 하려고 설정 ( viewWillAppear에서 동작)
-        self.navigationController?.navigationBar.prefersLargeTitles = true
+//        self.navigationController?.navigationBar.prefersLargeTitles = true
+        guard self.navigationController?.topViewController === self else { return }
+            self.transitionCoordinator?.animate(alongsideTransition: { [weak self](context) in
+                self?.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+                self?.navigationController?.navigationBar.shadowImage = UIImage()
+                self?.navigationController?.navigationBar.backgroundColor = .clear
+                self?.navigationController?.navigationBar.barTintColor = .clear
+            }, completion: nil)
         
         self.setUpShoppingBasket()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        
-        self.navigationController?.navigationBar.prefersLargeTitles = false
+        self.transitionCoordinator?.animate(alongsideTransition: { [weak self](context) in
+                self?.navigationController?.navigationBar.setBackgroundImage(nil, for: UIBarMetrics.default)
+                self?.navigationController?.navigationBar.shadowImage = nil
+                self?.navigationController?.navigationBar.backgroundColor = .white
+                self?.navigationController?.navigationBar.barTintColor = .white
+                }, completion: nil)
+//        self.navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     
